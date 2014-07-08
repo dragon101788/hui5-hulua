@@ -118,8 +118,11 @@ $(MCONF) :
 $(CONF) : 
 	make OUTDIR=$(dir $@) -C script/kconfig
 
+include/config/auto.conf:
+	$(CONF) -s Kconfig
+
 .PHONY: menuconfig
-menuconfig: $(MCONF) $(CONF) dragon_auto
+menuconfig: $(MCONF) $(CONF) dragon_auto include/config/auto.conf
 	echo $(WIDGETDIR)
 	$(MCONF) Kconfig
 	$(CONF) -s Kconfig

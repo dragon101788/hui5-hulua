@@ -27,4 +27,7 @@ script/conf
 /objs
 /lib
 .deps/
-
+/include/autoconf.h
+/include/config/
+/.cproject
+/.project
