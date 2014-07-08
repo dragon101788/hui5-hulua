@@ -1,0 +1,4 @@
+config  CONTROL_CARTOON 
+        bool "cartoon Control" 
+        help 
+			path=$AUTOPATH

@@ -1,0 +1,22 @@
+config  CONTROL_RADIO_BUTTONS 
+        bool "Radig Buttons Control" 
+        help 
+	<Radio_buttons name="xzrf" select="4rf">
+	    <node name="1rf" x="22"   y="54"  width="112" height="51" var="0" cs="fl1">
+	    	<up>button/1-1.png</up>
+	    	<dn>button/1-2.png</dn>
+	    </node>
+	    <node name="2rf" x="134"   y="54"  width="109" height="51" var="1" cs="fl2">
+	    	<up>button/2-1.png</up>
+	    	<dn>button/2-2.png</dn>
+	    </node>
+	    <node name="3rf" x="243"   y="54" width="109" height="51" var="2" cs="fl3">
+	    	<up>button/3-1.png</up>
+	    	<dn>button/3-2.png</dn>
+	    </node>
+	    <node name="4rf" x="352"   y="54"  width="112" height="51" var="3" cs="fl4">
+	    	<up>button/4-1.png</up>
+	    	<dn>button/4-2.png</dn>
+	    </node>
+    	</Radio_buttons>
+			path=$AUTOPATH

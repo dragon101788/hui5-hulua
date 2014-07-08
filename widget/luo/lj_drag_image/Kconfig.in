@@ -1,0 +1,4 @@
+config  CONTROL_LJ_DRAG_IMAGE 
+      	bool "lj_drag_image Control" 
+        help 
+		path=$AUTOPATH

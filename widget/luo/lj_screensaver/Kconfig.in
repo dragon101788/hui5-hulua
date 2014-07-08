@@ -1,0 +1,6 @@
+config  CONTROL_LJ_SCREENSAVER
+        bool "lj_screensaver Control" 
+        help 
+        	<screensaver ptimer=5000 run='./tongs_pre.sh'/>
+        	wait 5 sec into tongs_pre.sh seript
+			path=$AUTOPATH

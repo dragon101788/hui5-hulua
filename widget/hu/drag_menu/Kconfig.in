@@ -1,0 +1,5 @@
+config  CONTROL_DRAG_MENU 
+        bool "drag_menu Control" 
+        help 
+			path=$AUTOPATH
+ 

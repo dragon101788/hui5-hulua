@@ -1,0 +1,4 @@
+config  CONTROL_LJ_LOCK 
+        bool "lj_lock Control" 
+        help 
+		path=$AUTOPATH

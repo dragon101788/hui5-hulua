@@ -1,0 +1,46 @@
+mainmenu "HUI Configuretion"
+
+
+comment "------------HUI Configuretion---------"
+
+config  USING_FONT
+        bool "Using TTF Font"
+
+choice 
+        prompt "alpha channel render"
+        default ALPHA_SOFT
+        help
+		select alpha channel render
+config ALPHA_SOFT
+        bool "Soft Alpha"
+        help
+		soft
+config ALPHA_BLT
+        bool "Nuvoton 2D Blitting Accelerator"
+        help
+		2d Bltting
+endchoice
+
+config  FB_SOFT_RGB565
+        bool "FrameBuffer Soft Rgb565 output"
+choice 
+        prompt "Touch Panel Device"
+        default TOUCH_NONE
+        help
+		select alpha channel render
+config TOUCH_NONE
+        bool "none"
+        help
+		soft
+config TOUCH_EKTF2K
+        bool "ektf2k"
+        help
+		2d Bltting
+endchoice
+
+config DEBUG
+	bool "enable debug"
+
+
+comment "------------Dragon Auto Configuretion---------"
+source Kconfig.auto

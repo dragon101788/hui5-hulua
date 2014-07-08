@@ -1,0 +1,5 @@
+config  CONTROL_STATIC_TEXT 
+        depends on USING_FONT 
+        bool "static_text Control" 
+        help 
+			path=$AUTOPATH

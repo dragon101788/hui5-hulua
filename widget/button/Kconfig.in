@@ -1,0 +1,4 @@
+config  CONTROL_BUTTON 
+        bool "button Control" 
+        help 
+			path=$AUTOPATH

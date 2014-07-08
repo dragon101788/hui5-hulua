@@ -1,0 +1,7 @@
+config  CONTROL_LJ_DRAG_VERTICAL_EXPLAIN 
+        bool "lj_drag_vertical_explain Control" 
+        help 
+        <lj_drag_vertical_explain name=explain x=30 y=40 width="240" height="170" >
+    			<img>main/TEXT1.png</img>
+    		</lj_drag_vertical_explain>
+			path=$AUTOPATH

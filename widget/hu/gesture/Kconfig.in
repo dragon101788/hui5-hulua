@@ -1,0 +1,4 @@
+config  CONTROL_GESTURE 
+        bool "gesture Control" 
+		help 
+			path=$AUTOPATH

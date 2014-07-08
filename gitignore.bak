@@ -1,0 +1,30 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+*.d
+
+# Compiled Dynamic libraries
+*.pc
+*.so
+*.so.*
+*.log
+*.dylib
+*.dll
+script/mconf
+script/conf
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+*.auto
+# Executables
+*.exe
+*.out
+*.app
+/objs
+/lib
+.deps/
+
