@@ -1,0 +1,4 @@
+config  CONTROL_SLIP_TEXT 
+        bool "slip_text Control" 
+        help 
+			path=$AUTOPATH

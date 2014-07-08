@@ -29,9 +29,9 @@ public:
 
 				pos1 = tmp.GetHeight() * 1;
 				pos2 = tmp.GetHeight() * 2;
-				AreaCopy(&tmp, 0, 0, tmp.GetWidth(), tmp.GetHeight(), 0, 0 + tmp.GetHeight());
-				AreaCopy(&tmp, 0, 0, tmp.GetWidth(), tmp.GetHeight(), 0, pos1 + tmp.GetHeight());
-				AreaCopy(&tmp, 0, 0, tmp.GetWidth(), tmp.GetHeight(), 0, pos2 + tmp.GetHeight());
+				AreaCopy(&tmp, 0, 0, tmp.GetWidth(), tmp.GetHeight(), 0, 0);
+				AreaCopy(&tmp, 0, 0, tmp.GetWidth(), tmp.GetHeight(), 0, pos1);
+				AreaCopy(&tmp, 0, 0, tmp.GetWidth(), tmp.GetHeight(), 0, pos2);
 			}
 		}
 		int pos1;
@@ -81,7 +81,8 @@ public:
 		}
 
 		posy = index * node_h + dark.pos1;
-
+			printf("F to posy %d!!!!!!!!!!!!!!!!!!!!\r\n",posy);
+			
 		bright_ture_x = m_mp["bright_ture"]["x"]->getvalue_int();
 		bright_ture_y = m_mp["bright_ture"]["y"]->getvalue_int();
 		bright_ture_w = m_mp["bright_ture"]["width"]->getvalue_int();
@@ -107,12 +108,12 @@ public:
 		if (posy < dark.pos1)
 		{
 			posy = dark.pos2 - (dark.pos1 - posy);
-			//printf("OK\r\n");
+			//printf("F to pos1 %d!!!!!\r\n",posy);
 		}
 		if (posy > dark.pos2)
 		{
 			posy = dark.pos1 + (posy - dark.pos2);
-			printf("OK\r\n");
+			//printf("F to pos2 %d!!!!!\r\n",posy);
 		}
 		posy = (posy + node_h / 2) / node_h * node_h;
 		index = (posy - dark.pos1) / node_h;

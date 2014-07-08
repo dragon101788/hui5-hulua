@@ -162,7 +162,7 @@ extern unsigned long ttfSize;
 //	}
 //	return 0;
 //}
-ssize_t convert(const char *tocode, const char *fromcode, char *inbufp, size_t inbytesleft, char *outbufp,
+ssize_t FontDev::convert(const char *tocode, const char *fromcode, char *inbufp, size_t inbytesleft, char *outbufp,
 		size_t outbytesleft)
 {
 	iconv_t ic;
@@ -192,7 +192,7 @@ ssize_t convert(const char *tocode, const char *fromcode, char *inbufp, size_t i
 	return outbytesleft - outbytes;
 }
 
-void FontDev::DrawText(text * ptext, const char *encode, char * showtxt, unsigned int txt_len)
+void FontDev::DrawText(text * ptext, const char *encode, char * showtxt,int buff_width,int buff_height, unsigned int txt_len)
 {
 
 	unsigned int final_len = 0;
@@ -204,11 +204,10 @@ void FontDev::DrawText(text * ptext, const char *encode, char * showtxt, unsigne
 	}
 	memset(mytxt, 0, buf_len);
 
-	setPixelSize(ptext->fontWidth, ptext->fontHeight);
 	final_len = convert("wchar_t", encode, (char *) showtxt, txt_len, (char *) mytxt, buf_len);
 	final_len /= 4; //byte to wchar_t
 
-	TTF_DisplayUnicode(ptext, mytxt, final_len, ptext->color, ptext->style);
+	TTF_DisplayUnicode(ptext, mytxt, final_len, ptext->color, ptext->style,buff_width,buff_height);
 	free(mytxt);
 }
 //int FontDev::TTF_DisplayAscii(text * ptext, const unsigned char *text, int num, unsigned int color, unsigned char style)
@@ -262,8 +261,9 @@ void FontDev::DrawText(text * ptext, const char *encode, char * showtxt, unsigne
 //	return 0;
 //}
 
-int FontDev::TTF_DisplayUnicode(text * ptext, const wchar_t *text, int num, unsigned int color, unsigned char style)
+int FontDev::TTF_DisplayUnicode(text * ptext, const wchar_t *text, int num, unsigned int color, unsigned char style,int buff_width,int buff_height)
 {
+	int final_num=0;
 	if (face == NULL)
 	{
 		errexitf("font not initialize %s\r\n", text);
@@ -274,6 +274,9 @@ int FontDev::TTF_DisplayUnicode(text * ptext, const wchar_t *text, int num, unsi
 	int x = 0;
 	int y = 0;
 	printf("TTF_DisplayUnicode!,num=%d\n", num);
+	printf("buff_width=%d ,buff_height=%d\n",buff_width,buff_height);
+
+	setPixelSize(ptext->fontWidth, ptext->fontHeight);
 	for (i = 0; i < num; i++)
 	{
 		if (style & FONT_BOLD)
@@ -300,25 +303,26 @@ int FontDev::TTF_DisplayUnicode(text * ptext, const wchar_t *text, int num, unsi
 			FT_GlyphSlot_Embolden(slot);
 		}
 		//Font_H for prevent overflow
+		final_num++;//显示文字数加一
 		ptext->ft_draw_bitmap(&slot->bitmap, x + slot->bitmap_left, y + Font_H - slot->bitmap_top, color);
 		x += slot->advance.x >> 6; //可以从此处下手添加自动换行功能
-//		if ((x + Font_H * 2 + 4) > u32Width)
-//		{
-//			if ((y + Font_H * 2 + 4) < u32Height)
-//			{
-//				x = 0;
-//				y += Font_H + 2;
-//			}
-//			else
-//				break;
-//		}
-//		if(Font_H+4<u32Height)
-//			break;
+		if ((x + Font_H * 2 ) > buff_width)
+		{
+			if ((y + Font_H * 2 + 4) < buff_height)
+			{
+				x = 0;
+				y +=Font_H*1.2;
+			}
+			else
+				break;
+		}
+	//	if(Font_H+4>buff_height)
+	//		break;
 
 	}
 
-	printf("TTF_DisplayUnicode exit!\n");
-	return 0;
+	printf("final_num=%d TTF_DisplayUnicode exit!\n",final_num);
+	return final_num;
 }
 
 map<hustr, FontDev> font_mp;
@@ -326,8 +330,9 @@ map<hustr, FontDev> font_mp;
 
 void ParseFont(HUMap & xmlmp, xmlproc * xml)
 {
-	const char * path = xmlmp["path"]->getvalue();
+	const char * path;
 	const char * name = xmlmp["name"]->getvalue();
+	path = xmlmp["path"]->getvalue();
 
 	printf("ParseFont %s=%s\n", name, path);
 	font_mp[name].TTF_Init(path, FT_LOAD_NO_BITMAP | FT_LOAD_RENDER);

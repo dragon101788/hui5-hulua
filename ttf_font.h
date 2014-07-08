@@ -31,6 +31,7 @@ public:
 
 		face = NULL;
 		ft_Lib = NULL;
+
 	}
 	~FontDev()
 	{
@@ -86,12 +87,15 @@ public:
 		TTF_bitmap_type = bitmap;
 		return 0;
 	}
-	void DrawText(text * ptext, const char *encode, char * showtxt,
+         ssize_t convert(const char *tocode, const char *fromcode, char *inbufp, size_t inbytesleft, char *outbufp,
+                size_t outbytesleft);
+
+	void DrawText(text * ptext, const char *encode, char * showtxt,int buff_width,int buff_height,
 			unsigned int txt_len);
 	int TTF_DisplayAscii(text * ptext, const unsigned char *text, int num,
 			unsigned int color, unsigned char style);
 	int TTF_DisplayUnicode(text * ptext, const wchar_t *text, int num,
-			unsigned int color, unsigned char style);
+			unsigned int color, unsigned char style,int buff_width,int buff_height);
 	FT_Library ft_Lib;
 	FT_Face face;
 	FT_UInt glyph_index;
@@ -110,6 +114,7 @@ private:
 public:
 	//以下几个变量需要外部赋值
 	FontDev * m_font;
+	
 	unsigned int fontWidth;
 	unsigned int fontHeight;
 	unsigned int color;
@@ -199,10 +204,24 @@ public:
 //				errexitf("DrawText fontHeight[%d] > u32Height[%d]\r\n",
 //						fontHeight, u32Height);
 //			}
-			m_font->DrawText(this, encode, showtxt, txt_len);
+			m_font->DrawText(this, encode, showtxt, u32Width,u32Height,txt_len);
 
 		}
 	}
+	int  DrawText_unicode( wchar_t * showtxt, unsigned int txt_len)
+	{
+		if (m_font != NULL)
+		{
+//			if (fontHeight > u32Height)
+//			{
+//				errexitf("DrawText fontHeight[%d] > u32Height[%d]\r\n",
+//						fontHeight, u32Height);
+//			}
+			return m_font->TTF_DisplayUnicode(this,showtxt,txt_len, this->color, this->style,u32Width,u32Height);
+
+		}
+	}
+
 //format convert 
 //eg:convert("UTF-8", "wchar_t", (char *)out_buf1, rc, out_buf2, out_len);
 
