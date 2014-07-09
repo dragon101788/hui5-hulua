@@ -386,6 +386,8 @@ public:
                 ttf.color = color;
                 ttf.style = style;
 		lenth_once =width/size*2*(height/(size*1.2));// 粗略，需要调整 english
+		if(txt_len<lenth_once)
+			lenth_once=txt_len;
 		printf("txt_len=%d,  lenth_once=%d!!!!!!!!!!!!!!!\n",txt_len,lenth_once);
 		const_page=65000;//txt_len/lenth_once+((txt_len%lenth_once)? 1:0);
 		lenth_final=(txt_len%lenth_once)?txt_len%lenth_once:lenth_once;
