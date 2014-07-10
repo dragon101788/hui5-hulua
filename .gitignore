@@ -28,6 +28,6 @@ script/conf
 .deps/
 /include/autoconf.h
 /.config
-/include/config/
+/include/config/*.h
 /.cproject
 /.project

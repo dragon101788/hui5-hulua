@@ -1,4 +1,4 @@
-include .config
+sinclude .config
 #CROSS_COMPILE:=$(HOME)/usr/arm/4.3.3/bin/arm-linux-
 CROSS_COMPILE:=arm-linux-
 #CROSS_COMPILE:=
@@ -118,10 +118,10 @@ $(MCONF) :
 $(CONF) : 
 	make OUTDIR=$(dir $@) -C script/kconfig
 
-.config: $(MCONF) $(CONF)
-	echo $(WIDGETDIR)
-	$(MCONF) Kconfig
-	$(CONF) -s Kconfig
+#.config: $(MCONF) $(CONF)
+#	echo $(WIDGETDIR)
+#	$(MCONF) Kconfig
+#	$(CONF) -s Kconfig
 
 .PHONY: menuconfig
 menuconfig: $(MCONF) $(CONF) dragon_auto
