@@ -4,7 +4,6 @@
 *.o
 *.obj
 *.d
-
 # Compiled Dynamic libraries
 *.pc
 *.so
@@ -28,6 +27,7 @@ script/conf
 /lib
 .deps/
 /include/autoconf.h
+/.config
 /include/config/
 /.cproject
 /.project
