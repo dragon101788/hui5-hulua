@@ -50,7 +50,7 @@ else
 endif 
 
 
-include  $(MKAUTO)
+sinclude  $(MKAUTO)
 
 obj-y += $(patsubst %.cpp,%.o,$(wildcard tinyxml/*.cpp))
 
