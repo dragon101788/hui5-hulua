@@ -71,7 +71,7 @@ OBJS_MK=$(CC) $(CFLAG) -c $< -o $@
 	$(CC) $(CFLAG) -c $< -o $@
 
 
-all: lib/libz.a lib/libpng.a lib/libiconv.a dragon_auto $(DEPS) $(OBJS) dirobjs
+all: .config lib/libz.a lib/libpng.a lib/libiconv.a dragon_auto $(DEPS) $(OBJS) dirobjs
 	@echo built-in module: $(patsubst $(TOPDIR)%,%,$(dir-y))
 	@$(CC)  $(OBJS) $(SRCS) lib/libpng.a lib/libz.a lib/libiconv.a $(dir-objs) -o $(TARGET) $(LDFLAG)
 	@#rm $(dir-objs)
