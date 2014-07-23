@@ -181,8 +181,8 @@ int main(int argc, char * argv[])
 	str += "\"";
 	str += hustr("%02d月", timenow->tm_mon+1);
 	str += hustr("%02d日 ", timenow->tm_mday);
-	str += hustr("星期%s ", xinqi[timenow->tm_wday].nstr());
-	str += hustr("%02d:%02d ", timenow->tm_hour, timenow->tm_min);
+	str += hustr("星期%s ", xinqi[timenow->tm_wday-1].nstr());
+	str += hustr("   %02d:%02d   ", timenow->tm_hour, timenow->tm_min);
 	fprintf(stderr,"农历:%s %s\r\n");
 	str += hustr("农历%s%s", ny[n_mon-1].nstr(), nr[n_day-1].nstr());
 

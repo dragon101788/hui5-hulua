@@ -162,7 +162,7 @@ public:
 			debug("warning LoadResource empty path\r\n");
 			return -1;
 		}
-		return codec_to_Image(this, path.nstr());
+		return codec_to_Image(this, path.nstr());//装载图片
 	}
 	void ReSetResource(const char * filepath)
 	{

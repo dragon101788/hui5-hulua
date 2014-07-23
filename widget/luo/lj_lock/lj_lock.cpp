@@ -79,7 +79,7 @@ public:
 	void doTouchUp()
 	{
 		it = rects.begin();
-		Flush();
+		//Flush();
 		//UpdateRect();
 	}
 

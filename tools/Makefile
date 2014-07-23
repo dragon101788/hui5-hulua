@@ -1,6 +1,6 @@
 CC:=arm-linux-g++
 STRIP:=arm-linux-strip
-OUTPUT:=../../output/
+OUTPUT:=/mnt/hgfs/giant_share/joyoung/output/
 
 
 all:

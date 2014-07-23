@@ -237,7 +237,7 @@ public:
 	virtual void doRender() = 0;
 	virtual void doGetInfo(info & info)
 	{
-		printf("warning element bash OnDelete\r\n");
+		printf("warning element bash doGetInfo\r\n");
 	}
 	virtual void doDelete()
 	{

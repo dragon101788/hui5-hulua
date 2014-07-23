@@ -132,7 +132,7 @@ void element::Render()
 		printf("Render %s hide\r\n", name.c_str());
 	}
 
-	xml_mgr->Draw(this, 0, 0, width, height, x, y);
+	xml_mgr->Draw(this, 0, 0, width, height, x, y);//控件输出到容器
 	RenderET();
 	unlock();
 }

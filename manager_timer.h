@@ -27,9 +27,13 @@ public:
 		m_tm = tm;
 		timer_stop = 0;
 	}
-	int TimerStop()
+	virtual int TimerStop()
 	{
 		timer_stop = 1;
+	}
+	virtual int TimerStart()
+	{
+		timer_stop = 0;
 	}
 	int GetUpTimer();
 	timer_element()
@@ -109,7 +113,7 @@ public:
 		for (it = mp.begin(); it != mp.end(); ++it)
 		{
 			//printf("current = %dms %dms\r\n",cur,mp[i]->m_tm);
-			(*it)->timer_stop = 1;
+			(*it)->TimerStop();
 		}
 		unlock();
 	}
@@ -120,7 +124,7 @@ public:
 		for (it = mp.begin(); it != mp.end(); ++it)
 		{
 			//printf("current = %dms %dms\r\n",cur,mp[i]->m_tm);
-			(*it)->timer_stop = 0;
+			(*it)->TimerStart();
 		}
 		unlock();
 	}

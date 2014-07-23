@@ -21,7 +21,7 @@ public:
 		}
 	};
 
-	virtual int doTimer(int tm)
+	int doTimer(int tm)
 	{
 		//printf("OnTimer time=%d\r\n", fps_time + images[id].ntime);
 		TimerSet(tm + fps_time + images[id].ntime);

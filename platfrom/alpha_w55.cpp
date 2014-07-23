@@ -13,6 +13,8 @@ void Render_img_to_img(image * dst, image * src, int src_x, int src_y, int cp_wi
 	dst->lock();
 	src->lock();
 
+//	ProcArea(dst, src, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
+
 	S_DRVBLT_BLIT_OP s_sblitop =
 	{ 0 };
 

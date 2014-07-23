@@ -30,7 +30,7 @@ public:
 	unsigned long SrcSize;
 	unsigned int u32Width;	// crop width
 	unsigned int u32Height;	// crop height
-
+	int lcm_dpp;
 	image put;
 	image in_img;
 	image out_img;
@@ -107,9 +107,10 @@ public:
 		u32Width = var.xres;
 		u32Height = var.yres;
 
-		int lcm_dpp = var.bits_per_pixel;
+		lcm_dpp = var.bits_per_pixel;
 		printf("FrameBuffer Accept %d %d %d %d %d %d %d\r\n",u32Width,u32Height,lcm_dpp,var.xres_virtual,var.yres_virtual,var.xoffset,var.yoffset);
 		SrcSize = u32Width * u32Height * (lcm_dpp / 8);
+		//printf("$$$luo$$$ SrcSize is %d \r\n",SrcSize);
 
 		pSrcBuffer = mmap(NULL, SrcSize, PROT_READ | PROT_WRITE, MAP_SHARED, lcm_fd, 0);
 		if (pSrcBuffer == MAP_FAILED)
@@ -144,19 +145,25 @@ public:
 		ioctl(lcm_fd, IOCTL_LCD_DISABLE_INT);
 
 
-#ifdef CONFIG_FB_SOFT_RGB565
-		for(int y=0;y<u32Height;y++)
+		if (lcm_dpp == 16)
 		{
-			for(int x=0;x<u32Width;x++)
+			//printf("$$$luo$$$ bpp=16\r\n");
+			for(int y=0;y<u32Height;y++)
 			{
-				IMG_PIX * pix = img->GetPix(x,y);
-				*(((unsigned short*)pSrcBuffer)+(y*u32Width+x)) = RGB565(pix->u8Red,pix->u8Green,pix->u8Blue);
+				for(int x=0;x<u32Width;x++)
+				{
+					IMG_PIX * pix = img->GetPix(x,y);
+					*(((unsigned short*)pSrcBuffer)+(y*u32Width+x)) = RGB565(pix->u8Red,pix->u8Green,pix->u8Blue);
+				}
 			}
 		}
-#else
-		img->dump_to_buf(pSrcBuffer);
+		else if (lcm_dpp == 32)
+		{
+			//printf("$$$luo$$$ bpp=32\r\n");
+			img->dump_to_buf(pSrcBuffer);
+		}
 		//memcpy(pSrcBuffer, img->pSrcBuffer, SrcSize);
-#endif
+
 		ioctl(lcm_fd, IOCTL_LCD_ENABLE_INT);
 		unlock();
 	}

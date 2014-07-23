@@ -6,7 +6,7 @@
 
 void Render_img_to_img(image * dst, image * src, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
 {
-	ProcArea(dst, src, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
+//	ProcArea(dst, src, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
 	if (dst->SrcGPUAddr() == 0 || src->SrcGPUAddr() == 0)
 	{
 		errexitf("warning::Image source point is NULL dst=%#x src=%#x\r\n", dst->SrcGPUAddr(), src->SrcGPUAddr());
