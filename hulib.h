@@ -1,6 +1,6 @@
 #ifndef __HULIB_HU__
 #define __HULIB_HU__
-
+#include <unistd.h>
 #include <stdarg.h>
 #include <string>
 #include <pthread.h>
