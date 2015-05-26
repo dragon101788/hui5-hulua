@@ -1,6 +1,6 @@
 sinclude .config
 #CROSS_COMPILE:=$(HOME)/usr/arm/4.3.3/bin/arm-linux-
-CROSS_COMPILE:=arm-linux-
+CROSS_COMPILE:=$(HOME)/usr/arm/arm_linux_4.2/bin/arm-linux-
 #CROSS_COMPILE:=
 CC=$(CROSS_COMPILE)g++
 STRIP=$(CROSS_COMPILE)strip
@@ -8,7 +8,7 @@ TOPDIR=$(PWD)/
 CFLAG+=-I$(TOPDIR)
 CFLAG+=-I$(TOPDIR)include
 LDFLAG += -lpthread -lc -lgcc -ldl -rdynamic -lrt
-OUTPUT =/mnt/hgfs/giant_share/joyoung/output/
+OUTPUT =../output/
 TARGET = $(OUTPUT)hui
 OBJS_DIR = $(TOPDIR)/objs/
 DRAGON_AUTO = $(TOPDIR)/script/dragon_auto.sh

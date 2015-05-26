@@ -21,6 +21,15 @@ void Render_img_to_img(image * dst, image * src, int src_x, int src_y, int cp_wi
 			IMG_PIX * dst_pix = ((IMG_PIX *) dst->pSrcBuffer + (y + dst_y) * dst->u32Width + x + dst_x);
 			IMG_PIX * src_pix = ((IMG_PIX *) src->pSrcBuffer + (y + src_y) * src->u32Width + x + src_x);
 			int alpha = src_pix->u8Alpha*src->transp/100;
+			if(alpha <5)
+			{
+				continue;
+			}
+			else
+			{
+				*dst_pix = *src_pix;
+				continue;
+			}
 			dst_pix->u8Red =  (dst_pix->u8Red * (MAX_ALPHA - alpha) + src_pix->u8Red * alpha) / MAX_ALPHA;
 			dst_pix->u8Green = (dst_pix->u8Green * (MAX_ALPHA - alpha) + src_pix->u8Green * alpha) / MAX_ALPHA;
 			dst_pix->u8Blue =  (dst_pix->u8Blue * (MAX_ALPHA - alpha) + src_pix->u8Blue * alpha) / MAX_ALPHA;
