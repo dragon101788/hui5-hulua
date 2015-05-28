@@ -19,6 +19,10 @@
 #include "Framebuffer.h"
 #include "loaderDL.h"
 #include "dlproc.h"
+#include "hulua.h"
+
+lua_State* L;
+
 using namespace std;
 
 #define DEFAULT_XMLFILE "hu.xml"
@@ -495,6 +499,16 @@ void Dir(hustr dir, int l)
 
 int main(int argc, char *argv[])
 {
+        L = lua_open();
+
+        luaopen_base(L);
+
+
+        hulua::dofile(L, "hu.lua");
+
+        lua_close(L);
+
+        return 0;
 	printf("%s\r\n", __TIME__);
 
 	char * huipid = getenv("CURHUI");
@@ -513,8 +527,6 @@ int main(int argc, char *argv[])
 		errexitf("$$$HU$$$ InitSystem error %s", strerror(errno));
 	}
 
-	//debug["fps"] = 1;
-	//fb.AcceptFrameBuffer();
 
 	g_var.init_arg(argc, argv);
 
@@ -524,11 +536,20 @@ int main(int argc, char *argv[])
 		Dir(".", snaplevel - 1);
 		return 0;
 	}
+	
 	const char * xmlfile = g_var.getvar("xmlfile");
 	if (xmlfile == NULL)
 	{
 		xmlfile = "hu.xml";
 	}
+	
+	const char * luafile = g_var.getvar("luafile");
+	if (xmlfile == NULL)
+	{
+		xmlfile = "hu.lua";
+	}
+
+
 //	hustr snapfile("%s.png", xmlfile);
 //	if (access(snapfile, F_OK) == 0)
 //	{

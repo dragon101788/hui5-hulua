@@ -5,9 +5,10 @@ CROSS_COMPILE:=$(HOME)/usr/arm/arm_linux_4.2/bin/arm-linux-
 CC=$(CROSS_COMPILE)g++
 STRIP=$(CROSS_COMPILE)strip
 TOPDIR=$(PWD)/
-CFLAG+=-I$(TOPDIR)
+CFLAG+=-I$(TOPDIR) 
 CFLAG+=-I$(TOPDIR)include
-LDFLAG += -lpthread -lc -lgcc -ldl -rdynamic -lrt
+LDFLAG += -L$(TOPDIR)/lib/
+LDFLAG += -lpthread -lc -lgcc -ldl -rdynamic -lrt -lhulua
 OUTPUT =../output/
 TARGET = $(OUTPUT)hui
 OBJS_DIR = $(TOPDIR)/objs/
@@ -17,6 +18,7 @@ CONF = $(TOPDIR)/script/conf
 MKZLIB = $(TOPDIR)/script/mk.zlib.sh
 MKPNGLIB = $(TOPDIR)/script/mk.libpng.sh
 MKICONVLIB = $(TOPDIR)/script/mk.iconv.sh
+MKHULUA = $(TOPDIR)/libsrc/hulua/build.sh
 MKAUTO=Makefile.auto
 
 MAKE=make CROSS_COMPILE=$(CROSS_COMPILE) CC=$(CC) CFLAG="$(CFLAG)" TOPDIR=$(TOPDIR)
@@ -70,17 +72,24 @@ OBJS_MK=$(CC) $(CFLAG) -c $< -o $@
 	@mkdir -p `dirname $@`
 	$(CC) $(CFLAG) -c $< -o $@
 
-
-all: .config lib/libz.a lib/libpng.a lib/libiconv.a dragon_auto $(DEPS) $(OBJS) dirobjs
+.PHONY: all
+all: .config lib/libz.a lib/libpng.a lib/libiconv.a lib/libhulua.a dragon_auto $(DEPS) $(OBJS) dirobjs
 	@echo built-in module: $(patsubst $(TOPDIR)%,%,$(dir-y))
 	@$(CC)  $(OBJS) $(SRCS) lib/libpng.a lib/libz.a lib/libiconv.a $(dir-objs) -o $(TARGET) $(LDFLAG)
 	@#rm $(dir-objs)
 	@#$(STRIP) $(TARGET) 
 	@echo build done 	
 
+.PHONY: dragon_auto
 dragon_auto:
 	@$(DRAGON_AUTO)
 
+lib/libhulua.a:
+	echo build hulib
+	TOPDIR=$(TOPDIR) CROSS_COMPILE=$(CROSS_COMPILE) $(MKHULUA)
+	rm $(TOPDIR)/bin -rf
+	rm $(TOPDIR)/share -rf
+	rm $(TOPDIR)/man/ -rf
 
 lib/libz.a:
 	@mkdir -p `dirname $@`
@@ -106,6 +115,7 @@ $(dir-objs):
 	@mkdir -p `dirname $@`
 	@$(MAKE) -C $(patsubst %built-in.o,%,$@) built-in.o
 
+.PHONY:
 dirobjs:
 	@for dir in $(dir-y);do echo build $$dir ;$(MAKE) -s -C $$dir built-in.o;done
 
@@ -128,11 +138,14 @@ menuconfig: $(MCONF) $(CONF) dragon_auto
 	echo $(WIDGETDIR)
 	$(MCONF) Kconfig
 	$(CONF) -s Kconfig
+
+.PHONY: clean
 clean:
 	-rm -rf $(OBJS_DIR)
 	-rm -f $(TARGET)	
 	-@for dir in $(dir-y);do $(MAKE) -s -C $$dir clean;done
 
+.PHONY: distclean
 distclean: clean
 	-rm $(MCONF)
 	-rm $(CONF)
