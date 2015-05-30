@@ -32,7 +32,7 @@ datarootdir = ${prefix}/share
 srcdir = .
 VPATH = .:..
 topdir = ..
-BUILD_DIR = /home/dragon/hui/src/libsrc/hulua/readline-6.2
+BUILD_DIR = /mnt/disk1/hui/src/libsrc/hulua/readline-6.2
 
 INSTALL = /usr/bin/install -c
 INSTALL_PROGRAM = ${INSTALL}
@@ -52,7 +52,7 @@ SHELL = /bin/sh
 host_os = none
 host_vendor = unknown
 
-prefix = /home/dragon/hui/src
+prefix = /home/dragon/hui/src/libsrc/hulua/sample
 exec_prefix = ${prefix}
 includedir = ${prefix}/include
 bindir = ${exec_prefix}/bin

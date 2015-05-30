@@ -12,8 +12,6 @@
 #include <new>
 #include <cstring>
 
-//有些低端平台可能会出现不支持longlong的错误，那么添加 LUA_32BITS这个宏
-#define LUA_32BITS
 
 extern "C"
 {

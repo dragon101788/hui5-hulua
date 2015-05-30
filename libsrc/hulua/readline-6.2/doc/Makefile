@@ -20,7 +20,7 @@ topdir = ..
 srcdir = .
 VPATH = .
 
-prefix = /home/dragon/hui/src
+prefix = /home/dragon/hui/src/libsrc/hulua/sample
 
 datarootdir = ${prefix}/share
 
@@ -46,7 +46,7 @@ RM = rm -f
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 
-BUILD_DIR = /home/dragon/hui/src/libsrc/hulua/readline-6.2
+BUILD_DIR = /mnt/disk1/hui/src/libsrc/hulua/readline-6.2
 TEXINPUTDIR = $(srcdir)
 
 MAKEINFO    = LANGUAGE= makeinfo

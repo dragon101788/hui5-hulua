@@ -19,9 +19,7 @@
 #include "Framebuffer.h"
 #include "loaderDL.h"
 #include "dlproc.h"
-#include "hulua.h"
-
-lua_State* L;
+#include "hui_hulua.h"
 
 using namespace std;
 
@@ -80,6 +78,11 @@ void JumpToFile(const char * jump, const char * snap)
 		g_cur_xml = new dlproc(jump);
 		g_cur_xml->doLoader();
 	}
+	if(math==".lua")
+        {
+	        g_cur_xml = new dlproc(jump);
+
+        }
 	else if(math==".xml")
 	{
 		//	if (g_xml_proc.find(jump) != g_xml_proc.end())
@@ -497,18 +500,101 @@ void Dir(hustr dir, int l)
 	closedir(dp);
 }
 
+class lua_test_page : public element
+{
+public:
+        int x;
+        int y;
+        lua_test_page()
+        {
+                xpos = 0;
+                ypos = 0;
+                id = 0;
+        }
+        ~lua_test_page()
+        {
+
+        }
+        static void lua_create(const char * name)
+        {
+            printf("lua create\n");
+
+
+            hulua::class_add<lua_test_page>(lua, "lua_test_page");
+            hulua::class_mem<lua_test_page>(lua, "x", &lua_test_page::x);
+            hulua::class_mem<lua_test_page>(lua, "y", &lua_test_page::y);
+            hulua::class_def<lua_test_page>(lua, "LuaFlushConfig", &lua_test_page::LuaFlushConfig);
+
+            hulua::set(lua, name, new lua_test_page);
+        }
+        void LuaFlushConfig()
+        {
+                printf("LuaFlushConfig x=%d\n",x);
+                printf("LuaFlushConfig y=%d\n",y);
+                printf("LuaFlushConfig ypos=%d\n",ypos);
+                xml_mgr = g_cur_xml;
+                mgr = g_cur_xml;
+
+                SetRes(0,"./a.png");
+                Flush();
+        }
+        void doDelete()
+        {
+
+        }
+        void doGetInfo(info & info)
+        {
+                GetElementInfo(info);
+                info.AddInfo("id", id);
+                info.AddInfo("xpos", xpos);
+                info.AddInfo("ypos", ypos);
+        }
+        void doFlushConfig()
+        {
+                PraseElement();
+                id = m_mp["id"]->getvalue_int();
+                xpos = m_mp["xpos"]->getvalue_int();
+                ypos = m_mp["ypos"]->getvalue_int();
+
+                for (int i = 0; i < m_mp.count("node"); i++)
+                {
+                        printf("doFlushConfig %d %s\r\n",i, m_mp["node"][i]->getvalue());
+                        SetRes(i, m_mp["node"][i]->getvalue());
+                }
+
+                ParseModifRes();
+                Flush();
+        }
+        void doRender()
+        {
+                image::Render(&res[id], xpos, ypos, width, height, 0, 0);
+        }
+        int xpos;
+        int ypos;
+
+        int id;
+};
+
+
+typedef void (*lua_create)(const char * name);
+map<hustr,lua_create> hui_lua_create_Instance;
+int register_Instance(const char * classname, const char * funcname)
+{
+  printf("register_Instance\n");
+  if(hui_lua_create_Instance.find(classname)!=hui_lua_create_Instance.end())
+  {
+      hui_lua_create_Instance[classname](funcname);
+      return 0;
+  }
+  else
+  {
+      printf("can't find Instance [%s]\n",classname);
+      return -1;
+  }
+}
 int main(int argc, char *argv[])
 {
-        L = lua_open();
 
-        luaopen_base(L);
-
-
-        hulua::dofile(L, "hu.lua");
-
-        lua_close(L);
-
-        return 0;
 	printf("%s\r\n", __TIME__);
 
 	char * huipid = getenv("CURHUI");
@@ -537,18 +623,7 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 	
-	const char * xmlfile = g_var.getvar("xmlfile");
-	if (xmlfile == NULL)
-	{
-		xmlfile = "hu.xml";
-	}
 	
-	const char * luafile = g_var.getvar("luafile");
-	if (xmlfile == NULL)
-	{
-		xmlfile = "hu.lua";
-	}
-
 
 //	hustr snapfile("%s.png", xmlfile);
 //	if (access(snapfile, F_OK) == 0)
@@ -564,7 +639,23 @@ int main(int argc, char *argv[])
 //	//g_xml_proc[xmlfile] = g_cur_xml;
 //	g_cur_xml->ParseXMLFile();
 //	g_cur_xml->fore = 1;
-	JumpToFile(xmlfile, hustr("%s.png", xmlfile));
+        const char * xmlfile = g_var.getvar("xmlfile");
+        if (xmlfile != NULL)
+        {
+            JumpToFile(xmlfile, hustr("%s.png", xmlfile));
+        }
+
+        const char * luafile = g_var.getvar("luafile");
+        if (luafile != NULL)
+        {
+            lua.dofile(luafile);
+        }
+        else
+        {
+
+            hui_lua_create_Instance["lua_test_page"] = lua_test_page::lua_create;
+
+        }
 
 	printf("Press Ctrl-C to exit ...\n");
 	g_th_timer.wait();

@@ -5,7 +5,8 @@ CROSS_COMPILE:=$(HOME)/usr/arm/arm_linux_4.2/bin/arm-linux-
 CC=$(CROSS_COMPILE)g++
 STRIP=$(CROSS_COMPILE)strip
 TOPDIR=$(PWD)/
-CFLAG+=-I$(TOPDIR) 
+CFLAG+= -DLUA_C89_NUMBERS
+CFLAG+=-I$(TOPDIR)
 CFLAG+=-I$(TOPDIR)include
 LDFLAG += -L$(TOPDIR)/lib/
 LDFLAG += -lpthread -lc -lgcc -ldl -rdynamic -lrt -lhulua
@@ -18,11 +19,12 @@ CONF = $(TOPDIR)/script/conf
 MKZLIB = $(TOPDIR)/script/mk.zlib.sh
 MKPNGLIB = $(TOPDIR)/script/mk.libpng.sh
 MKICONVLIB = $(TOPDIR)/script/mk.iconv.sh
-MKHULUA = $(TOPDIR)/libsrc/hulua/build.sh
+HULUA = $(TOPDIR)/libsrc/hulua/
 MKAUTO=Makefile.auto
 
 MAKE=make CROSS_COMPILE=$(CROSS_COMPILE) CC=$(CC) CFLAG="$(CFLAG)" TOPDIR=$(TOPDIR)
 
+obj-y += hui_hulua.o
 obj-y += XMLInstal.o
 obj-y += loaderDL.o
 obj-$(CONFIG_ALPHA_BLT) += platfrom/alpha_w55.o
@@ -86,7 +88,7 @@ dragon_auto:
 
 lib/libhulua.a:
 	echo build hulib
-	TOPDIR=$(TOPDIR) CROSS_COMPILE=$(CROSS_COMPILE) $(MKHULUA)
+	make -C $(HULUA) TOPDIR=$(TOPDIR) CROSS_COMPILE=$(CROSS_COMPILE)
 	rm $(TOPDIR)/bin -rf
 	rm $(TOPDIR)/share -rf
 	rm $(TOPDIR)/man/ -rf

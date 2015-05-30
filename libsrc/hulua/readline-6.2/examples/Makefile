@@ -21,7 +21,7 @@ RL_LIBRARY_VERSION = 6.2
 SHELL = /bin/sh
 RM = rm -f
 
-prefix = /home/dragon/hui/src
+prefix = /home/dragon/hui/src/libsrc/hulua/sample
 exec_prefix = ${prefix}
 
 datarootdir = ${prefix}/share
@@ -32,7 +32,7 @@ datadir = ${datarootdir}
 VPATH = .
 top_srcdir = ..
 #BUILD_DIR = .
-BUILD_DIR = /home/dragon/hui/src/libsrc/hulua/readline-6.2
+BUILD_DIR = /mnt/disk1/hui/src/libsrc/hulua/readline-6.2
 installdir = $(datadir)/readline
 
 INSTALL = /usr/bin/install -c
