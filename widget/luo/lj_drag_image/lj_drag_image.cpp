@@ -20,7 +20,7 @@ public:
 		{
 			if (this->path != path)
 			{
-				destory();
+				destroy();
 				this->path = path;
 				image tmp;
 				tmp.SetResource(path);

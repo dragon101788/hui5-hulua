@@ -293,7 +293,7 @@ public:
 		map<int, image>::iterator it;
 		for (it = res.begin(); it != res.end(); ++it)
 		{
-			it->second.destory();
+			it->second.destroy();
 		}
 	}
 	void Flush();

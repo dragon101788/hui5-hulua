@@ -294,7 +294,7 @@ public:
 		debug("Destroy wait element_manager::ClearElement \r\n");
 		element_manager::ClearElement();
 		//system("ps|grep hui|sed -n \'1 p\'");
-		out.destory();
+		out.destroy();
 		unlock();
 		debug("---------------%s----------------OK\r\n", filename.c_str());
 
