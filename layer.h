@@ -72,7 +72,7 @@ public:
 	}
 	void onSchedule()
 	{
-		debug("$$$HU$$$ Render_layer::[%s]\r\n", name.c_str());
+		log_i("$$$HU$$$ Render_layer::[%s]\r\n", name.c_str());
 		Render();
 		//debug("$$$HU$$$ Render_layer::[%s]OK\r\n", name.c_str());
 	}

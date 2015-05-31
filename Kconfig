@@ -41,6 +41,14 @@ endchoice
 config DEBUG
 	bool "enable debug"
 
+config LOG_D
+	bool "enable log_d"
+config LOG_I
+	bool "enable log_i"
+config LOG_W
+	bool "enable log_w"
+config LOG_E
+	bool "enable log_e"
 
 comment "------------Dragon Auto Configuretion---------"
 source Kconfig.auto
