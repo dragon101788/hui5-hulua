@@ -1,9 +1,10 @@
 #ifndef __PRASE_XML_COMMENT_H__
 #define __PRASE_XML_COMMENT_H__
 
-void PraseXML_comment()
-{
+#include "hulib.h"
+#include "xmlproc.h"
+#define VALID_XML_COMMENT       "##"
 
-}
+void ParseXML_comment(const char * str,xmlproc * xml);
 
 #endif //__PRASE_XML_COMMENT_H__

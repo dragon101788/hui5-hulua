@@ -11,7 +11,7 @@ typedef SmartPtr<xmlproc> pXmlproc;
 extern pXmlproc g_cur_xml;
 extern map<hustr, pXmlproc> g_xml_proc;
 extern int go;
-int ParseXMLElement2(hustr name, HUMap & xmlmp, xmlproc * xml);
+int ParseXMLFrom_Instan(hustr name, HUMap & xmlmp, xmlproc * xml);
 void ParaseTinyXmlFile(const char * file, xmlproc * xml);
 void hui_exit(const char * cmd);
 void JumpToFile(const char * jump, const char * snap);

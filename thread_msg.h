@@ -6,7 +6,7 @@ extern int go;
 #include "xmlproc.h"
 #include "HuMsg.h"
 
-void ParaseUpdateXml3(TiXmlNode* pParent, xmlproc * xml);
+void ParseUpdateXml3(TiXmlNode* pParent, xmlproc * xml);
 int ParseXMLElement(HUMap & xmlmp);
 void GetInfo(const char * name, info & info);
 
@@ -29,7 +29,7 @@ public:
 			msg.read_message(100, &qbuf);
 			TiXmlDocument xml;
 			xml.Parse(qbuf.mtext);
-			ParaseUpdateXml3(&xml, g_cur_xml);
+			ParseUpdateXml3(&xml, g_cur_xml);
 		}
 		printf("msg thread exit\r\n");
 	}

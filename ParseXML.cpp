@@ -3,6 +3,7 @@
 #include <errno.h>
 #include "tinyxml/tinyxml.h"
 #include "xmlproc.h"
+#include "ParseXML_comment.h"
 
 void ParaseTinyAttribute2(TiXmlNode* pchild, HUMap & xmlmp)
 {
@@ -25,7 +26,7 @@ void ParaseTinyAttribute2(TiXmlNode* pchild, HUMap & xmlmp)
 	}
 }
 
-void ParaseUpdateXml2(TiXmlNode* pParent, HUMap & xmlmp)
+void ParseUpdateXml2(TiXmlNode* pParent, HUMap & xmlmp)
 {
 	if (pParent == NULL)
 	{
@@ -40,9 +41,6 @@ void ParaseUpdateXml2(TiXmlNode* pParent, HUMap & xmlmp)
 
 		if (t == TiXmlNode::TINYXML_COMMENT)
 		{
-		        const char * str = pchild->Value();
-		        printf("ParaseUpdateXml2 str=[%s]\n",str);
-
 			pchild = pchild->NextSibling();
 			continue;
 		}
@@ -58,7 +56,7 @@ void ParaseUpdateXml2(TiXmlNode* pParent, HUMap & xmlmp)
 
 		if (pchild->FirstChild() == NULL || pchild->FirstChild()->Type() == TiXmlNode::TINYXML_ELEMENT)
 		{
-			ParaseUpdateXml2(pchild, mp);
+			ParseUpdateXml2(pchild, mp);
 		}
 
 		pchild = pchild->NextSibling();
@@ -66,8 +64,8 @@ void ParaseUpdateXml2(TiXmlNode* pParent, HUMap & xmlmp)
 
 }
 
-int ParseXMLElement2(hustr name, HUMap & xmlmp, xmlproc * xml);
-void ParaseUpdateXml3(TiXmlNode* pParent, xmlproc * xml)
+int ParseXMLFrom_Instan(hustr name, HUMap & xmlmp, xmlproc * xml);
+void ParseUpdateXml3(TiXmlNode* pParent, xmlproc * xml)
 {
 	if (pParent == NULL)
 	{
@@ -82,9 +80,7 @@ void ParaseUpdateXml3(TiXmlNode* pParent, xmlproc * xml)
 
 		if (t == TiXmlNode::TINYXML_COMMENT)
 		{
-		        const char * str = pchild->Value();
-		        printf("ParaseUpdateXml3 str=[%s]\n",str);
-
+		        ParseXML_comment(pchild->Value(),xml);
 			pchild = pchild->NextSibling();
 			continue;
 		}
@@ -101,10 +97,10 @@ void ParaseUpdateXml3(TiXmlNode* pParent, xmlproc * xml)
 
 		if (pchild->FirstChild() == NULL || pchild->FirstChild()->Type() == TiXmlNode::TINYXML_ELEMENT)
 		{
-			ParaseUpdateXml2(pchild, mp);
+			ParseUpdateXml2(pchild, mp);
 		}
 
-		ParseXMLElement2(name, mp, xml);
+		ParseXMLFrom_Instan(name, mp, xml);
 
 		pchild = pchild->NextSibling();
 	}
@@ -127,7 +123,7 @@ void ParaseTinyXmlFile(const char * file, xmlproc * xml)
 		return;
 	}
 
-	ParaseUpdateXml3(root, xml);
+	ParseUpdateXml3(root, xml);
 
 }
 

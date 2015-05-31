@@ -3,7 +3,7 @@
 
 #include "layer.h"
 
-int ParseXMLElement2(hustr name, HUMap & xmlmp, xmlproc * xml);
+int ParseXMLFrom_Instan(hustr name, HUMap & xmlmp, xmlproc * xml);
 
 class CS_manager :virtual public Mutex
 {

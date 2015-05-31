@@ -16,7 +16,7 @@ void CS_manager::PostCS(HUMap::OrderList & mp)
 		}
 		//printf("parse %s\r\n",(*it).m_key.c_str());
 		//(*it).display();
-		ParseXMLElement2((*it).m_key, (*it), elemgr);
+		ParseXMLFrom_Instan((*it).m_key, (*it), elemgr);
 		//printf("CS_manager::PostCS %s\r\n", it->first.c_str());
 //		for(int i=0;i<it->second.BrotherCount();i++)
 //		{

@@ -402,7 +402,7 @@ void Parse_Luado(HUMap & xmlmp, xmlproc * xml)
 
 void Parse_Lua(HUMap & xmlmp, xmlproc * xml)
 {
-        printf("Parse_Lua[%s]\n",xmlmp->getvalue());
+        lua.dostring(xmlmp->getvalue());
 }
 //HUTMap<XMLinstan_tf> XMLinstan;
 void init_xml_instan()
@@ -421,7 +421,7 @@ void init_xml_instan()
 	XMLinstan["luado"] = Parse_Luado;
 	XMLinstan["lua"] = Parse_Lua;
 }
-int ParseXMLElement2(hustr name, HUMap & xmlmp, xmlproc * xml)
+int ParseXMLFrom_Instan(hustr name, HUMap & xmlmp, xmlproc * xml)
 {
 	debug("$$$HU$$$ Parse [%s]\r\n", name.c_str());
 	//xmlmp.display();
@@ -434,7 +434,7 @@ int ParseXMLElement2(hustr name, HUMap & xmlmp, xmlproc * xml)
 	}
 	else
 	{
-		printf("$$$$$HU$$$$$$$warning :: Parse %s err\r\n", name.c_str());
+		printf("$$$$$HU$$$$$$$warning :: can't find xml instan when Parse %s err\r\n", name.c_str());
 	}
 }
 

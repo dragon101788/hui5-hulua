@@ -39,6 +39,7 @@ obj-y += schedule.o
 obj-y += xmlproc.o
 obj-y += layer.o
 obj-y += ParseXML.o
+obj-y += ParseXML_comment.o
 obj-y += hulib.o
 obj-y += codec.o
 obj-y += Framebuffer.o
