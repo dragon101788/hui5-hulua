@@ -518,6 +518,7 @@ void Dir(hustr dir, int l)
 
 
 
+int lua_command(lua_State * L);
 
 int main(int argc, char *argv[])
 {
@@ -576,7 +577,7 @@ int main(int argc, char *argv[])
             JumpToFile("hu.xml", hustr("%s.png", xmlfile));
         }
 
-
+        lua_command(lua);
 
 	printf("Press Ctrl-C to exit ...\n");
 	g_th_timer.wait();

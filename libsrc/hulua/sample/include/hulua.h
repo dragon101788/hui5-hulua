@@ -1135,7 +1135,26 @@ namespace hulua
 
 		table_obj*		m_obj;
 	};
-
+	enum hulua_type
+        {
+            lua_nil,
+            lua_none,
+            lua_noneornil,
+            lua_integer,
+            lua_number,
+            lua_string,
+            lua_userdata,
+            lua_lightuserdata,
+            lua_boolean,
+            lua_table,
+            lua_cfunction,
+            lua_function,
+            lua_yieldable,
+            lua_thread,
+            lua_unknown,
+        };
+        hulua_type get_type(lua_State* L,const char * name);
+        hulua_type get_type(lua_State* L);
 } // namespace hulua
 
 #endif //_HU_LUA_H_

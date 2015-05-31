@@ -1,17 +1,21 @@
 #ifndef __HUI_HULUA_H__
 #define __HUI_HULUA_H__
-
+#include "hulib.h"
 #include "hulua.h"
 
 class LUA
 {	
 public:
 	lua_State* L;
+
+
 	LUA()
 	{
 	        printf("LUA\n");
 		L = lua_open();
 		luaopen_base(L);
+
+		hulua::def(L, "_ALERT", LUA::show_error);
 	}
 	~LUA()
 	{
@@ -30,6 +34,12 @@ public:
         {
                 hulua::dostring(L, str);
         }
+	static void show_error(const char* error)
+	{
+	    printf("_ALERT -> %s\n", error);
+	    fflush(stdout);
+	    exit(-1);
+	}
 
 	template<typename F>
 	void register_func(const char * name,F func)

@@ -25,6 +25,7 @@ MKAUTO=Makefile.auto
 MAKE=make CROSS_COMPILE=$(CROSS_COMPILE) CC=$(CC) CFLAG="$(CFLAG)" TOPDIR=$(TOPDIR)
 
 obj-y += hui_hulua.o
+obj-y += lua_command.o
 obj-y += XMLInstal.o
 obj-y += loaderDL.o
 obj-$(CONFIG_ALPHA_BLT) += platfrom/alpha_w55.o

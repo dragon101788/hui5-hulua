@@ -39,7 +39,15 @@ public:
         static void lua_create(const char * name)
         {
             printf("lua create\n");
-
+             //usage: lua call
+           /*
+            *       register_Instance("lua_test_page","test");
+                    test.x=0;
+                    test.y=0;
+                    test.width=480;
+                    test.height=272;
+                    test:LuaFlushConfig();
+           */
 
             hulua::class_add<lua_test_page>(lua, "lua_test_page");
             hulua::class_mem<lua_test_page>(lua, "x", &lua_test_page::x);

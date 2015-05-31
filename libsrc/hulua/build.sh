@@ -15,5 +15,5 @@ make install
 
 cd ${ROOTDIR}
 
-make -f Makefile.lib linux clean CFLAGS=-I${TOPDIR}/include LDFLAGS=-L${TOPDIR}/lib INSTALL_TOP=${TOPDIR} CROSS_COMPILE=${CROSS_COMPILE}
-make -f Makefile.lib linux install CFLAGS=-I${TOPDIR}/include LDFLAGS=-L${TOPDIR}/lib INSTALL_TOP=${TOPDIR} CROSS_COMPILE=${CROSS_COMPILE}
+make -f Makefile.lib linux clean "CFLAGS=${CFLAGS} -I${TOPDIR}/include" LDFLAGS=-L${TOPDIR}/lib INSTALL_TOP=${TOPDIR} CROSS_COMPILE=${CROSS_COMPILE}
+make -f Makefile.lib linux install "CFLAGS=${CFLAGS} -I${TOPDIR}/include" LDFLAGS=-L${TOPDIR}/lib INSTALL_TOP=${TOPDIR} CROSS_COMPILE=${CROSS_COMPILE}

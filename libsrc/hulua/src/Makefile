@@ -8,8 +8,8 @@ PLAT= none
 
 CROSS_COMPILE:=
 CC = $(CROSS_COMPILE)gcc -std=gnu99
-CPP = $(CROSS_COMPILE)g++ -DLUA_C89_NUMBERS
-CFLAGS= -O2 -Wall -Wextra -DLUA_COMPAT_5_2 $(SYSCFLAGS) $(MYCFLAGS)
+CPP = $(CROSS_COMPILE)g++
+CFLAGS += -O2 -Wall -Wextra -DLUA_COMPAT_5_2 $(SYSCFLAGS) $(MYCFLAGS)
 LDFLAGS= $(SYSLDFLAGS) $(MYLDFLAGS)
 LIBS= -lm $(SYSLIBS) $(MYLIBS)
 
@@ -52,7 +52,7 @@ ALL_A= $(LUA_A)
 default: $(PLAT)
 
 all:	$(ALL_T)
-	$(CPP) -c hulua.cpp -o hulua.o 
+	$(CPP) $(CFLAGS) -c hulua.cpp -o hulua.o 
 	$(AR) libhulua.a hulua.o $(BASE_O)
 
 o:	$(ALL_O)

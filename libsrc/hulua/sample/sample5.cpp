@@ -39,7 +39,11 @@ int main( int argc,char *argv[] )
 
 	printf("%s\n","-------------------------- calling test_error()");
 	hulua::call<void>(L, "test_error");
-
+	
+	printf("%s\n","-------------------------- get a");
+	hulua::get<hulua::table>(L, "abcdefg");
+	
+	printf("%s\n","-------------------------- end");
 	lua_close(L);
 
 	return 0;

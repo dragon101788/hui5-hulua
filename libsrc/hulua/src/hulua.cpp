@@ -783,4 +783,71 @@ hulua::table::~table()
 	m_obj->dec_ref();
 }
 
+
+hulua::hulua_type hulua::get_type(lua_State* L, const char * name)
+{
+  lua_getglobal(L, name);
+  return get_type(L);
+}
+hulua::hulua_type hulua::get_type(lua_State* L)
+{
+  if (lua_iscfunction(L, -1))
+    {
+      return lua_cfunction;
+    }
+  if (lua_isinteger(L, -1))
+    {
+      return lua_integer;
+    }
+  if (lua_isnumber(L, -1))
+    {
+      return lua_number;
+    }
+  if (lua_isstring(L, -1))
+    {
+      return lua_string;
+    }
+  if (lua_isuserdata(L, -1))
+    {
+      return lua_userdata;
+    }
+  if (lua_isyieldable(L))
+    {
+      return lua_yieldable;
+    }
+  if (lua_isboolean(L, -1))
+    {
+      return lua_boolean;
+    }
+  if (lua_isfunction(L, -1))
+    {
+      return lua_function;
+    }
+  if (lua_islightuserdata(L, -1))
+    {
+      return lua_lightuserdata;
+    }
+  if (lua_isnil(L, -1))
+    {
+      return lua_nil;
+    }
+  if (lua_isnone(L, -1))
+    {
+      return lua_none;
+    }
+  if (lua_isnoneornil(L, -1))
+    {
+      return lua_noneornil;
+    }
+  if (lua_istable(L, -1))
+    {
+      return lua_table;
+    }
+  if (lua_isthread(L, -1))
+    {
+      return lua_thread;
+    }
+
+  return lua_unknown;
+}
 /*---------------------------------------------------------------------------*/ 

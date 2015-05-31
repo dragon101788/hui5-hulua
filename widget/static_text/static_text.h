@@ -4,6 +4,7 @@
 #include "XMLInstal.h"
 #include "layer.h"
 #include "ttf_font.h"
+#include "hui_hulua.h"
 
 class static_text: public element
 {
@@ -41,6 +42,7 @@ public:
 	void doFlushConfig()
 	{
 		PraseElement();
+
 		//id = m_mp["id"]->getvalue_int();
 		int red = m_mp["red"]->getvalue_int();
 		int green = m_mp["green"]->getvalue_int();
