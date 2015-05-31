@@ -2,7 +2,7 @@
 #define __TIMER_H__
 
 #include "hulib.h"
-#include "ParaseXML.h"
+#include "ParseXML.h"
 #include <set>
 
 #define TIMER_CONTINUE 0

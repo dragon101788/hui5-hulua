@@ -1,7 +1,7 @@
 #ifndef __LAYER_H__
 #define __LAYER_H__
 
-#include "ParaseXML.h"
+#include "ParseXML.h"
 #include "codec.h"
 #include "schedule.h"
 #include <deque>

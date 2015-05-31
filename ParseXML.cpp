@@ -1,4 +1,4 @@
-#include "ParaseXML.h"
+#include "ParseXML.h"
 
 #include <errno.h>
 #include "tinyxml/tinyxml.h"
@@ -40,6 +40,9 @@ void ParaseUpdateXml2(TiXmlNode* pParent, HUMap & xmlmp)
 
 		if (t == TiXmlNode::TINYXML_COMMENT)
 		{
+		        const char * str = pchild->Value();
+		        printf("ParaseUpdateXml2 str=[%s]\n",str);
+
 			pchild = pchild->NextSibling();
 			continue;
 		}
@@ -79,6 +82,9 @@ void ParaseUpdateXml3(TiXmlNode* pParent, xmlproc * xml)
 
 		if (t == TiXmlNode::TINYXML_COMMENT)
 		{
+		        const char * str = pchild->Value();
+		        printf("ParaseUpdateXml3 str=[%s]\n",str);
+
 			pchild = pchild->NextSibling();
 			continue;
 		}

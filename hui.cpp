@@ -6,7 +6,7 @@
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 #include <signal.h>
-#include "ParaseXML.h"
+#include "ParseXML.h"
 #include "hui.h"
 #include "manager_touch.h"
 #include "manager_timer.h"
@@ -380,6 +380,30 @@ void Parse_gcfg(HUMap & xmlmp, xmlproc * xml)
 	g_th_msg.msg.send_message(101, info);
 }
 
+void Parse_Import(HUMap & xmlmp, xmlproc * xml)
+{
+        if(xmlmp.exist("lua"))
+        {
+            const char * name = xmlmp["lua"]->getvalue();
+            printf("import lua %s\n",name);
+            lua.dofile(name);
+        }
+}
+
+void Parse_Luado(HUMap & xmlmp, xmlproc * xml)
+{
+        if(xmlmp.exist("fun"))
+        {
+            const char * name = xmlmp["fun"]->getvalue();
+            printf("lua invok func %s()\n",name);
+            lua.dostring(name);
+        }
+}
+
+void Parse_Lua(HUMap & xmlmp, xmlproc * xml)
+{
+        printf("Parse_Lua[%s]\n",xmlmp->getvalue());
+}
 //HUTMap<XMLinstan_tf> XMLinstan;
 void init_xml_instan()
 {
@@ -393,6 +417,9 @@ void init_xml_instan()
 	XMLinstan["gcfg"] = Parse_gcfg;
 	XMLinstan["cs"] = ParseCS;
 	XMLinstan["env"] = ParseEnv;
+	XMLinstan["import"] = Parse_Import;
+	XMLinstan["luado"] = Parse_Luado;
+	XMLinstan["lua"] = Parse_Lua;
 }
 int ParseXMLElement2(hustr name, HUMap & xmlmp, xmlproc * xml)
 {
@@ -546,7 +573,7 @@ int main(int argc, char *argv[])
         }
         else
         {
-            JumpToFile("hu.lua", hustr("%s.png", xmlfile));
+            JumpToFile("hu.xml", hustr("%s.png", xmlfile));
         }
 
 

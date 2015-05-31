@@ -17,6 +17,10 @@ public:
 	{
 
 	}
+	void LuaCommand(const char * cmd,const char * arg)
+	{
+
+	}
 	void doDelete()
 	{
 

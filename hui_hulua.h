@@ -26,6 +26,10 @@ public:
 	{
 		hulua::dofile(L, file);
 	}
+	void dostring(const char * str)
+        {
+                hulua::dostring(L, str);
+        }
 
 	template<typename F>
 	void register_func(const char * name,F func)
