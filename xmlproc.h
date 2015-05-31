@@ -17,6 +17,7 @@ void hui_exit(const char * cmd);
 void JumpToFile(const char * jump, const char * snap);
 
 extern DebugTimer fps;
+extern int debug_timer_count;
 
 class HuExec
 {
@@ -189,7 +190,11 @@ public:
 		{
 			//printf("%s RenderFromBuffer\r\n",filename.c_str());
 			out.RenderToFramebuffer(&fb);
-			fps.debug_timer("<fps>");
+			if(debug_timer_count)
+			{
+			    fps.debug_timer("<fps>");
+			    debug_timer_count--;
+			}
 			isDraw = 0;
 		}
 		unlock();

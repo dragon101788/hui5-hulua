@@ -9,14 +9,7 @@ public:
 	lua_State* L;
 
 
-	LUA()
-	{
-	        printf("LUA\n");
-		L = lua_open();
-		luaopen_base(L);
-
-		hulua::def(L, "_ALERT", LUA::show_error);
-	}
+	LUA();
 	~LUA()
 	{
 	        printf("~LUA");
@@ -34,6 +27,7 @@ public:
         {
                 hulua::dostring(L, str);
         }
+
 	static void show_error(const char* error)
 	{
 	    printf("_ALERT -> %s\n", error);

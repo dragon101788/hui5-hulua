@@ -6,7 +6,7 @@
 DebugTimer fps;
 pXmlproc g_cur_xml;
 map<hustr, pXmlproc> g_xml_proc;
-
+int debug_timer_count=0;
 ProcTimer g_exec;
 
 int HuExec::doStart()
