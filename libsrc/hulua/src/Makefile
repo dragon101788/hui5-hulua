@@ -53,7 +53,7 @@ default: $(PLAT)
 
 all:	$(ALL_T)
 	$(CPP) $(CFLAGS) -c hulua.cpp -o hulua.o 
-	$(AR) libhulua.a hulua.o $(BASE_O)
+	$(AR) libhulua.a hulua.o $(BASE_O) $(LUA_O) $(LUA_A)
 
 o:	$(ALL_O)
 
