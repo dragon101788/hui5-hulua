@@ -72,7 +72,7 @@ public:
 	}
 	void onSchedule()
 	{
-		log_i("$$$HU$$$ Render_layer::[%s]\r\n", name.c_str());
+		log_d("$$$HU$$$ Render_layer::[%s]\r\n", name.c_str());
 		Render();
 		//debug("$$$HU$$$ Render_layer::[%s]OK\r\n", name.c_str());
 	}
@@ -90,7 +90,7 @@ public:
 
 	virtual ~element()
 	{
-		debug("###HU### distroy element %s\r\n", name.c_str());
+		log_i("$$$HU$$$ distroy element %s\r\n", name.c_str());
 		backstack();
 		map<int, image>::iterator it;
 		for (it = res.begin(); it != res.end(); ++it)
@@ -149,7 +149,7 @@ public:
 			x = tmpX;
 			y = tmpY;
 		}
-		debug(
+		log_i(
 				"$$$HU$$$ ElementPrase %s x=%d y=%d width=%d height=%d hide=%d\r\n",
 				name.c_str(), x, y, width, height, hide);
 

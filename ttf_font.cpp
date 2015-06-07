@@ -273,8 +273,8 @@ int FontDev::TTF_DisplayUnicode(text * ptext, const wchar_t *text, int num, unsi
 	FT_GlyphSlot slot = face->glyph;
 	int x = 0;
 	int y = 0;
-	printf("TTF_DisplayUnicode!,num=%d\n", num);
-	printf("buff_width=%d ,buff_height=%d\n",buff_width,buff_height);
+	log_d("TTF_DisplayUnicode!,num=%d\n", num);
+	log_d("buff_width=%d ,buff_height=%d\n",buff_width,buff_height);
 
 	setPixelSize(ptext->fontWidth, ptext->fontHeight);
 	for (i = 0; i < num; i++)
@@ -321,7 +321,7 @@ int FontDev::TTF_DisplayUnicode(text * ptext, const wchar_t *text, int num, unsi
 
 	}
 
-	printf("final_num=%d TTF_DisplayUnicode exit!\n",final_num);
+	log_d("final_num=%d TTF_DisplayUnicode exit!\n",final_num);
 	return final_num;
 }
 
@@ -334,7 +334,7 @@ void ParseFont(HUMap & xmlmp, xmlproc * xml)
 	const char * name = xmlmp["name"]->getvalue();
 	path = xmlmp["path"]->getvalue();
 
-	printf("ParseFont %s=%s\n", name, path);
+	log_i("ParseFont %s=%s\n", name, path);
 	font_mp[name].TTF_Init(path, FT_LOAD_NO_BITMAP | FT_LOAD_RENDER);
 	//printf("get font_mp %x %x\r\n",font_mp[name].face,font_mp[name].ft_Lib);
 }

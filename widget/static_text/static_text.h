@@ -29,7 +29,7 @@ public:
 
 	  txt = str;
 	  ttf.m_font = &font_mp[font];
-          printf("get font_mp %x %x\r\n", font_mp[font].face,
+          log_d("get font_mp %x %x\r\n", font_mp[font].face,
                           font_mp[font].ft_Lib);
           ttf.fontHeight = size;
           ttf.color = color;

@@ -1,4 +1,4 @@
-CROSS_COMPILE=$(HOME)/usr/arm/arm_linux_4.2/bin/arm-linux-
+#CROSS_COMPILE=$(HOME)/usr/arm/arm_linux_4.2/bin/arm-linux-
 CC=$(CROSS_COMPILE)g++
 all:
 	make -C ../ TOPDIR=$(PWD) CROSS_COMPILE=$(CROSS_COMPILE)

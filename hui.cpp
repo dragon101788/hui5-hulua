@@ -395,7 +395,7 @@ void Parse_Luado(HUMap & xmlmp, xmlproc * xml)
         if(xmlmp.exist("fun"))
         {
             const char * name = xmlmp["fun"]->getvalue();
-            printf("lua invok func %s()\n",name);
+            printf("lua invok func %s\n",name);
             lua.dostring(name);
         }
 }
@@ -423,7 +423,7 @@ void init_xml_instan()
 }
 int ParseXMLFrom_Instan(hustr name, HUMap & xmlmp, xmlproc * xml)
 {
-	debug("$$$HU$$$ Parse [%s]\r\n", name.c_str());
+	log_i("$$$HU$$$ Parse [%s]\r\n", name.c_str());
 	//xmlmp.display();
 	XMLinstan_tf fun = XMLinstan[name];
 	if (fun != NULL)
@@ -434,7 +434,7 @@ int ParseXMLFrom_Instan(hustr name, HUMap & xmlmp, xmlproc * xml)
 	}
 	else
 	{
-		printf("$$$$$HU$$$$$$$warning :: can't find xml instan when Parse %s err\r\n", name.c_str());
+		log_w("$$$$$HU$$$$$$$warning :: can't find xml instan when Parse %s err\r\n", name.c_str());
 	}
 }
 
@@ -518,7 +518,7 @@ void Dir(hustr dir, int l)
 
 
 
-int lua_command(lua_State * L);
+
 
 int main(int argc, char *argv[])
 {
@@ -577,7 +577,7 @@ int main(int argc, char *argv[])
             JumpToFile("hu.xml", hustr("%s.png", xmlfile));
         }
 
-        lua_command(lua);
+        //lua_command(lua);
 
 	printf("Press Ctrl-C to exit ...\n");
 	g_th_timer.wait();
