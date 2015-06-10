@@ -134,7 +134,7 @@ public:
 	}
 	void destroy()
 	{
-		printf("destroy\n");
+		log_d("destroy\n");
 
 	}
 	void LCD_PutPixel(unsigned int x, unsigned int y, unsigned int color,

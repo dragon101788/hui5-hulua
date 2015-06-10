@@ -31,7 +31,7 @@ public:
 	}
 };
 
-class element: public schedule_ele, public image, virtual public Mutex
+class element: public schedule_ele, public image,virtual public Mutex
 {
 public:
 	HUMap m_mp;
@@ -116,6 +116,33 @@ public:
 	{
 	    doLuaCommand(cmd);
 	}
+	class element_lua_node :public LUA::node
+	{
+	public:
+	  element * m_ele;
+	  element_lua_node(element * ele)
+	  {
+	     m_ele = ele;
+	  }
+          void DO(lua_State * L)
+          {
+            if (hulua::get_type(L, m_ele->name) == hulua::lua_nil)
+            {
+              printf("lua create %s object\n", m_ele->name.nstr());
+              hulua::class_add<element>(L, "lua_test_page");
+              hulua::class_mem<element>(L, "x", &element::x);
+              hulua::class_mem<element>(L, "y", &element::y);
+              hulua::class_mem<element>(L, "width", &element::width);
+              hulua::class_mem<element>(L, "height", &element::height);
+              hulua::class_def<element>(L, "command", &element::LuaCommand);
+              hulua::set(L, m_ele->name, this);
+            }
+            else
+            {
+              printf("lua find %s object !!!!!!\n", m_ele->name.nstr());
+            }
+          }
+	};
 	void PraseElement()
 	{
 		name = m_mp["name"]->getvalue();
@@ -125,21 +152,8 @@ public:
 		height = m_mp["height"]->getvalue_int();
 		hide = m_mp["hide"]->getvalue_int();
 
-		if(hulua::get_type(lua,name)==hulua::lua_nil)
-                {
-		    printf("lua create %s object\n",name.nstr());
-                    hulua::class_add<element>(lua, "lua_test_page");
-                    hulua::class_mem<element>(lua, "x", &element::x);
-                    hulua::class_mem<element>(lua, "y", &element::y);
-                    hulua::class_mem<element>(lua, "width", &element::width);
-                    hulua::class_mem<element>(lua, "height", &element::height);
-                    hulua::class_def<element>(lua, "command",&element::LuaCommand);
-                    hulua::set(lua, name, this);
-                }
-		else
-                {
-		    printf("lua find %s object !!!!!!\n","n");
-                }
+		lua.regele(this);
+                //lua.add(new element_lua_node(this));
 
 
 		//控件被移动

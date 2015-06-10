@@ -23,33 +23,40 @@ extern int debug_timer_count;
 class HuExec
 {
 public:
-	hustr run;
-	hustr cs;
-	int have;
+	hustr sh;
+	hustr ldo;
 	HuExec()
 	{
-		have = 0;
 	}
 	HuExec(HUMap & mp)
 	{
-		have = 0;
 		parse(mp);
 	}
 	int parse(HUMap & mp)
 	{
-		if (mp.exist("run"))
+		if (mp.exist("sh"))
 		{
-			run = mp["run"]->getvalue();
-			have = 1;
-			//HUTimerAdd(run, g_exec.GetUpTimer() + ptimer, timerfun_run, run);
+		        sh = mp["sh"]->getvalue();
 		}
+		if (mp.exist("ldo"))
+                {
+                        ldo = mp["ldo"]->getvalue();
+                }
 	}
 	int doStart()
 	{
-	        if (!run.empty())
-                {
-                        system(run);
-                }
+	    int ret = 0;
+            if (!sh.empty())
+            {
+                    system(sh);
+                    ret++;
+            }
+            if (!ldo.empty())
+            {
+                   lua.dostring(ldo);
+                   ret++;
+            }
+            return ret;
 	}
 };
 //

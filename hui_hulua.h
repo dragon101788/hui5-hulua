@@ -3,6 +3,7 @@
 #include "hulib.h"
 #include "hulua.h"
 
+
 class LUA :public thread
 {	
 public:
@@ -32,7 +33,9 @@ public:
           }
           void DO(lua_State * L)
           {
+              log_i("lua dofile %s\n",m_file.nstr());
               hulua::dofile(L, m_file);
+              log_i("lua dofile %s OK\n",m_file.nstr());
           }
         };
         class node_dostring :public node
@@ -45,7 +48,9 @@ public:
           }
           void DO(lua_State * L)
           {
+              log_i("lua dostring %s\n",m_str.nstr());
               hulua::dostring(L, m_str);
+              log_i("lua dostring %s OK\n",m_str.nstr());
           }
         };
         queue< SmartPtr<node> > q;
@@ -56,10 +61,10 @@ public:
 
 	LUA();
 	~LUA();
-	operator lua_State *()
-        {
-	    return L;
-        }
+//	operator lua_State *()
+//        {
+//	    return L;
+//        }
 	void dofile(const char * file)
 	{
 	  q.addele(new node_dofile(file));
@@ -68,7 +73,12 @@ public:
         {
 	  q.addele(new node_dostring(str));
         }
+        #define regele(ele)     add(new element_lua_node(ele))
 
+	void add(node * ele)
+	{
+	  q.addele(ele);
+	}
 	static void show_error(const char* error)
 	{
 	    printf("_ALERT -> %s\n", error);

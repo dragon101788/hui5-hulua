@@ -25,11 +25,9 @@ public:
 	{
 		//printf("OnTimer time=%d\r\n", fps_time + images[id].ntime);
 		TimerSet(tm + fps_time + images[id].ntime);
-		if (images[id].exec.have)
+		if (images[id].exec.doStart())
 		{
-			//xml_mgr->AddExec(0,);
-			images[id].exec.doStart();
-			debug("id[%d] PostCS\r\n", id);
+			debug("id[%d] Exec\r\n", id);
 		}
 		else
 		{

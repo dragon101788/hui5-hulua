@@ -49,14 +49,14 @@ public:
                     test:LuaFlushConfig();
            */
 
-            hulua::class_add<lua_test_page>(lua, "lua_test_page");
-            hulua::class_mem<lua_test_page>(lua, "x", &lua_test_page::x);
-            hulua::class_mem<lua_test_page>(lua, "y", &lua_test_page::y);
-            hulua::class_mem<lua_test_page>(lua, "width", &lua_test_page::width);
-            hulua::class_mem<lua_test_page>(lua, "height", &lua_test_page::height);
-            hulua::class_def<lua_test_page>(lua, "LuaFlushConfig", &lua_test_page::LuaFlushConfig);
-
-            hulua::set(lua, name, new lua_test_page);
+//            hulua::class_add<lua_test_page>(lua, "lua_test_page");
+//            hulua::class_mem<lua_test_page>(lua, "x", &lua_test_page::x);
+//            hulua::class_mem<lua_test_page>(lua, "y", &lua_test_page::y);
+//            hulua::class_mem<lua_test_page>(lua, "width", &lua_test_page::width);
+//            hulua::class_mem<lua_test_page>(lua, "height", &lua_test_page::height);
+//            hulua::class_def<lua_test_page>(lua, "LuaFlushConfig", &lua_test_page::LuaFlushConfig);
+//
+//            hulua::set(lua, name, new lua_test_page);
         }
         void LuaFlushConfig()
         {

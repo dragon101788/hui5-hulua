@@ -1,5 +1,6 @@
 #include "hui_hulua.h"
 #include "xmlproc.h"
+#include "layer.h"
 
 LUA lua;
 
@@ -51,3 +52,4 @@ int LUA::init()
  hulua::def(L, "debug_timer", set_debug_timer);
 
 }
+
