@@ -366,18 +366,18 @@ void ParseInclude(HUMap & xmlmp, xmlproc * xml)
 //	xml->CreateCS(xmlmp["name"]->getvalue(), xmlmp);
 //}
 
-void Parse_gcfg(HUMap & xmlmp, xmlproc * xml)
-{
-	const char * name = xmlmp["name"]->getvalue();
-	info info;
-	element * ele = xml->GetElementByName(name);
-	if (ele != NULL)
-	{
-		ele->GetInfo(info);
-	}
-	//printf("snd msg:\r\n %s\r\n", info.nstr());
-	g_th_msg.msg.send_message(101, info);
-}
+//void Parse_gcfg(HUMap & xmlmp, xmlproc * xml)
+//{
+//	const char * name = xmlmp["name"]->getvalue();
+//	info info;
+//	element * ele = xml->GetElementByName(name);
+//	if (ele != NULL)
+//	{
+//		ele->GetInfo(info);
+//	}
+//	//printf("snd msg:\r\n %s\r\n", info.nstr());
+//	g_th_msg.msg.send_message(101, info);
+//}
 
 void Parse_Import(HUMap & xmlmp, xmlproc * xml)
 {

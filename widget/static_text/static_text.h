@@ -46,13 +46,13 @@ public:
 	{
 
 	}
-	void doGetInfo(info & info)
-	{
-		GetElementInfo(info);
-		info.AddInfo("txt", txt);
-		info.AddInfo("size", size);
-		info.AddInfo("font", font);
-	}
+//	void doGetInfo(info & info)
+//	{
+//		GetElementInfo(info);
+//		info.AddInfo("txt", txt);
+//		info.AddInfo("size", size);
+//		info.AddInfo("font", font);
+//	}
 	void doFlushConfig()
 	{
 		PraseElement();

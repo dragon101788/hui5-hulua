@@ -37,31 +37,31 @@ public:
 	HUMap m_mp;
 	virtual void doFlushConfig() = 0;
 	virtual void doRender() = 0;
-	virtual void doGetInfo(info & info)
-	{
-		printf("warning element bash doGetInfo\r\n");
-	}
+//	virtual void doGetInfo(info & info)
+//	{
+//		printf("warning element bash doGetInfo\r\n");
+//	}
 	virtual void doDelete()
 	{
 		printf("warning element bash OnDelete\r\n");
 	}
 
-	void GetElementInfo(info & info)
-	{
-		info.AddInfo("name", name);
-		info.AddInfo("x", x);
-		info.AddInfo("y", y);
-		info.AddInfo("width", width);
-		info.AddInfo("height", height);
-		info.AddInfo("hide", hide);
-		info.AddInfo("lay", lay);
-	}
-	void GetInfo(info & info)
-	{
-		lock();
-		doGetInfo(info);
-		unlock();
-	}
+//	void GetElementInfo(info & info)
+//	{
+//		info.AddInfo("name", name);
+//		info.AddInfo("x", x);
+//		info.AddInfo("y", y);
+//		info.AddInfo("width", width);
+//		info.AddInfo("height", height);
+//		info.AddInfo("hide", hide);
+//		info.AddInfo("lay", lay);
+//	}
+//	void GetInfo(info & info)
+//	{
+//		lock();
+//		doGetInfo(info);
+//		unlock();
+//	}
 	void Delete()
 	{
 		doDelete();

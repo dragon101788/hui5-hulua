@@ -25,13 +25,13 @@ public:
 	{
 
 	}
-	void doGetInfo(info & info)
-	{
-		GetElementInfo(info);
-		info.AddInfo("id", id);
-		info.AddInfo("xpos", xpos);
-		info.AddInfo("ypos", ypos);
-	}
+//	void doGetInfo(info & info)
+//	{
+//		GetElementInfo(info);
+//		info.AddInfo("id", id);
+//		info.AddInfo("xpos", xpos);
+//		info.AddInfo("ypos", ypos);
+//	}
 	void doFlushConfig()
 	{
 		PraseElement();
