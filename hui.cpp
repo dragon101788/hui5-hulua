@@ -61,7 +61,7 @@ void huErrExit(const char * str)
 	exit(-1);
 }
 
-void JumpToFile(const char * jump, const char * snap)
+void JumpToFile(const char * jump)
 {
 
 	//pXmlproc tmp = g_cur_xml;
@@ -86,20 +86,14 @@ void JumpToFile(const char * jump, const char * snap)
         }
 	else if(math==".xml")
 	{
-                hustr snapfile;
-                if (snap == NULL)
-                {
-                        snapfile.format("%s.png", jump);
-                }
-                else
-                {
-                        snapfile = snap;
-                }
-                printf("snapfile = %s snap=%s\r\n", snap, snapfile.c_str());
+                hustr snapfile("%s.png", jump);
+
                 if (access_Image(snapfile))
                 {
-                        fb.DumpToSnap(snapfile);
+                    log_i("install snapfile = %s\r\n", snapfile.c_str());
+                    fb.DumpToSnap(snapfile);
                 }
+
                 g_cur_xml = new xmlproc(jump);
                 g_cur_xml->doLoader();
 	}
@@ -164,14 +158,18 @@ void ParseCUS(HUMap & xmlmp, xmlproc * xml)
 	g_xml_proc[cus]->doLoader();
 }
 
+void Jump(const char * jump)
+{
+  if (g_cur_xml->filename != jump)
+  {
+          JumpToFile(jump);
+  }
+}
+
 void ParseJump(HUMap & xmlmp, xmlproc * xml)
 {
 	hustr jump = xmlmp["xmlfile"]->getvalue();
-	hustr snap = xmlmp["snap"]->getvalue();
-	if (g_cur_xml->filename != jump)
-	{
-		JumpToFile(jump.nstr(), snap.nstr());
-	}
+	Jump(jump);
 }
 
 
@@ -569,11 +567,11 @@ int main(int argc, char *argv[])
         const char * xmlfile = g_var.getvar("xmlfile");
         if (xmlfile != NULL)
         {
-            JumpToFile(xmlfile, hustr("%s.png", xmlfile));
+            JumpToFile(xmlfile);
         }
         else
         {
-            JumpToFile("hu.xml", hustr("%s.png", xmlfile));
+            JumpToFile("hu.xml");
         }
 
         //lua_command(lua);

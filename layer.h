@@ -126,8 +126,7 @@ public:
 	  }
           void DO(lua_State * L)
           {
-            if (hulua::get_type(L, m_ele->name) == hulua::lua_nil)
-            {
+            //if (hulua::get_type(L, m_ele->name) == hulua::lua_nil);
               printf("lua create %s object\n", m_ele->name.nstr());
               hulua::class_add<element>(L, "lua_test_page");
               hulua::class_mem<element>(L, "x", &element::x);
@@ -136,13 +135,9 @@ public:
               hulua::class_mem<element>(L, "height", &element::height);
               hulua::class_def<element>(L, "command", &element::LuaCommand);
               hulua::set(L, m_ele->name, this);
-            }
-            else
-            {
-              printf("lua find %s object !!!!!!\n", m_ele->name.nstr());
-            }
           }
 	};
+
 	void PraseElement()
 	{
 		name = m_mp["name"]->getvalue();
@@ -163,8 +158,7 @@ public:
 			x = tmpX;
 			y = tmpY;
 		}
-		log_i(
-				"$$$HU$$$ ElementPrase %s x=%d y=%d width=%d height=%d hide=%d\r\n",
+		log_i("$$$HU$$$ ElementPrase %s x=%d y=%d width=%d height=%d hide=%d\r\n",
 				name.c_str(), x, y, width, height, hide);
 
 		if (m_mp.exist("lay"))

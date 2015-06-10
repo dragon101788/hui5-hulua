@@ -40,6 +40,7 @@ int LUA::run()
   destory();
 }
 
+extern void Jump(const char * jump);
 int LUA::init()
 {
   printf("LUA\n");
@@ -50,6 +51,6 @@ int LUA::init()
 
  hulua::def(L, "_ALERT", LUA::show_error);
  hulua::def(L, "debug_timer", set_debug_timer);
-
+ hulua::def(L, "jump", Jump);
 }
 
