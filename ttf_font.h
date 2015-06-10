@@ -127,7 +127,6 @@ public:
 		color = 0;
 		style = 0;
 		m_font = NULL;
-		printf("truetype\n");
 	}
 	~text()
 	{

@@ -1,9 +1,10 @@
 #ifndef __XML_PORG_H__
 #define __XML_PORG_H__
 
+#include "hulib.h"
+#include "layer.h"
 #include "manager_touch.h"
 #include "manager_timer.h"
-#include "manager_cs.h"
 #include "Framebuffer.h"
 
 class xmlproc;
@@ -42,29 +43,25 @@ public:
 			have = 1;
 			//HUTimerAdd(run, g_exec.GetUpTimer() + ptimer, timerfun_run, run);
 		}
-		if (mp.exist("cs"))
-		{
-			cs = mp["cs"]->getvalue();
-			have = 1;
-			//HUTimerAdd(cs, g_exec.GetUpTimer() + ptimer, timerfun_cs, cs);
-		}
 	}
-	virtual int doStart();
-	static int _exec(int tm, HuExec is)
+	int doStart()
 	{
-		is.doStart();
+	        if (!run.empty())
+                {
+                        system(run);
+                }
 	}
 };
+//
+//typedef HUTimer<HuExec> ProcTimer;
+//extern ProcTimer g_exec;
 
-typedef HUTimer<HuExec> ProcTimer;
-extern ProcTimer g_exec;
-class xmlproc: public element_manager,
-		public CS_manager,
+class xmlproc : public element_manager,
 		public timer_manager,
 		public touch_manager,
 		public schedule_draw,
 		public thread,
-		public ProcTimer::HUTimerContainer,
+//		public ProcTimer::HUTimerContainer,
 		virtual public Mutex
 {
 private:
@@ -85,17 +82,7 @@ private:
 		}
 	};
 	xmlout out;
-//	class tmexe
-//	{
-//	public:
-//		tmexe(HUMap &mp, xmlproc * xml)
-//		{
-//			exec.parase(mp, xml);
-//			tm = mp["tm"].getvalue_int();
-//		}
-//		executable exec;
-//		int tm;
-//	};
+
 	class save_snap: public schedule_ele
 	{
 	public:
@@ -155,16 +142,6 @@ public:
 	static int timerfun_run(int tm, hustr cmd)
 	{
 		system(cmd);
-	}
-	static int timerfun_cs(int tm, hustr cs)
-	{
-		printf("exec xml=%s cs=%s\r\n", g_cur_xml->filename.c_str(), cs.c_str());
-		g_cur_xml->PostCS(cs);
-	}
-	void AddExec(int ptimer, HuExec c)
-	{
-		printf("$$$HU$$$ exec %s %s\r\n", c.run.nstr(), c.cs.nstr());
-		HUTimerAdd(filename, g_exec.GetUpTimer() + ptimer, HuExec::_exec, c);
 	}
 
 	int ScheduleSaveSnap(const char * file)

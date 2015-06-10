@@ -24,8 +24,6 @@ MKAUTO=Makefile.auto
 
 MAKE=make CROSS_COMPILE=$(CROSS_COMPILE) CC=$(CC) CFLAG="$(CFLAG)" TOPDIR=$(TOPDIR)
 
-obj-y += hui_hulua.o
-obj-y += lua_command.o
 obj-y += XMLInstal.o
 obj-y += loaderDL.o
 obj-$(CONFIG_ALPHA_BLT) += platfrom/alpha_w55.o
@@ -34,7 +32,6 @@ obj-y += thread_msg.o
 obj-y += thread_timer.o
 obj-y += thread_touch.o
 obj-y += manager_timer.o
-obj-y += manager_cs.o
 obj-y += manager_touch.o
 obj-y += schedule.o
 obj-y += xmlproc.o
@@ -44,6 +41,8 @@ obj-y += ParseXML_comment.o
 obj-y += hulib.o
 obj-y += codec.o
 obj-y += Framebuffer.o
+obj-y += hui_hulua.o
+obj-y += lua_command.o
 obj-y += hui.o 
 obj-$(CONFIG_TOUCH_EKTF2K) += platfrom/touch_ektf2k.o
 obj-$(CONFIG_TOUCH_NONE) += platfrom/touch_none.o

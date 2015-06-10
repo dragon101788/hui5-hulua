@@ -31,7 +31,7 @@ public:
 
 	void doTouchActive()
 	{
-		xml_mgr->AddExec(0, exec);
+		exec.doStart();
 	}
 
 	void doDelete()

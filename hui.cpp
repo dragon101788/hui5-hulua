@@ -10,7 +10,6 @@
 #include "hui.h"
 #include "manager_touch.h"
 #include "manager_timer.h"
-#include "manager_cs.h"
 #include "thread_msg.h"
 #include "xmlproc.h"
 #include "thread_timer.h"
@@ -26,18 +25,18 @@ using namespace std;
 
 #define DEFAULT_XMLFILE "hu.xml"
 
-void post_scfg(HUMap & xmlmp, xmlproc * xml)
-{
-	if (xmlmp.exist("cus"))
-	{
-		hustr cus = xmlmp["cus"]->getvalue();
-		g_xml_proc[cus]->PostScfg(xmlmp);
-	}
-	else
-	{
-		xml->PostScfg(xmlmp);
-	}
-}
+//void post_scfg(HUMap & xmlmp, xmlproc * xml)
+//{
+//	if (xmlmp.exist("cus"))
+//	{
+//		hustr cus = xmlmp["cus"]->getvalue();
+//		g_xml_proc[cus]->PostScfg(xmlmp);
+//	}
+//	else
+//	{
+//		xml->PostScfg(xmlmp);
+//	}
+//}
 
 void huErrExit(const char * str)
 {
@@ -214,16 +213,16 @@ void ParseControl(HUMap & xmlmp, xmlproc * xml)
 
 		xml->element_manager::DelElement(name);
 	}
-	else if (event == "proc")
-	{
-		int ptimer=0;
-		if (xmlmp.exist("ptimer"))
-		{
-			//xml->AddExec();
-			ptimer = xmlmp["ptimer"]->getvalue_int();
-		}
-		xml->AddExec(ptimer,xmlmp);
-	}
+//	else if (event == "proc")
+//	{
+//		int ptimer=0;
+//		if (xmlmp.exist("ptimer"))
+//		{
+//			//xml->AddExec();
+//			ptimer = xmlmp["ptimer"]->getvalue_int();
+//		}
+//		xml->AddExec(ptimer,xmlmp);
+//	}
 	else if (event == "sleep")
 	{
 		int msec = xmlmp["msec"]->getvalue_int();
@@ -281,40 +280,40 @@ void ParseControl(HUMap & xmlmp, xmlproc * xml)
 		}
 		xml->ScheduleSaveSnap(file);
 	}
-	else if (event == "cs")
-	{
-		hustr cont = xmlmp["cont"]->getvalue();
-		if (cont == "stop")
-		{
-			printf("stop\r\n");
-			g_cur_xml->CS_manager::Stop();
-		}
-		else if (cont == "start")
-		{
-			printf("start\r\n");
-			g_cur_xml->CS_manager::Start();
-		}
-		else if (cont == "clear")
-		{
-			printf("clear\r\n");
-			//g_th_timer.create();
-			g_cur_xml->m_cs.clear();
-		}
-		if (xmlmp.exist("post"))
-		{
-			hustr post = xmlmp["post"]->getvalue();
-			if (xmlmp.exist("cus"))
-			{
-				g_xml_proc[xmlmp["cus"]->getvalue()]->PostCS(post);
-			}
-			else
-			{
-				g_cur_xml->PostCS(post);
-			}
-
-		}
-
-	}
+//	else if (event == "cs")
+//	{
+//		hustr cont = xmlmp["cont"]->getvalue();
+//		if (cont == "stop")
+//		{
+//			printf("stop\r\n");
+//			g_cur_xml->CS_manager::Stop();
+//		}
+//		else if (cont == "start")
+//		{
+//			printf("start\r\n");
+//			g_cur_xml->CS_manager::Start();
+//		}
+//		else if (cont == "clear")
+//		{
+//			printf("clear\r\n");
+//			//g_th_timer.create();
+//			g_cur_xml->m_cs.clear();
+//		}
+//		if (xmlmp.exist("post"))
+//		{
+//			hustr post = xmlmp["post"]->getvalue();
+//			if (xmlmp.exist("cus"))
+//			{
+//				g_xml_proc[xmlmp["cus"]->getvalue()]->PostCS(post);
+//			}
+//			else
+//			{
+//				g_cur_xml->PostCS(post);
+//			}
+//
+//		}
+//
+//	}
 	else if (event == "timer")
 	{
 		hustr cont = xmlmp["cont"]->getvalue();
@@ -362,10 +361,10 @@ void ParseInclude(HUMap & xmlmp, xmlproc * xml)
 
 }
 
-void ParseCS(HUMap & xmlmp, xmlproc * xml)
-{
-	xml->CreateCS(xmlmp["name"]->getvalue(), xmlmp);
-}
+//void ParseCS(HUMap & xmlmp, xmlproc * xml)
+//{
+//	xml->CreateCS(xmlmp["name"]->getvalue(), xmlmp);
+//}
 
 void Parse_gcfg(HUMap & xmlmp, xmlproc * xml)
 {
@@ -413,9 +412,9 @@ void init_xml_instan()
 	XMLinstan["widget"] = ParseWidget;
 	XMLinstan["cus"] = ParseCUS;
 	XMLinstan["savecus"] = ParseSAVECUS;
-	XMLinstan["scfg"] = post_scfg;
-	XMLinstan["gcfg"] = Parse_gcfg;
-	XMLinstan["cs"] = ParseCS;
+//	XMLinstan["scfg"] = post_scfg;
+//	XMLinstan["gcfg"] = Parse_gcfg;
+//	XMLinstan["cs"] = ParseCS;
 	XMLinstan["env"] = ParseEnv;
 	XMLinstan["import"] = Parse_Import;
 	XMLinstan["luado"] = Parse_Luado;

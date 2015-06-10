@@ -1,4 +1,0 @@
-config  CONTROL_SLIP_MENU 
-        bool "slip_menu Control" 
-        help 
-			path=$AUTOPATH

@@ -27,7 +27,8 @@ public:
 		TimerSet(tm + fps_time + images[id].ntime);
 		if (images[id].exec.have)
 		{
-			xml_mgr->AddExec(0,images[id].exec);
+			//xml_mgr->AddExec(0,);
+			images[id].exec.doStart();
 			debug("id[%d] PostCS\r\n", id);
 		}
 		else

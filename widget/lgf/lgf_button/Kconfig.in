@@ -1,4 +1,0 @@
-config  CONTROL_LGF_BUTTON 
-        bool "lgf_button Control" 
-        help 
-			path=$AUTOPATH
