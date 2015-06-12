@@ -12,46 +12,11 @@
 using namespace std;
 #include "ParseXML.h"
 #include "hulib.h"
+#include "element_base.h"
 
 class touch_manager;
 
-
-//class origin
-//{
-//public:
-//
-//	origin()
-//	{
-//		ox = 0;
-//		oy = 0;
-//		mx = 0;
-//		my = 0;
-//		x_lock = 0;
-//		y_lock = 0;
-//	}
-//
-//	int move_x()
-//	{
-//		if (x_lock)
-//			return 0;
-//		else
-//			return mx;
-//	}
-//	int move_y()
-//	{
-//		if (y_lock)
-//			return 0;
-//		else
-//			return my;
-//	}
-//	int x_lock;
-//	int y_lock;
-//	int tx, ty;
-//private:
-//	int mx, my;
-//
-//};
-class touch_element :virtual public Mutex
+class touch_element :virtual public element_base,virtual public Mutex
 {
 public:
 //	virtual void doFlushConfig()
@@ -93,10 +58,10 @@ public:
 	void touch_init_area(int x, int y, int width, int height)
 	{
 		lock();
-		top = y;
-		left = x;
-		bottom = y + height;
-		right = x + width;
+		top = GetY();
+		left = GetX();
+		bottom = GetY() + GetHeight();
+		right = GetX() + GetWidth();
 		unlock();
 	}
 	void origin_in()
@@ -222,7 +187,7 @@ int TouchInit();
 //touch_panel_sample_base * GetTouchSample();
 
 
-class touch_manager :virtual public Mutex
+class touch_manager : virtual public Mutex
 {
 public:
 

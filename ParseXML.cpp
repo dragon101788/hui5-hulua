@@ -86,11 +86,12 @@ void ParaseTinyXmlFile(const char * file, xmlproc * xml)
 	HUMap mp;
 	ParseUpdateXml(root, mp);
 	//mp.display();
-	HUMap::iterator it;
-	for(it = mp.begin();it!=mp.end();it++)
+	HUMap::OrderList lst;
+	lst.accept(mp);
+	for(HUMap::OrderList::iterator it = lst.begin();it!=lst.end();++it)
         {
-	    hustr ins = it.key();
-	    ParseXMLFrom_Instan(ins, it, xml);
+	    hustr name = (*it).m_key;
+	    ParseXMLFrom_Instan(name, *it, xml);
         }
 }
 
