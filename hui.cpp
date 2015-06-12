@@ -10,7 +10,6 @@
 #include "hui.h"
 #include "manager_touch.h"
 #include "manager_timer.h"
-#include "thread_msg.h"
 #include "xmlproc.h"
 #include "thread_timer.h"
 #include "thread_touch.h"
@@ -50,8 +49,6 @@ void huErrExit(const char * str)
 	printf("wait g_th_timer OK\r\n");
 	g_th_touch.cancel();
 	printf("wait g_th_touch OK\r\n");
-	g_th_msg.cancel();
-	printf("wait g_th_msg OK\r\n");
 	map<hustr, pXmlproc>::iterator it;
 	for (it = g_xml_proc.begin(); it != g_xml_proc.end(); ++it)
 	{
@@ -445,8 +442,6 @@ void hui_exit(const char * cmd)
 	printf("wait g_th_timer OK\r\n");
 	g_th_touch.wait();
 	printf("wait g_th_touch OK\r\n");
-	g_th_msg.cancel();
-	printf("wait g_th_msg OK\r\n");
 
 	printf("cmd=%s\r\n", cmd);
 	system(cmd);
@@ -557,7 +552,6 @@ int main(int argc, char *argv[])
 //	}
 
 	g_th_touch.init();
-	g_th_msg.create();
 	g_th_timer.create();
 
 //	g_cur_xml = new xmlproc(xmlfile);
@@ -581,8 +575,6 @@ int main(int argc, char *argv[])
 	printf("wait g_th_timer OK\r\n");
 	g_th_touch.wait();
 	printf("wait g_th_touch OK\r\n");
-	g_th_msg.cancel();
-	printf("wait g_th_msg OK\r\n");
 
 	printf("demo exit %d\r\n", go);
 

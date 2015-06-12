@@ -3,7 +3,6 @@
 
 #include "XMLInstal.h"
 #include "layer.h"
-#include "thread_msg.h"
 
 
 class cartoon: public element, public timer_element
@@ -49,73 +48,39 @@ public:
 	{
 		xml_mgr->DelTimerElement(this);
 	}
-	void doFlushConfig()
+	void doFlushConfig(HUMap & mp)
 	{
-		PraseElement();
-		fps_time = m_mp["fps"]->getvalue_int();
-		id = m_mp["id"]->getvalue_int();
-		release = m_mp["release"]->getvalue_int();
+		fps_time = mp["fps"]->getvalue_int();
+		id = mp["id"]->getvalue_int();
+		release = mp["release"]->getvalue_int();
 
-		//m_mp.display();
-		if (m_mp.exist("autonode"))
-		{
-			for (int i = 0; i < m_mp.count("autonode"); i++)
-			{
-				//printf("autonode %d %d\r\n", i, m_mp["autonode"].BrotherCount());
-				HUMap & mp = m_mp["autonode"][i];
-				hustr fmt = mp["format"]->getvalue();
-				hustr cnt = mp["id"]->getvalue();
-				int ntime = mp["ntime"]->getvalue_int();
 
-				int min = strtoul(cnt.str_key("-"), NULL, 10);
-				int max = strtoul(cnt.str_value("-"), NULL, 10);
-				fmt.Replace("$", "%");
-				//printf("autonode %s %d-%d %d\r\n", fmt.c_str(), min, max, ntime);
-				hustr path;
-				for (int i = min; i <= max; i++)
-				{
-					path.format(fmt.c_str(), i);
+                for (int i = 0; i < mp.count("node"); i++)
+                {
+                        HUMap n_mp = mp["node"][i];
+                        if (n_mp.exist("id"))
+                        {
+                                int id = n_mp["id"]->getvalue_int();
+                                //printf("node id=%d\r\n", id);
+                                images[id].SetResource(n_mp->getvalue());
+                                images[id].ntime = n_mp["ntime"]->getvalue_int();
+                                images[id].exec.parse(n_mp);
+                        }
+                        else
+                        {
+                                int id = images.size();
+                                //printf("node id=%d\r\n", id);
+                                images[id].SetResource(n_mp->getvalue());
+                                images[id].ntime = n_mp["ntime"]->getvalue_int();
+                                images[id].exec.parse(n_mp);
+                        }
 
-					images[i].SetResource(path);
-					images[id].ntime = ntime;
+                }
 
-					//printf("%i %s\r\n", i, path.c_str());
-				}
-
-			}
-			m_mp.erase("autonode");
-		}
-		if (m_mp.exist("node"))
-		{
-			for (int i = 0; i < m_mp.count("node"); i++)
-			{
-				HUMap mp = m_mp["node"][i];
-				if (mp.exist("id"))
-				{
-					int id = mp["id"]->getvalue_int();
-					//printf("node id=%d\r\n", id);
-					images[id].SetResource(mp->getvalue());
-					images[id].ntime = mp["ntime"]->getvalue_int();
-					images[id].exec.parse(mp);
-				}
-				else
-				{
-					int id = images.size();
-					//printf("node id=%d\r\n", id);
-					images[id].SetResource(mp->getvalue());
-					images[id].ntime = mp["ntime"]->getvalue_int();
-					images[id].exec.parse(mp);
-				}
-
-			}
-			m_mp.erase("node");
-		}
-
-		TimerParaseXml(m_mp);
+		TimerParaseXml(mp);
 
 		xml_mgr->AddTimerElement(this);
 
-		Flush();
 
 	}
 	cartoon()

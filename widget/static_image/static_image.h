@@ -32,21 +32,18 @@ public:
 //		info.AddInfo("xpos", xpos);
 //		info.AddInfo("ypos", ypos);
 //	}
-	void doFlushConfig()
+	void doFlushConfig(HUMap & mp)
 	{
-		PraseElement();
-		id = m_mp["id"]->getvalue_int();
-		xpos = m_mp["xpos"]->getvalue_int();
-		ypos = m_mp["ypos"]->getvalue_int();
+		id = mp["id"]->getvalue_int();
+		xpos = mp["xpos"]->getvalue_int();
+		ypos = mp["ypos"]->getvalue_int();
 
-		for (int i = 0; i < m_mp.count("node"); i++)
+		for (int i = 0; i < mp.count("node"); i++)
 		{
-			printf("doFlushConfig %d %s\r\n",i, m_mp["node"][i]->getvalue());
-			SetRes(i, m_mp["node"][i]->getvalue());
+			printf("doFlushConfig %d %s\r\n",i, mp["node"][i]->getvalue());
+			SetRes(i, mp["node"][i]->getvalue());
 		}
 
-		ParseModifRes();
-		Flush();
 	}
 	void doRender()
 	{

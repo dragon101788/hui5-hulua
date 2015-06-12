@@ -26,7 +26,7 @@ void ParaseTinyAttribute2(TiXmlNode* pchild, HUMap & xmlmp)
 	}
 }
 
-void ParseUpdateXml2(TiXmlNode* pParent, HUMap & xmlmp)
+void ParseUpdateXml(TiXmlNode* pParent, HUMap & xmlmp)
 {
 	if (pParent == NULL)
 	{
@@ -56,7 +56,7 @@ void ParseUpdateXml2(TiXmlNode* pParent, HUMap & xmlmp)
 
 		if (pchild->FirstChild() == NULL || pchild->FirstChild()->Type() == TiXmlNode::TINYXML_ELEMENT)
 		{
-			ParseUpdateXml2(pchild, mp);
+			ParseUpdateXml(pchild, mp);
 		}
 
 		pchild = pchild->NextSibling();
@@ -65,47 +65,7 @@ void ParseUpdateXml2(TiXmlNode* pParent, HUMap & xmlmp)
 }
 
 int ParseXMLFrom_Instan(hustr name, HUMap & xmlmp, xmlproc * xml);
-void ParseUpdateXml3(TiXmlNode* pParent, xmlproc * xml)
-{
-	if (pParent == NULL)
-	{
-		return;
-	}
 
-	TiXmlNode* pchild = pParent->FirstChild();
-
-	while (pchild)
-	{
-		int t = pchild->Type();
-
-		if (t == TiXmlNode::TINYXML_COMMENT)
-		{
-		        ParseXML_comment(pchild->Value(),xml);
-			pchild = pchild->NextSibling();
-			continue;
-		}
-
-		const char * name = pchild->Value();
-		HUMap mp(name);
-
-		ParaseTinyAttribute2(pchild, mp);
-
-		if (pchild->FirstChild() != NULL && pchild->FirstChild()->Type() == TiXmlNode::TINYXML_TEXT)
-		{
-			mp.m_val = pchild->FirstChild()->Value();
-		}
-
-		if (pchild->FirstChild() == NULL || pchild->FirstChild()->Type() == TiXmlNode::TINYXML_ELEMENT)
-		{
-			ParseUpdateXml2(pchild, mp);
-		}
-
-		ParseXMLFrom_Instan(name, mp, xml);
-
-		pchild = pchild->NextSibling();
-	}
-
-}
 
 void ParaseTinyXmlFile(const char * file, xmlproc * xml)
 {
@@ -123,7 +83,14 @@ void ParaseTinyXmlFile(const char * file, xmlproc * xml)
 		return;
 	}
 
-	ParseUpdateXml3(root, xml);
-
+	HUMap mp;
+	ParseUpdateXml(root, mp);
+	//mp.display();
+	HUMap::iterator it;
+	for(it = mp.begin();it!=mp.end();it++)
+        {
+	    hustr ins = it.key();
+	    ParseXMLFrom_Instan(ins, it, xml);
+        }
 }
 

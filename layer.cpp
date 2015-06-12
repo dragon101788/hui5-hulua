@@ -147,15 +147,19 @@ void element::Back()
 
 }
 
-void element::FlushConfig()
+void element::FlushConfig(HUMap &mp)
 {
 	lock();
-	doFlushConfig();
+	PraseElement(mp);
+	doFlushConfig(mp);
+	ParseModifRes(mp);
+	Flush();
+
 	xml_mgr->AddElement(name, this);
 	unlock();
 }
 
-void element::ParseModifRes()
+void element::ParseModifRes(HUMap &m_mp)
 {
 	for (int i = 0; i < m_mp.count("res"); ++i)
 	{

@@ -1,7 +1,6 @@
 #include "xmlproc.h"
 #include "thread_touch.h"
 #include "thread_timer.h"
-#include "thread_msg.h"
 
 DebugTimer fps;
 pXmlproc g_cur_xml;

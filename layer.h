@@ -34,8 +34,8 @@ public:
 class element: public schedule_ele, public image,virtual public Mutex
 {
 public:
-	HUMap m_mp;
-	virtual void doFlushConfig() = 0;
+	//HUMap m_mp;
+	virtual void doFlushConfig(HUMap &m_mp) = 0;
 	virtual void doRender() = 0;
 //	virtual void doGetInfo(info & info)
 //	{
@@ -104,9 +104,9 @@ public:
 	void Render();
 	void Back();
 
-	void FlushConfig();
+	void FlushConfig(HUMap &m_mp);
 
-	void ParseModifRes();
+	void ParseModifRes(HUMap &m_mp);
 
 	virtual void doLuaCommand(const char * cmd)
 	{
@@ -138,7 +138,7 @@ public:
           }
 	};
 
-	void PraseElement()
+	void PraseElement(HUMap &m_mp)
 	{
 		name = m_mp["name"]->getvalue();
 		int tmpX = m_mp["x"]->getvalue_int();
@@ -178,17 +178,17 @@ public:
 		}
 		initstack();
 	}
-	void ModifXmlMap(HUMap &mp)
-	{
-		lock();
-		HUMap::iterator it;
-		for (it = mp.begin(); it != mp.end(); ++it)
-		{
-			m_mp[it.key().c_str()] = it.value().getvalue();
-		}
-		FlushConfig();
-		unlock();
-	}
+//	void ModifXmlMap(HUMap &mp)
+//	{
+//		lock();
+//		HUMap::iterator it;
+//		for (it = mp.begin(); it != mp.end(); ++it)
+//		{
+//			m_mp[it.key().c_str()] = it.value().getvalue();
+//		}
+//		FlushConfig();
+//		unlock();
+//	}
 	void ResetEB()
 	{
 		if (!eb.empty())

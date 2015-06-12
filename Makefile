@@ -28,7 +28,6 @@ obj-y += XMLInstal.o
 obj-y += loaderDL.o
 obj-$(CONFIG_ALPHA_BLT) += platfrom/alpha_w55.o
 obj-$(CONFIG_ALPHA_SOFT) += platfrom/alpha_soft.o
-obj-y += thread_msg.o
 obj-y += thread_timer.o
 obj-y += thread_touch.o
 obj-y += manager_timer.o
