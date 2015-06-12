@@ -81,9 +81,7 @@ public:
 	}
 	static void show_error(const char* error)
 	{
-	    printf("_ALERT -> %s\n", error);
-	    fflush(stdout);
-	    exit(-1);
+	    errexitf("_ALERT -> %s\n", error);
 	}
 
 	template<typename F>
