@@ -183,6 +183,12 @@ public:
 
 		//path.format("SetBuffer-%dx%d",width,height);
 		lock();
+
+		if(width * height == 0)
+                {
+		    log_w("undefined width height is zero\n");
+                }
+
 		int dep = 4;
 
 		int tmpsize = width * height * dep;
@@ -193,6 +199,7 @@ public:
 		}
 		if (pSrcBuffer == NULL)
 		{
+		        log_d("SetBuffer %d %d %d\n",width,height,tmpsize);
 			pSrcBuffer = malloc(tmpsize);
 			if (pSrcBuffer == NULL)
 			{

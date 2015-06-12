@@ -46,7 +46,7 @@ public:
 	{
 		doDelete();
 		revocation();
-		hide = 1;
+		m_hide = 1;
 		Render();
 		ResetEB();
 	}
@@ -57,12 +57,15 @@ public:
 	}
 	element()
 	{
-		hide = 0;
-		x = 0;
-		y = 0;
-		height = 0;
-		width = 0;
-		lay = 0;
+		m_hide = 0;
+		m_x = 0;
+		m_y = 0;
+		m_height = 0;
+		m_width = 0;
+		m_lay = 0;
+		m_parent = NULL;
+		xml_mgr = NULL;
+		log_d("new element m_parent=%x\n",m_parent);
 	}
 
 	virtual ~element()
@@ -106,52 +109,44 @@ public:
             //if (hulua::get_type(L, m_ele->name) == hulua::lua_nil);
               printf("lua create %s object\n", m_ele->name.nstr());
               hulua::class_add<element>(L, "lua_test_page");
-              hulua::class_mem<element>(L, "x", &element::x);
-              hulua::class_mem<element>(L, "y", &element::y);
-              hulua::class_mem<element>(L, "width", &element::width);
-              hulua::class_mem<element>(L, "height", &element::height);
+              hulua::class_mem<element>(L, "x", &element::m_x);
+              hulua::class_mem<element>(L, "y", &element::m_y);
+              hulua::class_mem<element>(L, "width", &element::m_width);
+              hulua::class_mem<element>(L, "height", &element::m_height);
+              hulua::class_mem<element>(L, "lay", &element::m_lay);
+              hulua::class_mem<element>(L, "hide", &element::m_hide);
               hulua::class_def<element>(L, "command", &element::LuaCommand);
               hulua::set(L, m_ele->name, this);
           }
 	};
 
+        #define defset_element_int(name,member,mp,def) if (mp.exist(name)){member = mp[name]->getvalue_int();} else{member = def;}
+
 	void PraseElement(HUMap &m_mp)
 	{
+	        log_i("$$$HU$$$ ElementPrase [%s] %x x=%d y=%d width=%d height=%d hide=%d\r\n",
+	                                  name.c_str(), m_parent,GetX(), GetY(), GetWidth(), GetHeight(), GetHeight());
 		name = m_mp["name"]->getvalue();
-		int tmpX = m_mp["x"]->getvalue_int();
-		int tmpY = m_mp["y"]->getvalue_int();
-		width = m_mp["width"]->getvalue_int();
-		height = m_mp["height"]->getvalue_int();
-		hide = m_mp["hide"]->getvalue_int();
+		defset_element_int("x",m_x,m_mp,0);
+		defset_element_int("y",m_y,m_mp,0);
+		defset_element_int("width",m_width,m_mp,0);
+		defset_element_int("height",m_height,m_mp,0);
+		defset_element_int("hide",m_hide,m_mp,0);
+		defset_element_int("lay",m_lay,m_mp,5);
+
 
 		lua.regele(this);
-                //lua.add(new element_lua_node(this));
+
+		log_i("$$$HU$$$ ElementPrase [%s] x=%d y=%d width=%d height=%d hide=%d\r\n",
+				name.c_str(),GetX(), GetY(), GetWidth(), GetHeight(), GetHeight());
 
 
-		//控件被移动
-		if (tmpX != x || tmpY != y)
-		{
-			Back();
-			x = tmpX;
-			y = tmpY;
-		}
-		log_i("$$$HU$$$ ElementPrase %s x=%d y=%d width=%d height=%d hide=%d\r\n",
-				name.c_str(), x, y, width, height, hide);
-
-		if (m_mp.exist("lay"))
-		{
-			lay = m_mp["lay"]->getvalue_int();
-		}
-		else
-		{
-			lay = 5;
-		}
 
 		if (pSrcBuffer == NULL)
 		{
 			//printf("%s SetBuffer width=%d height=%d\r\n", name.c_str(), width, height);
-			SetBuffer(width, height);
-			path.format("ele-%s %dx%d", name.c_str(), width, height);
+			SetBuffer(GetWidth(), GetHeight());
+			path.format("ele-%s %dx%d", name.c_str(), GetWidth(), GetHeight());
 		}
 		initstack();
 	}
@@ -175,39 +170,39 @@ public:
 			for (it = eb.begin(); it != eb.end(); ++it)
 			{
 				element * ele = *it;
-				if (ele->hide == 0)
+				if (ele->GetHide() == 0)
 				{
 					//printf("$$$HU$$$ RenderEB %s <-- %s\r\n", name.c_str(), ele->name.c_str());
 
 					int s_ofx = 0; //源x
 					int d_ofx = 0; //目标x
-					if (ele->x < x)
+					if (ele->GetX() < GetX())
 					{
-						s_ofx = x - ele->x;
+						s_ofx = GetX() - ele->GetX();
 						d_ofx = 0;
 					}
-					else if (ele->x > x)
+					else if (ele->GetX() > GetX())
 					{
 						s_ofx = 0;
 						//d_ofx = width - (x + width - ele->x);
-						d_ofx = ele->x - x;
+						d_ofx = ele->GetX() - GetX();
 					}
 
 					int s_ofy = 0; //源x
 					int d_ofy = 0; //目标x
-					if (ele->y < y)
+					if (ele->GetY() < GetY())
 					{
-						s_ofy = y - ele->y;
+						s_ofy = GetY() - ele->GetY();
 						d_ofy = 0;
 					}
-					else if (ele->y > y)
+					else if (ele->GetY() > GetY())
 					{
 						s_ofy = 0;
 						//d_ofy = height - (y + height - ele->y);
-						d_ofy = ele->y - y;
+						d_ofy = ele->GetY() - GetY();
 					}
 
-					AreaCopy(ele, s_ofx, s_ofy, width, height, d_ofx, d_ofy);
+					AreaCopy(ele, s_ofx, s_ofy, GetWidth(), GetHeight(), d_ofx, d_ofy);
 				}
 				//RollBack::RollBackBlock(*it, x, y, width, height);
 				//(*it)->Render();
@@ -222,7 +217,7 @@ public:
 			for (it = et.begin(); it != et.end(); ++it)
 			{
 				element * ele = *it;
-				if (ele->hide == 0)
+				if (ele->GetHide() == 0)
 				{
 					//printf("$$$HU$$$ RenderET %s <-- %s\r\n", name.c_str(), ele->name.c_str());
 					ele->Render();
@@ -236,7 +231,7 @@ public:
 	public:
 		bool operator()(const element * st1, const element * st2) const
 		{
-			return st1->lay < st2->lay;
+			return (st1->GetLay()) < (st2->GetLay());
 		}
 	};
 	void initstack();
@@ -304,14 +299,72 @@ public:
 		}
 	}
 
+
+	int GetX() const
+	{
+	  if(m_parent!=NULL)
+          {
+              return m_x + m_parent->GetX();
+          }
+          return m_x;
+	}
+	int GetY() const
+        {
+          if(m_parent!=NULL)
+          {
+              return m_y + m_parent->GetY();
+          }
+          return m_y;
+        }
+
+	int GetWidth() const
+        {
+          if(m_parent!=NULL)
+          {
+              return m_width;
+          }
+          return m_width;
+        }
+
+	int GetHeight() const
+        {
+          if(m_parent!=NULL)
+          {
+              return m_height;
+          }
+          return m_height;
+        }
+
+	int GetLay() const
+        {
+          if(m_parent!=NULL)
+          {
+              return m_lay + m_parent->GetLay();
+          }
+          return m_lay;
+        }
+
+	int GetHide() const
+	{
+	  if(m_parent!=NULL)
+          {
+              return m_hide + m_parent->GetHide();
+          }
+          return m_hide;
+	}
+
+
 	hustr name;
-	int hide;
-	int x;
-	int y;
-	int width;
-	int height;
-	int lay;
+	int m_hide;
+	int m_x;
+	int m_y;
+	int m_width;
+	int m_height;
+	int m_lay;
+	element * m_parent;
+
 	xmlproc * xml_mgr;
+
 	map<int, image> res;
 	//schedule_draw * mgr;
 	list<element *> et;					//�ϲ�ؼ�

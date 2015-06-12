@@ -40,14 +40,14 @@ int crossAlgorithm(element * r1, element * r2)
 	int nMinBottom = 0;
 
 	//计算两矩形可能的相交矩形的边界
-	nMaxLeft = r1->x >= r2->x ? r1->x : r2->x;
-	nMaxTop = r1->y >= r2->y ? r1->y : r2->y;
+	nMaxLeft = r1->GetX() >= r2->GetX() ? r1->GetX() : r2->GetX();
+	nMaxTop = r1->GetY() >= r2->GetY() ? r1->GetY() : r2->GetY();
 	nMinRight =
-			(r1->x + r1->width) <= (r2->x + r2->width) ?
-					(r1->x + r1->width) : (r2->x + r2->width);
+			(r1->GetX() + r1->GetWidth()) <= (r2->GetX() + r2->GetWidth()) ?
+					(r1->GetX() + r1->GetWidth()) : (r2->GetX() + r2->GetWidth());
 	nMinBottom =
-			(r1->y + r1->height) <= (r2->y + r2->height) ?
-					(r1->y + r1->height) : (r2->y + r2->height);
+			(r1->GetY() + r1->GetHeight()) <= (r2->GetY() + r2->GetHeight()) ?
+					(r1->GetY() + r1->GetHeight()) : (r2->GetY() + r2->GetHeight());
 	// 判断是否相交
 	//printf("crossAlgorithm %d %d %d %d\r\n",nMaxLeft , nMinRight , nMaxTop , nMinBottom);
 	if (nMaxLeft >= nMinRight || nMaxTop >= nMinBottom)
@@ -88,13 +88,13 @@ void element::initstack()
 		if (crossAlgorithm(ele, this))
 		{
 
-			if (ele->lay < lay && lay != 0)
+			if (ele->GetLay() < GetLay() && GetLay() != 0)
 			{
 				addeb(ele);
 				ele->addet(this);
 
 			}
-			else if (ele->lay > lay)
+			else if (ele->GetLay() > GetLay())
 			{
 				addet(ele);
 				ele->addeb(this);
@@ -123,7 +123,7 @@ void element::Render()
 	lock();
 	RenderEB();
 
-	if (hide == 0)
+	if (GetHide() == 0)
 	{
 		doRender();
 	}
@@ -132,7 +132,7 @@ void element::Render()
 		printf("Render %s hide\r\n", name.c_str());
 	}
 
-	xml_mgr->Draw(this, 0, 0, width, height, x, y);//控件输出到容器
+	xml_mgr->Draw(this, 0, 0, GetWidth(), GetHeight(), GetX(), GetY());//控件输出到容器
 	RenderET();
 	unlock();
 }
@@ -141,7 +141,7 @@ void element::Back()
 {
 	lock();
 	RenderEB();
-	xml_mgr->Draw(this, 0, 0, width, height, x, y);
+	xml_mgr->Draw(this, 0, 0, GetWidth(), GetHeight(), GetX(), GetY());
 	RenderET();
 	unlock();
 

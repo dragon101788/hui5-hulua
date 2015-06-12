@@ -40,7 +40,7 @@ public:
 	void doFlushConfig(HUMap &mp)
 	{
 		exec.parse(mp);
-		touch_init_area(x, y, width, height);
+		touch_init_area(GetX(), GetY(), GetWidth(), GetHeight());
 
 		SetRes(0, mp["up"]->getvalue());
 		SetRes(1, mp["dn"]->getvalue());

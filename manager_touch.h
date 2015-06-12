@@ -71,6 +71,7 @@ public:
 		y_lock = 0;
 		ox = 0;
 		oy = 0;
+		log_d("new touch_element\n");
 		//RegistdoFlushConfig (touch_ele);
 	}
 	~touch_element()

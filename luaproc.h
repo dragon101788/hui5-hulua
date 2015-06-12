@@ -65,7 +65,7 @@ public:
                 printf("LuaFlushConfig ypos=%d\n",ypos);
                 xml_mgr = g_cur_xml;
                 //mgr = g_cur_xml;
-                SetBuffer(width, height);
+                SetBuffer(GetWidth(), GetHeight());
                 SetRes(0,"./a.png");
                 Flush();
         }
@@ -98,7 +98,7 @@ public:
 //        }
         void doRender()
         {
-                image::Render(&res[id], xpos, ypos, width, height, 0, 0);
+                image::Render(&res[id], xpos, ypos, GetWidth(), GetHeight(), 0, 0);
         }
         int xpos;
         int ypos;

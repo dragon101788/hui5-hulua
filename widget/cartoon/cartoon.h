@@ -85,8 +85,6 @@ public:
 	}
 	cartoon()
 	{
-		x = 0;
-		y = 0;
 		id = 0;
 		release = 0;
 		fps_time = 0;

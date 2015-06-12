@@ -18,7 +18,6 @@ public:
 		font = NULL;
 		style = FONT_NORMAL;
 		size = 16;
-		hide = 0;
 		lenth = 0;
 	}
 	~static_text()
@@ -34,7 +33,7 @@ public:
           ttf.fontHeight = size;
           ttf.color = color;
           ttf.style = style;
-          ttf.SetBuffer(width, height);
+          ttf.SetBuffer(GetWidth(), GetHeight());
           ttf.DrawText("UTF-8", (char *) txt.c_str(), txt.length());
 
           Flush();
@@ -73,7 +72,7 @@ public:
 		ttf.fontHeight = size;
 		ttf.color = color;
 		ttf.style = style;
-		ttf.SetBuffer(width, height);
+		ttf.SetBuffer(GetWidth(), GetHeight());
 		ttf.DrawText("UTF-8", (char *) txt.c_str(), txt.length());
 
 	}
