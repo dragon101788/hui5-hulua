@@ -98,7 +98,7 @@ public:
 //        }
         void doRender()
         {
-                image::Render(&res[id], xpos, ypos, GetWidth(), GetHeight(), 0, 0);
+                image::RenderFrom(&res[id], xpos, ypos, GetWidth(), GetHeight(), 0, 0);
         }
         int xpos;
         int ypos;

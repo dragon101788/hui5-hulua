@@ -49,7 +49,7 @@ public:
 	}
 	void doRender()
 	{
-		image::Render(&res[isdn], 0, 0);
+		image::RenderFrom(&res[isdn], 0, 0);
 	}
 
 	button()

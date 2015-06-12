@@ -38,6 +38,7 @@ public:
 		xpos = mp["xpos"]->getvalue_int();
 		ypos = mp["ypos"]->getvalue_int();
 
+		mp.display();
 		for (int i = 0; i < mp.count("node"); i++)
 		{
 			printf("doFlushConfig %d %s\r\n",i, mp["node"][i]->getvalue());
@@ -47,7 +48,7 @@ public:
 	}
 	void doRender()
 	{
-		image::Render(&res[id], xpos, ypos, GetWidth(), GetHeight(), 0, 0);
+		image::RenderFrom(&res[id], xpos, ypos, GetWidth(), GetHeight(), 0, 0);
 	}
 	int xpos;
 	int ypos;

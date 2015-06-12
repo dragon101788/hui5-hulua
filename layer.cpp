@@ -132,7 +132,16 @@ void element::Render()
 		printf("Render %s hide\r\n", name.c_str());
 	}
 
-	xml_mgr->Draw(this, 0, 0, GetWidth(), GetHeight(), GetX(), GetY());//控件输出到容器
+	if(m_parent)
+        {
+	    m_parent->AreaCopy(this, 0, 0, GetWidth(), GetHeight(), GetX(), GetY());//控件输出到容器
+	    m_parent->Flush();
+        }
+	else
+        {
+            xml_mgr->Draw(this, 0, 0, GetWidth(), GetHeight(), GetX(), GetY());//控件输出到容器
+        }
+
 	RenderET();
 	unlock();
 }
@@ -196,7 +205,7 @@ void element::ParseModifRes(HUMap &m_mp)
 				//ele->image::Render(&file, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
 				lock();
 
-				res[id].Render(&file, src_x, src_y, cp_width, cp_height, dst_x,
+				res[id].RenderFrom(&file, src_x, src_y, cp_width, cp_height, dst_x,
 						dst_y);
 				//ele->Render();
 				unlock();
@@ -238,7 +247,7 @@ void element::ParseModifRes(HUMap &m_mp)
 				//ele->image::Render(&file, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
 				lock();
 
-				res[id].Render(&tmpttf, src_x, src_y, cp_width, cp_height,
+				res[id].RenderFrom(&tmpttf, src_x, src_y, cp_width, cp_height,
 						dst_x, dst_y);
 				//ele->Render();
 				unlock();

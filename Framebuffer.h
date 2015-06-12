@@ -53,7 +53,7 @@ public:
 //			in_img.stransformation.colorMultiplier.i16Alpha = 255 - 32 * i;
 //			put.Render(&in_img, 0, 0);
 			out_img.setTransp(20 * i);
-			put.Render(&out_img, 0, 0);
+			put.RenderFrom(&out_img, 0, 0);
 			RenderImageToFrameBuffer(&put);
 			usleep(1000*30);
 		}

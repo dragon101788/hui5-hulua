@@ -630,6 +630,15 @@ template<typename T>
 class queue: public Mutex, public Sem
 {
 public:
+        typedef typename list< T >::iterator  iterator;
+        iterator begin()
+        {
+          return m_list.begin();
+        }
+        iterator end()
+        {
+          return m_list.end();
+        }
 	queue()
 	{
 	}
@@ -1247,10 +1256,11 @@ class mapv: public hustr
 public:
 	mapv()
 	{
-
+	    m_data = NULL;
 	}
 	mapv(const char * fmt, ...)
 	{
+	        m_data = NULL;
 		char buffer[256];
 		if (fmt == NULL)
 		{
@@ -1292,7 +1302,7 @@ public:
 	{
 		return strtol(getvalue(), NULL, 10);
 	}
-
+	void * m_data;
 };
 typedef humap<mapv> HUMap;
 

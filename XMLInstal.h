@@ -9,14 +9,21 @@ using namespace std;
 typedef void (*XMLinstan_tf)(HUMap & xmlmp, xmlproc * xml);
 extern map<hustr, XMLinstan_tf> XMLinstan;
 
+
+
 template<class T>
 void Install_Element(HUMap &xmlmp, xmlproc * xml)
 {
 	//xml->mtx.lock();
 	T * te = new T;
-	//te->m_mp.fetch(xmlmp);
+	if(xmlmp.exist("parent"))
+        {
+	    element * parent = (element *)xmlmp["parent"].value().m_data;
+	    log_d("%s sub element\n",parent->name.nstr());
+	    te->m_parent = parent;
+        }
+
 	te->xml_mgr = xml;
-	//te->mgr = xml;
 	te->FlushConfig(xmlmp);
 	//xml->mtx.unlock();
 }

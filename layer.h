@@ -13,24 +13,6 @@ class schedule_draw;
 class element_manager;
 class xmlproc;
 
-
-class info: public hustr
-{
-public:
-	void AddInfo(const char * key, const char * value)
-	{
-		(*this) += key;
-		(*this) += "=";
-		(*this) += value;
-		(*this) += "\r\n";
-	}
-	void AddInfo(const char * key, int value)
-	{
-		hustr str("%d", value);
-		AddInfo(key, str);
-	}
-};
-
 class element: public schedule_ele, public image,virtual public Mutex
 {
 public:
@@ -65,7 +47,7 @@ public:
 		m_lay = 0;
 		m_parent = NULL;
 		xml_mgr = NULL;
-		log_d("new element m_parent=%x\n",m_parent);
+		//log_d("new element m_parent=%x\n",m_parent);
 	}
 
 	virtual ~element()
@@ -116,7 +98,7 @@ public:
               hulua::class_mem<element>(L, "lay", &element::m_lay);
               hulua::class_mem<element>(L, "hide", &element::m_hide);
               hulua::class_def<element>(L, "command", &element::LuaCommand);
-              hulua::set(L, m_ele->name, this);
+              hulua::set(L, m_ele->name, m_ele);
           }
 	};
 
@@ -300,56 +282,36 @@ public:
 	}
 
 
+	const char * GetName()
+	{
+	  return name.nstr();
+	}
 	int GetX() const
 	{
-	  if(m_parent!=NULL)
-          {
-              return m_x + m_parent->GetX();
-          }
           return m_x;
 	}
 	int GetY() const
         {
-          if(m_parent!=NULL)
-          {
-              return m_y + m_parent->GetY();
-          }
           return m_y;
         }
 
 	int GetWidth() const
         {
-          if(m_parent!=NULL)
-          {
-              return m_width;
-          }
           return m_width;
         }
 
 	int GetHeight() const
         {
-          if(m_parent!=NULL)
-          {
-              return m_height;
-          }
           return m_height;
         }
 
 	int GetLay() const
         {
-          if(m_parent!=NULL)
-          {
-              return m_lay + m_parent->GetLay();
-          }
           return m_lay;
         }
 
 	int GetHide() const
 	{
-	  if(m_parent!=NULL)
-          {
-              return m_hide + m_parent->GetHide();
-          }
           return m_hide;
 	}
 
@@ -362,7 +324,6 @@ public:
 	int m_height;
 	int m_lay;
 	element * m_parent;
-
 	xmlproc * xml_mgr;
 
 	map<int, image> res;

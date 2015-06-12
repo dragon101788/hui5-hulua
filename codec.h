@@ -369,7 +369,7 @@ public:
 
 	}
 
-	void Render(image * img, int x, int y)
+	void RenderFrom(image * img, int x, int y)
 	{
 		//AreaCopy(img, 0, 0, img->u32Width, img->u32Height, x, y);
 		//printf("$$$HU$$$ Render %s to %s\r\n",this->path.c_str(),img->path.c_str());
@@ -377,7 +377,7 @@ public:
 		img->LoadResource();
 		Render_img_to_img(this, img, 0, 0, img->u32Width, img->u32Height, x, y);
 	}
-	void Render(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
+	void RenderFrom(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
 	{
 		src_img->LoadResource();
 		ProcArea(this, src_img, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
