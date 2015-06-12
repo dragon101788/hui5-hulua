@@ -5,10 +5,10 @@
 
 void element::Flush()
 {
-	if (mgr != NULL)
+	if (xml_mgr != NULL)
 	{
 		lock();
-		mgr->que.addele(this);
+		xml_mgr->que.addele(this);
 		unlock();
 	}
 	else
@@ -19,10 +19,10 @@ void element::Flush()
 }
 void element::revocation()
 {
-	if (mgr != NULL)
+	if (xml_mgr != NULL)
 	{
 		lock();
-		mgr->que.delele(this);
+		xml_mgr->que.delele(this);
 		unlock();
 	}
 	else

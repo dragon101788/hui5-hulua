@@ -64,7 +64,7 @@ public:
                 printf("LuaFlushConfig y=%d\n",y);
                 printf("LuaFlushConfig ypos=%d\n",ypos);
                 xml_mgr = g_cur_xml;
-                mgr = g_cur_xml;
+                //mgr = g_cur_xml;
                 SetBuffer(width, height);
                 SetRes(0,"./a.png");
                 Flush();

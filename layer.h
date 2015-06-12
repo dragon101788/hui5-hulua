@@ -37,31 +37,11 @@ public:
 	//HUMap m_mp;
 	virtual void doFlushConfig(HUMap &m_mp) = 0;
 	virtual void doRender() = 0;
-//	virtual void doGetInfo(info & info)
-//	{
-//		printf("warning element bash doGetInfo\r\n");
-//	}
 	virtual void doDelete()
 	{
 		printf("warning element bash OnDelete\r\n");
 	}
 
-//	void GetElementInfo(info & info)
-//	{
-//		info.AddInfo("name", name);
-//		info.AddInfo("x", x);
-//		info.AddInfo("y", y);
-//		info.AddInfo("width", width);
-//		info.AddInfo("height", height);
-//		info.AddInfo("hide", hide);
-//		info.AddInfo("lay", lay);
-//	}
-//	void GetInfo(info & info)
-//	{
-//		lock();
-//		doGetInfo(info);
-//		unlock();
-//	}
 	void Delete()
 	{
 		doDelete();
@@ -74,7 +54,6 @@ public:
 	{
 		log_d("$$$HU$$$ Render_layer::[%s]\r\n", name.c_str());
 		Render();
-		//debug("$$$HU$$$ Render_layer::[%s]OK\r\n", name.c_str());
 	}
 	element()
 	{
@@ -84,8 +63,6 @@ public:
 		height = 0;
 		width = 0;
 		lay = 0;
-		mgr = NULL;
-		//RegistdoFlushConfig(element);
 	}
 
 	virtual ~element()
@@ -178,17 +155,6 @@ public:
 		}
 		initstack();
 	}
-//	void ModifXmlMap(HUMap &mp)
-//	{
-//		lock();
-//		HUMap::iterator it;
-//		for (it = mp.begin(); it != mp.end(); ++it)
-//		{
-//			m_mp[it.key().c_str()] = it.value().getvalue();
-//		}
-//		FlushConfig();
-//		unlock();
-//	}
 	void ResetEB()
 	{
 		if (!eb.empty())
@@ -347,7 +313,7 @@ public:
 	int lay;
 	xmlproc * xml_mgr;
 	map<int, image> res;
-	schedule_draw * mgr;
+	//schedule_draw * mgr;
 	list<element *> et;					//�ϲ�ؼ�
 	list<element *> eb;					//�ײ�ؼ�
 };

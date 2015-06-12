@@ -16,7 +16,7 @@ void Install_Element(HUMap &xmlmp, xmlproc * xml)
 	T * te = new T;
 	//te->m_mp.fetch(xmlmp);
 	te->xml_mgr = xml;
-	te->mgr = xml;
+	//te->mgr = xml;
 	te->FlushConfig(xmlmp);
 	//xml->mtx.unlock();
 }
