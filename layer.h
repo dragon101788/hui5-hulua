@@ -13,7 +13,116 @@ class schedule_draw;
 class element_manager;
 class xmlproc;
 
-class element: public schedule_ele, public image,virtual public Mutex
+class element_base
+{
+public:
+  void SetName(const char * name)
+  {
+    m_name = name;
+  }
+  void SetX(int x)
+  {
+    m_x = x;
+  }
+  void SetY(int y)
+  {
+    m_y = y;
+  }
+  void SetWidth(int width)
+  {
+    m_width = width;
+  }
+  void SetHeight(int height)
+  {
+    m_height = height;
+  }
+
+  void SetLay(int lay)
+  {
+    m_lay = lay;
+  }
+  void SetHide(int hide)
+  {
+    m_hide = hide;
+  }
+  const char * GetName() const
+  {
+    return m_name.nstr();
+  }
+  int GetX() const
+  {
+    return m_x;
+  }
+  int GetY() const
+  {
+    return m_y;
+  }
+
+  int GetWidth() const
+  {
+    return m_width;
+  }
+
+  int GetHeight() const
+  {
+    return m_height;
+  }
+
+  int GetLay() const
+  {
+    return m_lay;
+  }
+
+  int GetHide() const
+  {
+    return m_hide;
+  }
+
+  virtual void doLuaCommand(const char * cmd)
+  {
+      printf("%s virtual doLuaCommand Nothing can be done\n",GetName());
+  }
+  void LuaCommand(const char * cmd)
+  {
+      doLuaCommand(cmd);
+  }
+  class element_lua_node :public LUA::node
+  {
+  public:
+    element_base * m_ele;
+    element_lua_node(element_base * ele)
+    {
+       m_ele = ele;
+    }
+    void DO(lua_State * L)
+    {
+      //if (hulua::get_type(L, m_ele->name) == hulua::lua_nil);
+      if(m_ele->GetName()!=NULL)
+      {
+        printf("lua create %s object\n", m_ele->GetName());
+                hulua::class_add<element_base>(L, "element_base");
+                hulua::class_mem<element_base>(L, "x", &element_base::m_x);
+                hulua::class_mem<element_base>(L, "y", &element_base::m_y);
+                hulua::class_mem<element_base>(L, "width", &element_base::m_width);
+                hulua::class_mem<element_base>(L, "height", &element_base::m_height);
+                hulua::class_mem<element_base>(L, "lay", &element_base::m_lay);
+                hulua::class_mem<element_base>(L, "hide", &element_base::m_hide);
+                hulua::class_def<element_base>(L, "command", &element_base::LuaCommand);
+                hulua::set(L, m_ele->GetName(), m_ele);
+      }
+    }
+  };
+//private:
+  hustr m_name;
+  int m_hide;
+  int m_x;
+  int m_y;
+  int m_width;
+  int m_height;
+  int m_lay;
+};
+
+class element: virtual public element_base,public schedule_ele, public image,virtual public Mutex
 {
 public:
 	//HUMap m_mp;
@@ -34,7 +143,7 @@ public:
 	}
 	void onSchedule()
 	{
-		log_d("$$$HU$$$ Render_layer::[%s]\r\n", name.c_str());
+		log_d("$$$HU$$$ Render_layer::[%s]\r\n", GetName());
 		Render();
 	}
 	element()
@@ -52,7 +161,7 @@ public:
 
 	virtual ~element()
 	{
-		log_i("$$$HU$$$ distroy element %s\r\n", name.c_str());
+		log_i("$$$HU$$$ distroy element %s\r\n", GetName());
 		backstack();
 		map<int, image>::iterator it;
 		for (it = res.begin(); it != res.end(); ++it)
@@ -70,45 +179,15 @@ public:
 
 	void ParseModifRes(HUMap &m_mp);
 
-	virtual void doLuaCommand(const char * cmd)
-	{
-	    printf("%s virtual doLuaCommand Nothing can be done\n",name.nstr());
-	}
-	void LuaCommand(const char * cmd)
-	{
-	    doLuaCommand(cmd);
-	}
-	class element_lua_node :public LUA::node
-	{
-	public:
-	  element * m_ele;
-	  element_lua_node(element * ele)
-	  {
-	     m_ele = ele;
-	  }
-          void DO(lua_State * L)
-          {
-            //if (hulua::get_type(L, m_ele->name) == hulua::lua_nil);
-              printf("lua create %s object\n", m_ele->name.nstr());
-              hulua::class_add<element>(L, "lua_test_page");
-              hulua::class_mem<element>(L, "x", &element::m_x);
-              hulua::class_mem<element>(L, "y", &element::m_y);
-              hulua::class_mem<element>(L, "width", &element::m_width);
-              hulua::class_mem<element>(L, "height", &element::m_height);
-              hulua::class_mem<element>(L, "lay", &element::m_lay);
-              hulua::class_mem<element>(L, "hide", &element::m_hide);
-              hulua::class_def<element>(L, "command", &element::LuaCommand);
-              hulua::set(L, m_ele->name, m_ele);
-          }
-	};
+
 
         #define defset_element_int(name,member,mp,def) if (mp.exist(name)){member = mp[name]->getvalue_int();} else{member = def;}
 
 	void PraseElement(HUMap &m_mp)
 	{
 	        log_i("$$$HU$$$ ElementPrase [%s] %x x=%d y=%d width=%d height=%d hide=%d\r\n",
-	                                  name.c_str(), m_parent,GetX(), GetY(), GetWidth(), GetHeight(), GetHeight());
-		name = m_mp["name"]->getvalue();
+	                                  GetName(), m_parent,GetX(), GetY(), GetWidth(), GetHeight(), GetHeight());
+		SetName(m_mp["name"]->getvalue());
 		defset_element_int("x",m_x,m_mp,0);
 		defset_element_int("y",m_y,m_mp,0);
 		defset_element_int("width",m_width,m_mp,0);
@@ -120,7 +199,7 @@ public:
 		lua.regele(this);
 
 		log_i("$$$HU$$$ ElementPrase [%s] x=%d y=%d width=%d height=%d hide=%d\r\n",
-				name.c_str(),GetX(), GetY(), GetWidth(), GetHeight(), GetHeight());
+				GetName(),GetX(), GetY(), GetWidth(), GetHeight(), GetHeight());
 
 
 
@@ -128,7 +207,7 @@ public:
 		{
 			//printf("%s SetBuffer width=%d height=%d\r\n", name.c_str(), width, height);
 			SetBuffer(GetWidth(), GetHeight());
-			path.format("ele-%s %dx%d", name.c_str(), GetWidth(), GetHeight());
+			path.format("ele-%s %dx%d", GetName(), GetWidth(), GetHeight());
 		}
 		initstack();
 	}
@@ -282,47 +361,7 @@ public:
 	}
 
 
-	const char * GetName()
-	{
-	  return name.nstr();
-	}
-	int GetX() const
-	{
-          return m_x;
-	}
-	int GetY() const
-        {
-          return m_y;
-        }
 
-	int GetWidth() const
-        {
-          return m_width;
-        }
-
-	int GetHeight() const
-        {
-          return m_height;
-        }
-
-	int GetLay() const
-        {
-          return m_lay;
-        }
-
-	int GetHide() const
-	{
-          return m_hide;
-	}
-
-
-	hustr name;
-	int m_hide;
-	int m_x;
-	int m_y;
-	int m_width;
-	int m_height;
-	int m_lay;
 	element * m_parent;
 	xmlproc * xml_mgr;
 

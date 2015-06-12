@@ -19,7 +19,7 @@ void Install_Element(HUMap &xmlmp, xmlproc * xml)
 	if(xmlmp.exist("parent"))
         {
 	    element * parent = (element *)xmlmp["parent"].value().m_data;
-	    log_d("%s sub element\n",parent->name.nstr());
+	    log_d("%s sub element\n",parent->GetName());
 	    te->m_parent = parent;
         }
 

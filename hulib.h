@@ -121,7 +121,7 @@ public:
 		return (cnt);
 	}
 
-	const char * nstr()
+	const char * nstr() const
 	{
 		if (empty())
 		{

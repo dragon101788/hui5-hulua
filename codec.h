@@ -59,11 +59,11 @@ public:
 	{
 		return SrcSize;
 	}
-	int GetWidth()
+	int GetImageWidth()
 	{
 		return u32Width;
 	}
-	int GetHeight()
+	int GetImageHeight()
 	{
 		return u32Height;
 	}

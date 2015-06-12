@@ -14,7 +14,7 @@ void element::Flush()
 	else
 	{
 		errexitf("$$$$HU$$$$ Flush element %s manager is NULL\r\n",
-				name.c_str());
+				GetName());
 	}
 }
 void element::revocation()
@@ -28,7 +28,7 @@ void element::revocation()
 	else
 	{
 		errexitf("$$$$HU$$$$ revocation element %s manager is NULL\r\n",
-				name.c_str());
+				GetName());
 	}
 }
 
@@ -129,7 +129,7 @@ void element::Render()
 	}
 	else
 	{
-		printf("Render %s hide\r\n", name.c_str());
+		printf("Render %s hide\r\n", GetName());
 	}
 
 	if(m_parent)
@@ -164,7 +164,7 @@ void element::FlushConfig(HUMap &mp)
 	ParseModifRes(mp);
 	Flush();
 
-	xml_mgr->AddElement(name, this);
+	xml_mgr->AddElement(GetName(), this);
 	unlock();
 }
 
@@ -185,8 +185,8 @@ void element::ParseModifRes(HUMap &m_mp)
 		res[id].LoadResource();
 		if (cp_width + cp_height == 0)
 		{
-			cp_width = res[id].GetWidth();
-			cp_height = res[id].GetHeight();
+			cp_width = res[id].GetImageWidth();
+			cp_height = res[id].GetImageHeight();
 		}
 		if (meth == "render")
 		{
@@ -196,7 +196,7 @@ void element::ParseModifRes(HUMap &m_mp)
 
 			printf(
 					"$$$HU$$$ XML Draw Render %s to %s res=%d %d %d %d %d %d %d\r\n",
-					file.path.c_str(), name.c_str(), id, src_x, src_y, cp_width,
+					file.path.c_str(), GetName(), id, src_x, src_y, cp_width,
 					cp_height, dst_x, dst_y);
 
 			if (!res[id].isNULL())
@@ -213,7 +213,7 @@ void element::ParseModifRes(HUMap &m_mp)
 			}
 			else
 			{
-				errexitf("%s res %d no init\r\n", name.c_str(), id);
+				errexitf("%s res %d no init\r\n", GetName(), id);
 			}
 		}
 		else if (meth == "text")

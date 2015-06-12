@@ -248,7 +248,7 @@ int pngEndec_to_image(const char *file_name, image * graph)
 	/* 判断要写入至文件的图片数据是否有透明度，来选择色彩类型 */
 	color_type = PNG_COLOR_TYPE_RGB_ALPHA;
 
-	png_set_IHDR(png_ptr, info_ptr, graph->GetWidth(), graph->GetHeight(), 8, color_type, PNG_INTERLACE_NONE,
+	png_set_IHDR(png_ptr, info_ptr, graph->GetImageWidth(), graph->GetImageHeight(), 8, color_type, PNG_INTERLACE_NONE,
 	PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
 
 	png_write_info(png_ptr, info_ptr);
@@ -258,11 +258,11 @@ int pngEndec_to_image(const char *file_name, image * graph)
 	{
 		huErrExit("[write_png_file] Error during writing bytes");
 	}
-	temp = (4 * graph->GetWidth());
+	temp = (4 * graph->GetImageWidth());
 
 	pos = 0;
-	row_pointers = (png_bytep*) malloc(graph->GetHeight() * sizeof(png_bytep));
-	for (i = 0; i < graph->GetHeight(); i++)
+	row_pointers = (png_bytep*) malloc(graph->GetImageHeight() * sizeof(png_bytep));
+	for (i = 0; i < graph->GetImageHeight(); i++)
 	{
 		row_pointers[i] = (png_bytep) malloc(sizeof(unsigned char) * temp);
 		for (j = 0; j < temp; j += 4)
@@ -290,7 +290,7 @@ int pngEndec_to_image(const char *file_name, image * graph)
 	png_write_end(png_ptr, NULL);
 
 	/* cleanup heap allocation */
-	for (j = 0; j < graph->GetHeight(); j++)
+	for (j = 0; j < graph->GetImageHeight(); j++)
 		free(row_pointers[j]);
 	free(row_pointers);
 
@@ -354,7 +354,7 @@ int image_read_from_snap(image * img, const char * rawpath)
 	fread(&img->u32Stride, sizeof(unsigned int), 1, fp);
 	unsigned int reserved[17];
 	fread(&reserved, sizeof(unsigned int), 17, fp);
-	img->SetBuffer(img->GetWidth(), img->GetHeight());
+	img->SetBuffer(img->GetImageWidth(), img->GetImageHeight());
 	fread(img->pSrcBuffer, 1, img->SrcSize, fp);
 
 	fclose(fp);
@@ -607,31 +607,31 @@ void ProcArea(image * dst_img, image * rsc_img, int & src_x, int & src_y, int & 
 //		{
 //			dst_y = 0;
 //		}
-	if (src_y + cp_height > rsc_img->GetHeight())
+	if (src_y + cp_height > rsc_img->GetImageHeight())
 	{
 		//printf("AreaCopy src_y=%d cp_height=%d rsc_img->get_height()=%d\r\n", src_y, cp_height, rsc_img->get_height());
-		cp_height = rsc_img->GetHeight() - src_y;
+		cp_height = rsc_img->GetImageHeight() - src_y;
 		if (cp_height <= 0)
 		{
 			return;
 		}
 	}
-	if (src_x + cp_width > rsc_img->GetWidth())
+	if (src_x + cp_width > rsc_img->GetImageWidth())
 	{
 		//printf("AreaCopy src_x=%d cp_width=%d rsc_img->get_width()=%d\r\n", src_x, cp_width, rsc_img->get_width());
-		cp_width = rsc_img->GetWidth() - src_x;
+		cp_width = rsc_img->GetImageWidth() - src_x;
 		if (cp_width <= 0)
 		{
 			return;
 		}
 	}
-	if (dst_y + cp_height > dst_img->GetHeight())
+	if (dst_y + cp_height > dst_img->GetImageHeight())
 	{
-		cp_height = dst_img->GetHeight() - dst_y;
+		cp_height = dst_img->GetImageHeight() - dst_y;
 	}
-	if (dst_x + cp_width > dst_img->GetWidth())
+	if (dst_x + cp_width > dst_img->GetImageWidth())
 	{
-		cp_width = dst_img->GetWidth() - dst_x;
+		cp_width = dst_img->GetImageWidth() - dst_x;
 	}
 }
 
