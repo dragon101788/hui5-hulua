@@ -25,7 +25,7 @@ void Install_Element(HUMap &xmlmp, xmlproc * xml)
         }
 
 	te->xml_mgr = xml;
-	printf("$$$dragon$$$ m_flag=%x\n",te->m_flag);
+
 	if(te->m_flag&ELEMENT_FLAG_DRAWLOGIC)
         {
           te->FlushConfig(xmlmp);
@@ -33,6 +33,7 @@ void Install_Element(HUMap &xmlmp, xmlproc * xml)
 
 	if(te->m_flag&ELEMENT_FLAG_TOUCH)
         {
+	    log_i("$$$dragon$$$ %s init Touch\n",te->GetName());
 	    touch_element * touch_ele = (touch_element *)te;
 	    touch_ele->touch_init_area();
 	    touch_ele->TouchParaseXml(xmlmp);
@@ -41,6 +42,7 @@ void Install_Element(HUMap &xmlmp, xmlproc * xml)
 
 	if(te->m_flag&ELEMENT_FLAG_TIMER)
         {
+	    log_i("$$$dragon$$$ %s init Timer\n",te->GetName());
 	    timer_element * timer_ele = (timer_element *)te;
 	    timer_ele->TimerParaseXml(xmlmp);
 	    xml->AddTimerElement(timer_ele);

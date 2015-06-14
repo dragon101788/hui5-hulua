@@ -1,0 +1,4 @@
+config  CONTROL_DRAG_FRAME 
+        bool "drag_frame Control" 
+        help 
+			path=$AUTOPATH

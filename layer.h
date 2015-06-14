@@ -92,12 +92,10 @@ public:
 
 
 
-		if (pSrcBuffer == NULL)
-		{
-			//printf("%s SetBuffer width=%d height=%d\r\n", name.c_str(), width, height);
-			SetBuffer(GetWidth(), GetHeight());
-			path.format("ele-%s %dx%d", GetName(), GetWidth(), GetHeight());
-		}
+                //printf("%s SetBuffer width=%d height=%d\r\n", name.c_str(), width, height);
+                SetBuffer(GetWidth(), GetHeight());
+                path.format("ele-%s %dx%d", GetName(), GetWidth(), GetHeight());
+
 		initstack();
 	}
 	void ResetEB()

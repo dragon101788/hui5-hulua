@@ -132,15 +132,15 @@ void element::Render()
 		printf("Render %s hide\r\n", GetName());
 	}
 
-//	if(m_parent)
-//        {
-//	    m_parent->RenderFrom(this, 0, 0, GetWidth(), GetHeight(), GetX(), GetY());//控件输出到容器
-//	    m_parent->Flush();
-//        }
-//	else
-//        {
+	if(m_parent)
+        {
+	    m_parent->RenderFrom(this, 0, 0, GetWidth(), GetHeight(), GetX(), GetY());//控件输出到容器
+	    m_parent->Flush();
+        }
+	else
+        {
             xml_mgr->Draw(this, 0, 0, GetWidth(), GetHeight(), GetX(), GetY());//控件输出到容器
-//        }
+        }
 
 	RenderET();
 	unlock();
