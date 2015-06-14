@@ -4,7 +4,7 @@
 #include "XMLInstal.h"
 #include "layer.h"
 
-class dragframe: public element , public touch_element
+class dragframe: public element , public touch_element ,public touch_manager
 {
 public:
 	dragframe()
@@ -25,8 +25,11 @@ public:
 	         if (isdn == 1)
                         return;
 
-                 SetX(GetTouchX());
-                 SetY(GetTouchY());
+	         touch_sample tp;
+	         tp.x = GetTouchX();
+	         tp.y = GetTouchY();
+	         tp.pressure = GetTouchP();
+	         touch_proc_event(&tp);
                 //printf("%s touch\r\n", name.c_str());
 
                 Flush();
@@ -37,6 +40,11 @@ public:
                 if (isdn == 0)
                         return;
 
+                touch_sample tp;
+                 tp.x = GetTouchX();
+                 tp.y = GetTouchY();
+                 tp.pressure = GetTouchP();
+                 touch_proc_event(&tp);
                 //printf("%s free\r\n", name.c_str());
 
                 Flush();
@@ -62,7 +70,8 @@ public:
 	        if (fun != NULL)
 	        {
 	                //xml->done = 0;
-	                xmlmp["parent"].value().m_data = this;
+	                xmlmp["parent"].value().m_data = (element *)this;
+	                xmlmp["touch_mgr"].value().m_data = (touch_manager *)this;
 	                fun(xmlmp, xml_mgr);
 	                //xml->done = 1;
 	        }
