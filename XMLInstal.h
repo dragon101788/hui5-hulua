@@ -3,6 +3,7 @@
 
 #include "hulib.h"
 #include "xmlproc.h"
+#include "element_base.h"
 #include <map>
 using namespace std;
 
@@ -24,7 +25,26 @@ void Install_Element(HUMap &xmlmp, xmlproc * xml)
         }
 
 	te->xml_mgr = xml;
-	te->FlushConfig(xmlmp);
+	printf("$$$dragon$$$ m_flag=%x\n",te->m_flag);
+	if(te->m_flag&ELEMENT_FLAG_DRAWLOGIC)
+        {
+          te->FlushConfig(xmlmp);
+        }
+
+	if(te->m_flag&ELEMENT_FLAG_TOUCH)
+        {
+	    touch_element * touch_ele = (touch_element *)te;
+	    touch_ele->touch_init_area();
+	    touch_ele->TouchParaseXml(xmlmp);
+	    xml->AddEleArea(touch_ele);
+        }
+
+	if(te->m_flag&ELEMENT_FLAG_TIMER)
+        {
+	    timer_element * timer_ele = (timer_element *)te;
+	    timer_ele->TimerParaseXml(xmlmp);
+	    xml->AddTimerElement(timer_ele);
+        }
 	//xml->mtx.unlock();
 }
 

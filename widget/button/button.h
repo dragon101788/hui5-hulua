@@ -40,11 +40,11 @@ public:
 	void doFlushConfig(HUMap &mp)
 	{
 		exec.parse(mp);
-		touch_init_area(GetX(), GetY(), GetWidth(), GetHeight());
+//		touch_init_area(GetX(), GetY(), GetWidth(), GetHeight());
 
 		SetRes(0, mp["up"]->getvalue());
 		SetRes(1, mp["dn"]->getvalue());
-		xml_mgr->AddEleArea(this);
+		//xml_mgr->AddEleArea(this);
 
 	}
 	void doRender()

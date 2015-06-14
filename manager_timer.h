@@ -3,13 +3,14 @@
 
 #include "hulib.h"
 #include "ParseXML.h"
+#include "element_base.h"
 #include <set>
 
 #define TIMER_CONTINUE 0
 #define TIMER_DEL_ELE  9
 
 class timer_manager;
-class timer_element: virtual public Mutex
+class timer_element: virtual public element_base, virtual public Mutex
 {
 public:
 	virtual int doTimer(int tm) = 0;
@@ -38,6 +39,7 @@ public:
 	int GetUpTimer();
 	timer_element()
 	{
+	        m_flag |= ELEMENT_FLAG_TIMER;
 		timer_stop = 1;
 		m_tm = 0;
 	}

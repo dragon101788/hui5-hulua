@@ -77,11 +77,6 @@ public:
 
                 }
 
-		TimerParaseXml(mp);
-
-		xml_mgr->AddTimerElement(this);
-
-
 	}
 	cartoon()
 	{

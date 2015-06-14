@@ -3,6 +3,10 @@
 
 #include "hui_hulua.h"
 
+#define ELEMENT_FLAG_DRAWLOGIC              (1<<0)
+#define ELEMENT_FLAG_TOUCH                  (1<<1)
+#define ELEMENT_FLAG_TIMER                  (1<<2)
+
 class element_base
 {
 public:
@@ -14,6 +18,7 @@ public:
     m_height = 0;
     m_width = 0;
     m_lay = 0;
+    m_flag = 0;
   }
   inline void SetName(const char * name)
   {
@@ -111,6 +116,7 @@ public:
       }
     }
   };
+  int m_flag;
 private:
   hustr m_name;
   int m_hide;

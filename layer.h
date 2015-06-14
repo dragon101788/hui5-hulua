@@ -41,7 +41,7 @@ public:
 	}
 	element()
 	{
-
+	        m_flag |= ELEMENT_FLAG_DRAWLOGIC;
 		m_parent = NULL;
 		xml_mgr = NULL;
 		//log_d("new element m_parent=%x\n",m_parent);

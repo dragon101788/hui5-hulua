@@ -25,6 +25,7 @@ public:
 //	}
 	touch_element()
 	{
+	        m_flag |= ELEMENT_FLAG_TOUCH;
 		top = 0;
 		bottom = 0;
 		left = 0;
@@ -55,7 +56,7 @@ public:
 	virtual void doTouchUp()=0;
 	virtual void doTouchActive() = 0;
 
-	void touch_init_area(int x, int y, int width, int height)
+	void touch_init_area()
 	{
 		lock();
 		top = GetY();
