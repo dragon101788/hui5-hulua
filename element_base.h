@@ -20,64 +20,64 @@ public:
     m_lay = 0;
     m_flag = 0;
   }
-  inline void SetName(const char * name)
+  virtual void SetName(const char * name)
   {
     m_name = name;
   }
-  inline void SetX(int x)
+  virtual void SetX(int x)
   {
     m_x = x;
   }
-  inline void SetY(int y)
+  virtual void SetY(int y)
   {
     m_y = y;
   }
-  inline void SetWidth(int width)
+  virtual void SetWidth(int width)
   {
     m_width = width;
   }
-  inline void SetHeight(int height)
+  virtual void SetHeight(int height)
   {
     m_height = height;
   }
 
-  inline void SetLay(int lay)
+  virtual void SetLay(int lay)
   {
     m_lay = lay;
   }
-  inline void SetHide(int hide)
+  virtual void SetHide(int hide)
   {
     m_hide = hide;
   }
-  inline const char * GetName() const
+  virtual const char * GetName() const
   {
     return m_name.nstr();
   }
-  inline int GetX() const
+  virtual int GetX() const
   {
     return m_x;
   }
-  inline int GetY() const
+  virtual int GetY() const
   {
     return m_y;
   }
 
-  inline int GetWidth() const
+  virtual int GetWidth() const
   {
     return m_width;
   }
 
-  inline int GetHeight() const
+  virtual int GetHeight() const
   {
     return m_height;
   }
 
-  inline int GetLay() const
+  virtual int GetLay() const
   {
     return m_lay;
   }
 
-  inline int GetHide() const
+  virtual int GetHide() const
   {
     return m_hide;
   }
@@ -117,7 +117,7 @@ public:
     }
   };
   int m_flag;
-private:
+//private:
   hustr m_name;
   int m_hide;
   int m_x;

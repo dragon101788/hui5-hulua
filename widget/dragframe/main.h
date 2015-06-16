@@ -17,13 +17,23 @@ public:
 	{
 
 	}
+
+	int GetX() const
+	{
+	   //printf("dragframe GetX %d\n",m_x + move_x());
+	   return m_x + move_x();
+	}
+	int GetY() const
+        {
+	   //printf("dragframe GetY %d\n",m_y + move_y());
+           return m_y + move_y();
+        }
 	void doTouchDown()
         {
                 //printf("$$$HU$$$ %s %s tx=%d ty=%d t%d b%d l%d r%d\r\n",name,__FUNCTION__,tx,ty,top,bottom,left,right);
 
-	        printf("tx=%d ty=%d\n",GetTouchX(),GetTouchY());
-	         if (isdn == 1)
-                        return;
+	        //printf("tx=%d ty=%d\n",GetTouchX(),GetTouchY());
+
 
 	         touch_sample tp;
 	         tp.x = GetTouchX();
@@ -37,8 +47,6 @@ public:
 
         void doTouchUp()
         {
-                if (isdn == 0)
-                        return;
 
                 touch_sample tp;
                  tp.x = GetTouchX();
@@ -72,6 +80,7 @@ public:
 	                //xml->done = 0;
 	                xmlmp["parent"].value().m_data = (element *)this;
 	                xmlmp["touch_mgr"].value().m_data = (touch_manager *)this;
+	                printf("$$$$HU$$$$ [%s] sub element [%s]\n",GetName(),xmlmp["name"]->getvalue());
 	                fun(xmlmp, xml_mgr);
 	                //xml->done = 1;
 	        }

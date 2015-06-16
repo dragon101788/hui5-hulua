@@ -222,102 +222,9 @@ public:
 		return 0;
 	}
 
-//	void ProcArea(image * rsc_img, int & src_x, int & src_y, int & cp_width, int & cp_height, int & dst_x, int & dst_y)
-//	{
-//		if (cp_width == 0 || cp_height == 0)
-//		{
-//			return;
-//		}
-//		if (cp_width < 0 || cp_height < 0)
-//		{
-//			errexit("AreaCopy cp_windth or cp_height <0\r\n");
-//		}
-//		//printf("$$$HU$$$ src_x=%d\r\n", src_x);
-//
-//		if (src_x < 0)
-//		{
-//			dst_x -= src_x;
-//			src_x = 0;
-//		}
-//		if (src_y < 0)
-//		{
-//			dst_y -= src_y;
-//			src_y = 0;
-//		}
-////		if (dst_x < 0)
-////		{
-////			dst_x = 0;
-////		}
-////		if (dst_y < 0)
-////		{
-////			dst_y = 0;
-////		}
-//		if (src_y + cp_height > rsc_img->u32Height)
-//		{
-//			//printf("AreaCopy src_y=%d cp_height=%d rsc_img->u32Height=%d\r\n", src_y, cp_height, rsc_img->u32Height);
-//			cp_height = rsc_img->u32Height - src_y;
-//			if (cp_height <= 0)
-//			{
-//				return;
-//			}
-//		}
-//		if (src_x + cp_width > rsc_img->u32Width)
-//		{
-//			//printf("AreaCopy src_x=%d cp_width=%d rsc_img->u32Width=%d\r\n", src_x, cp_width, rsc_img->u32Width);
-//			cp_width = rsc_img->u32Width - src_x;
-//			if (cp_width <= 0)
-//			{
-//				return;
-//			}
-//		}
-//		if (dst_y + cp_height > u32Height)
-//		{
-//			cp_height = u32Height - dst_y;
-//		}
-//		if (dst_x + cp_width > u32Width)
-//		{
-//			cp_width = u32Width - dst_x;
-//		}
-//	}
-	void AreaCopy(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
-	{
 
-		::AreaCopy(this, src_img, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
-	}
 
-//	void AreaCopy_transparent(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
-//	{
-//		ProcArea(src_img, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
-//
-//		unsigned int * src_buf = (unsigned int*) src_img->pSrcBuffer;
-//		unsigned int src_w = src_img->u32Width;
-//		unsigned int * dst_buf = (unsigned int*) pSrcBuffer;
-//		unsigned int dst_w = u32Width;
-//		int dx = dst_x;
-//		int dy = dst_y;
-//		for (int sy = 0; sy < src_img->u32Height; sy++)
-//		{
-//			for (int sx = 0; sx < src_img->u32Width; sx++)
-//			{
-//				IMG_PIX * sp = (IMG_PIX *) (src_buf + sx + sy * src_w);
-//				if ((*sp).u8Alpha != 0)
-//				{
-//					IMG_PIX * dp = (IMG_PIX *) (dst_buf + dx + sx + (dy + sy) * dst_w);
-//
-//					//				S_DRVBLT_ARGB8 * up = (S_DRVBLT_ARGB8 *) ((unsigned int*) g_lay_mgr[0]->pSrcBuffer + dx + sx
-//					//						+ (dy + sy) * g_lay_mgr[0]->u32Width);
-//
-//					*dp = *sp;
-//
-//				}
-//			}
-//		}
-//	}
 
-	void AreaCopy(image * img, int x, int y)
-	{
-		AreaCopy(img, 0, 0, img->u32Width, img->u32Height, x, y);
-	}
 
 	void DrawPoint(int x, int y, int color)
 	{
@@ -369,7 +276,7 @@ public:
 
 	}
 
-	void RenderFrom(image * img, int x, int y)
+	virtual void RenderFrom(image * img, int x, int y)
 	{
 		//AreaCopy(img, 0, 0, img->u32Width, img->u32Height, x, y);
 		//printf("$$$HU$$$ Render %s to %s\r\n",this->path.c_str(),img->path.c_str());
@@ -377,12 +284,48 @@ public:
 		img->LoadResource();
 		Render_img_to_img(this, img, 0, 0, img->u32Width, img->u32Height, x, y);
 	}
-	void RenderFrom(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
+	virtual void RenderFrom(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
 	{
 		src_img->LoadResource();
 		ProcArea(this, src_img, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
 		Render_img_to_img(this, src_img, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
 	}
+
+	virtual void RenderTo(image * img, int x, int y)
+        {
+                //AreaCopy(img, 0, 0, img->u32Width, img->u32Height, x, y);
+                //printf("$$$HU$$$ Render %s to %s\r\n",this->path.c_str(),img->path.c_str());
+
+                img->LoadResource();
+                Render_img_to_img(img,this, 0, 0, img->u32Width, img->u32Height, x, y);
+        }
+
+	virtual void RenderTo(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
+        {
+                src_img->LoadResource();
+                ProcArea(this, src_img, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
+                Render_img_to_img(src_img, this, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
+        }
+
+	void AreaCopyFrom(image * img, int x, int y)
+        {
+                ::AreaCopy(this , img, 0, 0, img->u32Width, img->u32Height, x, y);
+        }
+        void AreaCopyFrom(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
+        {
+
+                ::AreaCopy(this, src_img, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
+        }
+
+        void AreaCopyTo(image * img, int x, int y)
+        {
+                ::AreaCopy(img,this, 0, 0, img->u32Width, img->u32Height, x, y);
+        }
+        void AreaCopyTo(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
+        {
+
+                ::AreaCopy(src_img , this, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
+        }
 
 //	int SetConfig(const char * key,const char * value)
 //	{

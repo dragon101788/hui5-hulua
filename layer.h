@@ -150,7 +150,7 @@ public:
 						d_ofy = ele->GetY() - GetY();
 					}
 
-					AreaCopy(ele, s_ofx, s_ofy, GetWidth(), GetHeight(), d_ofx, d_ofy);
+					AreaCopyFrom(ele, s_ofx, s_ofy, GetWidth(), GetHeight(), d_ofx, d_ofy);
 				}
 				//RollBack::RollBackBlock(*it, x, y, width, height);
 				//(*it)->Render();

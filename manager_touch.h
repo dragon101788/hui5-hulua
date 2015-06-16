@@ -43,14 +43,6 @@ public:
 	~touch_element()
 	{
 	}
-	int AreaWidth()
-	{
-		return right - left;
-	}
-	int AreaHeight()
-	{
-		return bottom - top;
-	}
 
 	virtual void doTouchDown()=0;
 	virtual void doTouchUp()=0;
@@ -79,7 +71,7 @@ public:
 		ox = 0;
 		oy = 0;
 	}
-	int move_x()
+	int move_x() const
 	{
 		if (x_lock)
 			return 0;
@@ -88,7 +80,7 @@ public:
 
 		return GetTouchX() - ox;
 	}
-	int move_y()
+	int move_y() const
 	{
 		if (y_lock)
 			return 0;
@@ -137,9 +129,9 @@ public:
 		return (x > left && x < right && y > top && y < bottom);
 	}
 
-	int GetTouchX();
-	int GetTouchY();
-	int GetTouchP();
+	int GetTouchX() const;
+	int GetTouchY() const;
+	int GetTouchP() const;
 
 	int top;
 	int bottom;

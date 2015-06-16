@@ -589,24 +589,34 @@ void ProcArea(image * dst_img, image * rsc_img, int & src_x, int & src_y, int & 
 	}
 	//printf("$$$HU$$$ src_x=%d\r\n", src_x);
 
+	//***************************************
+	//判断是否复制的坐标小于0，并且修正宽度
+//	if (dst_x < 0)
+//        {
+//            cp_width = dst_img->GetImageWidth() + dst_x;
+//               // dst_x = 0;
+//        }
+//        if (dst_y < 0)
+//        {
+//            cp_height = dst_img->GetImageHeight() + dst_y;
+//                //dst_y = 0;
+//        }
+
+        //*************************************
 	if (src_x < 0)
 	{
+	        //cp_width += src_x;
 		dst_x -= src_x;
 		src_x = 0;
 	}
 	if (src_y < 0)
 	{
+	        //cp_height += src_y;
 		dst_y -= src_y;
 		src_y = 0;
 	}
-//		if (dst_x < 0)
-//		{
-//			dst_x = 0;
-//		}
-//		if (dst_y < 0)
-//		{
-//			dst_y = 0;
-//		}
+
+	//*************************************
 	if (src_y + cp_height > rsc_img->GetImageHeight())
 	{
 		//printf("AreaCopy src_y=%d cp_height=%d rsc_img->get_height()=%d\r\n", src_y, cp_height, rsc_img->get_height());
@@ -625,6 +635,8 @@ void ProcArea(image * dst_img, image * rsc_img, int & src_x, int & src_y, int & 
 			return;
 		}
 	}
+
+	//*************************************
 	if (dst_y + cp_height > dst_img->GetImageHeight())
 	{
 		cp_height = dst_img->GetImageHeight() - dst_y;
@@ -643,15 +655,20 @@ void AreaCopy(image * dst_img, image * src_img, int src_x, int src_y, int cp_wid
 	src_img->lock();
 	//printf("$$$HU$$$ AreaCopy1 src_x=%d src_y=%d cp_width=%d cp_height=%d dst_x=%d dst_y=%d\r\n", src_x, src_y, cp_width, cp_height, dst_x, dst_y);
 	ProcArea(dst_img, src_img, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
-	//printf("$$$HU$$$ AreaCopy2 src_x=%d src_y=%d cp_width=%d cp_height=%d dst_x=%d dst_y=%d\r\n", src_x, src_y, cp_width, cp_height, dst_x, dst_y);
-	for (y = 0; y < cp_height; y++)
+	//printf("$$$HU$$$ AreaCopy2 src_x=%d src_y=%d cp_width=%d cp_height=%d dst_x=%d dst_y=%d row_size=%d\r\n", src_x, src_y, cp_width, cp_height, dst_x, dst_y,cp_width * sizeof(IMG_PIX));
+	for (y=0; y < cp_height; y++)
 	{
-//			for(x=0;x<cp_width;x++)
-//			{
-//				*(((unsigned int *)pSrcBuffer)+dst_x+dst_y*u32Width+x+y*cp_width)=*(((unsigned int *)img->pSrcBuffer)+src_x+src_y*img->u32Width+x+y*cp_width);
-//			}
-		memcpy((unsigned int *) dst_img->pSrcBuffer + (y + dst_y) * dst_img->u32Width + dst_x,
-				(unsigned int *) src_img->pSrcBuffer + (y + src_y) * src_img->u32Width + src_x, cp_width * 4);
+                for(x=0;x<cp_width;x++)
+                {
+                    IMG_PIX * dst_pix = ((IMG_PIX *) dst_img->pSrcBuffer + (y + dst_y) * dst_img->u32Width + (x + dst_x));
+                    IMG_PIX * src_pix = ((IMG_PIX *) src_img->pSrcBuffer + (y + src_y) * src_img->u32Width + (x + src_x));
+                    if(src_pix->u8Alpha)
+                      *dst_pix = *src_pix;
+                }
+
+//		memcpy((unsigned int *) dst_img->pSrcBuffer + (y + dst_y) * dst_img->u32Width + dst_x,
+//				(unsigned int *) src_img->pSrcBuffer + (y + src_y) * src_img->u32Width + src_x,
+//				(cp_width * sizeof(IMG_PIX)));
 	}
 
 	dst_img->unlock();

@@ -41,7 +41,7 @@ void Install_Element(HUMap &xmlmp, xmlproc * xml)
             if(xmlmp.exist("touch_mgr"))
             {
                 touch_manager * tp = (touch_manager *)xmlmp["touch_mgr"].value().m_data;
-                printf("touch_ele %s exist touch_mgr\n",touch_ele->GetName());
+                //printf("touch_ele %s exist touch_mgr\n",touch_ele->GetName());
                 tp->AddEleArea(touch_ele);
             }
             else

@@ -78,7 +78,7 @@ private:
 		void Draw(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
 		{
 			lock();
-			AreaCopy(src_img, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
+			AreaCopyFrom(src_img, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
 			unlock();
 		}
 		void RenderToFramebuffer(framebuffer * fb)

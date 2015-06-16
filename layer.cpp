@@ -129,16 +129,18 @@ void element::Render()
 	}
 	else
 	{
-		printf("Render %s hide\r\n", GetName());
+		log_d("Render %s hide\r\n", GetName());
 	}
 
 	if(m_parent)
         {
-	    m_parent->RenderFrom(this, 0, 0, GetWidth(), GetHeight(), GetX(), GetY());//控件输出到容器
-	    m_parent->Flush();
+	    //printf("draw %s parent %s  %d %d %d %d\n",m_parent->GetName(),GetName(),GetWidth(), GetHeight(), GetX(), GetY());
+	    m_parent->AreaCopyFrom(this, 0, 0, GetWidth(), GetHeight(), GetX(), GetY());//控件输出到容器
+	    //m_parent->Flush();
         }
 	else
         {
+	    //printf("draw %s %d %d %d %d\n",GetName(),GetWidth(), GetHeight(), GetX(), GetY());
             xml_mgr->Draw(this, 0, 0, GetWidth(), GetHeight(), GetX(), GetY());//控件输出到容器
         }
 
@@ -194,7 +196,7 @@ void element::ParseModifRes(HUMap &m_mp)
 			file.SetResource(xmlmp["file"]->getvalue());
 			file.LoadResource();
 
-			printf(
+			log_d(
 					"$$$HU$$$ XML Draw Render %s to %s res=%d %d %d %d %d %d %d\r\n",
 					file.path.c_str(), GetName(), id, src_x, src_y, cp_width,
 					cp_height, dst_x, dst_y);
@@ -232,15 +234,14 @@ void element::ParseModifRes(HUMap &m_mp)
 
 			text tmpttf;
 			tmpttf.m_font = &font_mp[font];
-			printf("get font_mp %s %x %x\r\n",font.nstr() ,tmpttf.m_font->face,
-					tmpttf.m_font->ft_Lib);
+			//log_d("get font_mp %s %x %x\r\n",);
 			tmpttf.fontHeight = size;
 			tmpttf.color = color;
 			tmpttf.style = style;
 			tmpttf.SetBuffer(cp_width, cp_height);
 			tmpttf.DrawText("UTF-8", (char *) txt.c_str(), txt.length());
 
-			printf("ParseModifRes text=%s\r\n",txt.c_str());
+			log_d("ParseModifRes text=%s [%s] <%x %x>\r\n",txt.c_str(),font.nstr() ,tmpttf.m_font->face,tmpttf.m_font->ft_Lib);
 			if (!res[id].isNULL())
 			{
 
