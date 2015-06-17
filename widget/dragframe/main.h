@@ -10,22 +10,14 @@ public:
 	dragframe()
 	{
 		id = 0;
+		x_pos=0;
+		y_pos=0;
 	}
 	~dragframe()
 	{
 
 	}
 
-	int GetX() const
-	{
-	   //printf("dragframe GetX %d\n",m_x + move_x());
-	   return m_x + move_x();
-	}
-	int GetY() const
-        {
-	   //printf("dragframe GetY %d\n",m_y + move_y());
-           return m_y + move_y();
-        }
 	void doTouchDown()
         {
                 //printf("$$$HU$$$ %s %s tx=%d ty=%d t%d b%d l%d r%d\r\n",name,__FUNCTION__,tx,ty,top,bottom,left,right);
@@ -34,10 +26,11 @@ public:
 
 
 	         touch_sample tp;
-	         tp.x = GetTouchX();
-	         tp.y = GetTouchY();
+	         tp.x = GetTouchX()-x_pos;
+	         tp.y = GetTouchY()-y_pos;
 	         tp.pressure = GetTouchP();
 	         touch_proc_event(&tp);
+
                 //printf("%s touch\r\n", name.c_str());
 
                 Flush();
@@ -47,11 +40,13 @@ public:
         {
 
                 touch_sample tp;
-                 tp.x = GetTouchX();
-                 tp.y = GetTouchY();
+                 tp.x = GetTouchX()-x_pos;
+                 tp.y = GetTouchY()-y_pos;
                  tp.pressure = GetTouchP();
                  touch_proc_event(&tp);
                 //printf("%s free\r\n", name.c_str());
+                 x_pos+=move_x();
+                 y_pos+=move_y();
 
                 Flush();
         }
@@ -88,6 +83,7 @@ public:
 
 //	    touch_init_area(GetX(), GetY(), GetWidth(), GetHeight());
 //	            xml_mgr->AddEleArea(this);
+
 	    res[0].SetBuffer(GetWidth(),GetHeight());
 
             HUMap::OrderList lst;
@@ -102,14 +98,15 @@ public:
 	}
 	void doRender()
 	{
-	        res[0].RenderTo(this, 0, 0, GetWidth(), GetHeight(), 0, 0);
+	        res[0].RenderTo(this, 0, 0, GetWidth(), GetHeight(), x_pos+move_x(), y_pos+move_y());
 	}
 	virtual void RenderFrom(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
 	{
-	    printf("dragframe RenderFrom\n");
-	    res[0].RenderFrom(src_img,src_x,src_y,cp_width,cp_height,dst_x,dst_y);
+	    res[0].AreaCopyFrom(src_img,src_x,src_y,cp_width,cp_height,dst_x,dst_y);
 	}
 	int id;
+	int x_pos;
+	int y_pos;
 };
 
 #endif //__STATIC_IMAGE_H__

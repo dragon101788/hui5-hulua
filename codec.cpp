@@ -658,17 +658,17 @@ void AreaCopy(image * dst_img, image * src_img, int src_x, int src_y, int cp_wid
 	//printf("$$$HU$$$ AreaCopy2 src_x=%d src_y=%d cp_width=%d cp_height=%d dst_x=%d dst_y=%d row_size=%d\r\n", src_x, src_y, cp_width, cp_height, dst_x, dst_y,cp_width * sizeof(IMG_PIX));
 	for (y=0; y < cp_height; y++)
 	{
-                for(x=0;x<cp_width;x++)
-                {
-                    IMG_PIX * dst_pix = ((IMG_PIX *) dst_img->pSrcBuffer + (y + dst_y) * dst_img->u32Width + (x + dst_x));
-                    IMG_PIX * src_pix = ((IMG_PIX *) src_img->pSrcBuffer + (y + src_y) * src_img->u32Width + (x + src_x));
-                    if(src_pix->u8Alpha)
-                      *dst_pix = *src_pix;
-                }
+//                for(x=0;x<cp_width;x++)
+//                {
+//                    IMG_PIX * dst_pix = ((IMG_PIX *) dst_img->pSrcBuffer + (y + dst_y) * dst_img->u32Width + (x + dst_x));
+//                    IMG_PIX * src_pix = ((IMG_PIX *) src_img->pSrcBuffer + (y + src_y) * src_img->u32Width + (x + src_x));
+//                    if(src_pix->u8Alpha)
+//                      *dst_pix = *src_pix;
+//                }
 
-//		memcpy((unsigned int *) dst_img->pSrcBuffer + (y + dst_y) * dst_img->u32Width + dst_x,
-//				(unsigned int *) src_img->pSrcBuffer + (y + src_y) * src_img->u32Width + src_x,
-//				(cp_width * sizeof(IMG_PIX)));
+		memcpy((unsigned int *) dst_img->pSrcBuffer + (y + dst_y) * dst_img->u32Width + dst_x,
+				(unsigned int *) src_img->pSrcBuffer + (y + src_y) * src_img->u32Width + src_x,
+				(cp_width * sizeof(IMG_PIX)));
 	}
 
 	dst_img->unlock();

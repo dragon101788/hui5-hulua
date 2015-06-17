@@ -120,7 +120,7 @@ public:
 		touch_lock = mp["lock"]->getvalue_int();
 		x_lock = mp["x_lock"]->getvalue_int();
 		y_lock = mp["y_lock"]->getvalue_int();
-		debug("TouchParaseXml %d %d %d\r\n", touch_lock, x_lock, y_lock);
+		log_d("TouchParaseXml %d %d %d\r\n", touch_lock, x_lock, y_lock);
 		unlock();
 	}
 
