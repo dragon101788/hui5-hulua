@@ -9,8 +9,6 @@ class dragframe: public element , public touch_element ,public touch_manager
 public:
 	dragframe()
 	{
-		xpos = 0;
-		ypos = 0;
 		id = 0;
 	}
 	~dragframe()
@@ -90,6 +88,7 @@ public:
 
 //	    touch_init_area(GetX(), GetY(), GetWidth(), GetHeight());
 //	            xml_mgr->AddEleArea(this);
+	    res[0].SetBuffer(GetWidth(),GetHeight());
 
             HUMap::OrderList lst;
             lst.accept(mp);
@@ -103,11 +102,13 @@ public:
 	}
 	void doRender()
 	{
-		//image::Render(&res[id], xpos, ypos, GetWidth(), GetHeight(), 0, 0);
+	        res[0].RenderTo(this, 0, 0, GetWidth(), GetHeight(), 0, 0);
 	}
-	int xpos;
-	int ypos;
-
+	virtual void RenderFrom(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
+	{
+	    printf("dragframe RenderFrom\n");
+	    res[0].RenderFrom(src_img,src_x,src_y,cp_width,cp_height,dst_x,dst_y);
+	}
 	int id;
 };
 

@@ -300,31 +300,31 @@ public:
                 Render_img_to_img(img,this, 0, 0, img->u32Width, img->u32Height, x, y);
         }
 
-	virtual void RenderTo(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
+	virtual void RenderTo(image * dst_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
         {
-                src_img->LoadResource();
-                ProcArea(this, src_img, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
-                Render_img_to_img(src_img, this, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
+	        dst_img->LoadResource();
+                ProcArea(this, dst_img, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
+                Render_img_to_img(dst_img, this, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
         }
 
-	void AreaCopyFrom(image * img, int x, int y)
+	virtual void AreaCopyFrom(image * img, int x, int y)
         {
                 ::AreaCopy(this , img, 0, 0, img->u32Width, img->u32Height, x, y);
         }
-        void AreaCopyFrom(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
+	virtual void AreaCopyFrom(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
         {
 
                 ::AreaCopy(this, src_img, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
         }
 
-        void AreaCopyTo(image * img, int x, int y)
+	virtual void AreaCopyTo(image * img, int x, int y)
         {
                 ::AreaCopy(img,this, 0, 0, img->u32Width, img->u32Height, x, y);
         }
-        void AreaCopyTo(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
+	virtual void AreaCopyTo(image * dst_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
         {
 
-                ::AreaCopy(src_img , this, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
+                ::AreaCopy(dst_img , this, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
         }
 
 //	int SetConfig(const char * key,const char * value)

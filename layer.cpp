@@ -121,30 +121,40 @@ void element::initstack()
 void element::Render()
 {
 	lock();
-	RenderEB();
 
-	if (GetHide() == 0)
-	{
-		doRender();
-	}
-	else
-	{
-		log_d("Render %s hide\r\n", GetName());
-	}
 
 	if(m_parent)
         {
+	    if (GetHide() == 0)
+            {
+                 doRender();
+            }
+	    else
+            {
+                    log_d("Render %s hide\r\n", GetName());
+            }
 	    //printf("draw %s parent %s  %d %d %d %d\n",m_parent->GetName(),GetName(),GetWidth(), GetHeight(), GetX(), GetY());
-	    m_parent->AreaCopyFrom(this, 0, 0, GetWidth(), GetHeight(), GetX(), GetY());//控件输出到容器
+	    m_parent->RenderFrom(this, 0, 0, GetWidth(), GetHeight(), GetX(), GetY());//控件输出到父亲
 	    //m_parent->Flush();
         }
 	else
         {
+	    RenderEB();
+
+            if (GetHide() == 0)
+            {
+                    doRender();
+            }
+            else
+            {
+                    log_d("Render %s hide\r\n", GetName());
+            }
 	    //printf("draw %s %d %d %d %d\n",GetName(),GetWidth(), GetHeight(), GetX(), GetY());
             xml_mgr->Draw(this, 0, 0, GetWidth(), GetHeight(), GetX(), GetY());//控件输出到容器
+
+            RenderET();
         }
 
-	RenderET();
 	unlock();
 }
 
