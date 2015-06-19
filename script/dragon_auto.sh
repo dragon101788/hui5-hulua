@@ -1,6 +1,14 @@
 #!/bin/bash
 
 FILTER='libsrc|test'
+AUTOMK=${PWD}/Makefile.auto
+AUTOKC=${PWD}/Kconfig.auto
+
+if [ -f "${AUTOMK}" ] | [ -f "${AUTOKC}" ];then
+	echo remove old $AUTOMK $AUTOKC
+	rm ${AUTOMK}
+	rm ${AUTOKC}
+fi
 
 myfunc()
 {
@@ -28,10 +36,6 @@ myfunc()
 }
 
 
-AUTOMK=${PWD}/Makefile.auto
-AUTOKC=${PWD}/Kconfig.auto
-#rm ${AUTOMK}
-#rm ${AUTOKC}
 myfunc
 #cat ${AUTOMK}
 #cat ${AUTOKC}

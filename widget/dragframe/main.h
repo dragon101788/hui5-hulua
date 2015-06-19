@@ -85,12 +85,13 @@ public:
 //	    touch_init_area(GetX(), GetY(), GetWidth(), GetHeight());
 //	            xml_mgr->AddEleArea(this);
 
-	     mp.display();
-	    if(mp.exist("linit"))
-             {
-                 printf("exec linit %s\n",mp["linit"]->getvalue());
-                 lua.dostring(mp["linit"]->getvalue());
-             }
+	     //mp.display();
+	     lua.dostring(mp.m_val);
+//	     if(mp.exist("linit"))
+//             {
+//                 printf("exec linit %s\n",mp["linit"]->getvalue());
+//                 lua.dostring(mp["linit"]->getvalue());
+//             }
 
 
 	    res[0].SetBuffer(GetWidth(),GetHeight());

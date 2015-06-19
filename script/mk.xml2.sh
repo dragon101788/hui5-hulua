@@ -14,6 +14,7 @@ set -e
 	--prefix=${TOPDIR}/objs/ \
 
 
+
 make install
 cp -rf ${TOPDIR}/objs/include/libxml2/libxml ${TOPDIR}/include/ 
 cp -rf ${TOPDIR}/objs/lib/* ${TOPDIR}/lib/ 
