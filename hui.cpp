@@ -345,13 +345,13 @@ void ParseInclude(HUMap & xmlmp, xmlproc * xml)
 	{
 		hustr cus = xmlmp["cus"]->getvalue();
 		printf("include xmlfile=[%s] to %s\r\n",  xmlmp["xmlfile"]->getvalue(), cus.c_str());
-		g_xml_proc[cus]->ParseXMLElementFile(filename);
+		g_xml_proc[cus]->StartParseXML(filename);
 
 	}
 	else
 	{
 		printf("include xmlfile=[%s] to %s\r\n", xmlmp["xmlfile"]->getvalue(), xml->filename.c_str());
-		xml->ParseXMLElementFile(filename);
+		xml->StartParseXML(filename);
 	}
 
 }

@@ -1,6 +1,7 @@
 #include "xmlproc.h"
 #include "thread_touch.h"
 #include "thread_timer.h"
+#include "ParseXML.h"
 
 DebugTimer fps;
 pXmlproc g_cur_xml;
@@ -51,3 +52,24 @@ void xmlproc::UnDoneProc()
 	done = 0;
 }
 
+void xmlproc::StartParseXML(const char * file)
+{
+
+        debug("+++++++++++++%s++++++++++++++\r\n", filename.c_str());
+        UnDoneProc();
+        //DebugTimer dbg;
+        HUMap mp;
+        ParseXmlFile(file, mp);
+
+        //mp.display();
+        HUMap::OrderList lst;
+        lst.accept(mp);
+        for(HUMap::OrderList::iterator it = lst.begin();it!=lst.end();++it)
+        {
+          hustr name = (*it).m_key;
+          ParseXMLFrom_Instan(name, *it, this);
+        }
+        //dbg.debug_timer("ParaseTinyXmlFile3");
+        DoneProc();
+        debug("+++++++++++++%s++++++++++++++OK\r\n", filename.c_str());
+}

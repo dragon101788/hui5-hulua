@@ -30,8 +30,8 @@ myfunc()
 
 AUTOMK=${PWD}/Makefile.auto
 AUTOKC=${PWD}/Kconfig.auto
-rm ${AUTOMK}
-rm ${AUTOKC}
+#rm ${AUTOMK}
+#rm ${AUTOKC}
 myfunc
 #cat ${AUTOMK}
 #cat ${AUTOKC}

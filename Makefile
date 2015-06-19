@@ -57,8 +57,6 @@ endif
 
 sinclude  $(MKAUTO)
 
-obj-y += $(patsubst %.cpp,%.o,$(wildcard tinyxml/*.cpp))
-
 
 OBJS := $(patsubst %.o,$(OBJS_DIR)%.o,$(obj-y))
 DEPS := $(patsubst %.o,$(OBJS_DIR)%.d,$(obj-y))
@@ -82,6 +80,8 @@ all: .config $(BUILTIN_LIB) dragon_auto $(DEPS) $(OBJS) dirobjs
 	@#rm $(dir-objs)
 	@#$(STRIP) $(TARGET) 
 	@echo build done 	
+	@rm Makefile.auto
+	@rm Kconfig.auto
 
 .PHONY: dragon_auto
 dragon_auto:
@@ -144,6 +144,8 @@ menuconfig: $(MCONF) $(CONF) dragon_auto
 	echo $(WIDGETDIR)
 	$(MCONF) Kconfig
 	$(CONF) -s Kconfig
+	@rm Makefile.auto
+	@rm Kconfig.auto
 
 .PHONY: clean
 clean:

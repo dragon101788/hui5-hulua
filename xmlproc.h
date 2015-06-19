@@ -6,14 +6,16 @@
 #include "manager_touch.h"
 #include "manager_timer.h"
 #include "Framebuffer.h"
+#include "ParseXML.h"
 
 class xmlproc;
+
+
 typedef SmartPtr<xmlproc> pXmlproc;
 extern pXmlproc g_cur_xml;
 extern map<hustr, pXmlproc> g_xml_proc;
 extern int go;
 int ParseXMLFrom_Instan(hustr name, HUMap & xmlmp, xmlproc * xml);
-void ParaseTinyXmlFile(const char * file, xmlproc * xml);
 void hui_exit(const char * cmd);
 void JumpToFile(const char * jump, const char * snap);
 
@@ -217,27 +219,17 @@ public:
 	}
 	virtual void doLoader()
 	{
-		ParseXMLFile();
+                if (filename.empty())
+                {
+                        huErrExit("can't init filename\r\n");
+                }
+		StartParseXML(filename);
 	}
-	void ParseXMLFile()
-	{
-		if (filename.empty())
-		{
-			huErrExit("can't init filename\r\n");
-		}debug("+++++++++++++%s++++++++++++++\r\n", filename.c_str());
-		UnDoneProc();
-		//DebugTimer dbg;
-		ParaseTinyXmlFile(filename, this);
-		//dbg.debug_timer("ParaseTinyXmlFile3");
-		DoneProc();
-		debug("+++++++++++++%s++++++++++++++OK\r\n", filename.c_str());
-	}
-	void ParseXMLElementFile(const char * file)
-	{
-
-		ParaseTinyXmlFile(file, this);
-
-	}
+	void StartParseXML(const char * file);
+//	void ParseXMLElementFile(const char * file)
+//	{
+//	    ParseXMLFile(file, this);
+//	}
 
 	virtual ~xmlproc()
 	{
