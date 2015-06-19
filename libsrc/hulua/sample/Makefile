@@ -2,6 +2,7 @@
 CC=$(CROSS_COMPILE)g++
 all:
 	make -C ../ TOPDIR=$(PWD) CROSS_COMPILE=$(CROSS_COMPILE)
+	$(CC) -I./include/ -L./lib   lua.c -lhulua -lm -ldl -lreadline -ltermcap -o bin/lua
 	$(CC) -I./include/ -L./lib   sample1.cpp   -o sample1 -lhulua -lm -ldl -DLUA_C89_NUMBERS
 	$(CC) -I./include/ -L./lib   sample2.cpp   -o sample2 -lhulua -lm -ldl -DLUA_C89_NUMBERS
 	$(CC) -I./include/ -L./lib   sample3.cpp   -o sample3 -lhulua -lm -ldl -DLUA_C89_NUMBERS

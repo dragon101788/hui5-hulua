@@ -7,23 +7,27 @@
 
 void ParaseTinyAttribute2(TiXmlNode* pchild, HUMap & xmlmp)
 {
-	TiXmlAttribute* attr = pchild->ToElement()->FirstAttribute();
-	if (attr)
-	{
-		TiXmlNode* node = pchild;
-		while (node)
-		{
-			while (attr)
-			{
+        if(pchild->ToElement() != 0)
+        {
+              TiXmlAttribute* attr = pchild->ToElement()->FirstAttribute();
+              if (attr)
+              {
+                      TiXmlNode* node = pchild;
+                      while (node)
+                      {
+                              while (attr)
+                              {
 
-				xmlmp[attr->Name()] = attr->Value();
-				attr = attr->Next();
-			}
+                                      xmlmp[attr->Name()] = attr->Value();
+                                      attr = attr->Next();
+                              }
 
-			node = node->NextSiblingElement();
-		}
+                              node = node->NextSiblingElement();
+                      }
 
-	}
+              }
+        }
+
 }
 
 void ParseUpdateXml(TiXmlNode* pParent, HUMap & xmlmp)
@@ -39,25 +43,44 @@ void ParseUpdateXml(TiXmlNode* pParent, HUMap & xmlmp)
 	{
 		int t = pchild->Type();
 
-		if (t == TiXmlNode::TINYXML_COMMENT)
-		{
-			pchild = pchild->NextSibling();
-			continue;
-		}
+//		if (t == TiXmlNode::TINYXML_COMMENT)
+//		{
+//		        ParseXML_comment(pchild->Value(),xmlmp);
+//			pchild = pchild->NextSibling();
+//			continue;
+//		}
 
 		HUMap &mp = xmlmp.CreateMultiLast(pchild->Value());
-
 		ParaseTinyAttribute2(pchild, mp);
 
-		if (pchild->FirstChild() != NULL && pchild->FirstChild()->Type() == TiXmlNode::TINYXML_TEXT)
+		if (pchild->FirstChild() != NULL)
+                {
+
+
+                      if (pchild->FirstChild()->Type() == TiXmlNode::TINYXML_TEXT)
+                      {
+                            mp.m_val = pchild->FirstChild()->Value();
+                      }
+                      else if (pchild->FirstChild()->Type() == TiXmlNode::TINYXML_COMMENT)
+                      {
+                            ParseXML_comment(pchild->Value(),xmlmp);
+                            pchild = pchild->NextSibling();
+                            continue;
+                      }
+                      else if(pchild->FirstChild()->Type() == TiXmlNode::TINYXML_ELEMENT)
+                      {
+                            ParseUpdateXml(pchild, mp);
+                      }
+                      else
+                      {
+                            printf("$$$dragon$$$ incognizance type=%d\n",pchild->FirstChild()->Type());
+                      }
+                }
+		else
 		{
-			mp.m_val = pchild->FirstChild()->Value();
+		     //printf("[%s] %d is null\n",pchild->Value(),t);
 		}
 
-		if (pchild->FirstChild() == NULL || pchild->FirstChild()->Type() == TiXmlNode::TINYXML_ELEMENT)
-		{
-			ParseUpdateXml(pchild, mp);
-		}
 
 		pchild = pchild->NextSibling();
 	}
@@ -95,3 +118,93 @@ void ParaseTinyXmlFile(const char * file, xmlproc * xml)
         }
 }
 
+//#include<libxml/parser.h>
+//#include<libxml/tree.h>
+//
+//void print_tree(xmlNodePtr node)
+//{
+//  //printf("$$$print_tree");
+//  char value[256];
+//  for(node=node->children;node;node=node->next)
+//  {
+//      if(xmlIsBlankNode(node))
+//        printf("%s",xmlNodeGetContent(node));
+//      else
+//      {
+//        if(XML_TEXT_NODE == node->type)
+//        {
+//            printf("[%s:%s]\n",node->parent->name,node->content);
+//        }
+//        else if(XML_CDATA_SECTION_NODE == node->type)
+//        {
+//            printf("%s:CDATA:%s\n",node->parent->name,node->content);
+//        }
+//        else if(XML_COMMENT_NODE == node->type)
+//        {
+//            printf("%s:COMMENT:%s\n",node->parent->name,node->content);
+//        }
+//        else if(XML_ELEMENT_NODE == node->type)
+//        {
+//            printf("%s",(char *)node->name);
+//            const xmlChar *name,*value;
+//            xmlAttrPtr attr = node->properties;
+//            for(;attr;attr = attr->next)
+//            {
+//              name=attr->name;
+//              value=attr->children->content;
+//              printf("[%s:%s]",(char*)name,(char*)value);   //get value, CDATA is not parse and don't take into value
+//            }
+//            print_tree(node);
+//
+//            printf("\n");
+//        }
+//        else
+//        {
+//          printf("[%s] %d is blank %d\n",node->name,node->type,xmlIsBlankNode(node));
+//        }
+//      }
+//  }
+//}
+//int parse_xml_file(char *buf,int len){
+//        xmlDocPtr doc;
+//        xmlNodePtr root,node,detail;
+//        xmlChar *name,*value;
+//        doc=xmlParseMemory(buf,len);    //parse xml in memory
+//        if(doc==NULL){
+//                printf("doc == null\n");
+//                return -1;
+//        }
+//        root=xmlDocGetRootElement(doc);
+//        for(node=root->children;node;node=node->next){
+//                if(xmlStrcasecmp(node->name,BAD_CAST"content")==0)
+//                        break;
+//        }
+//        node=root;
+//        if(node==NULL){
+//                printf("no node = content\n");
+//                return -1;
+//        }
+//        print_tree(node);
+//        xmlFreeDoc(doc);
+//        return 0;
+//}
+//int main1(int argc,char * argv[]){
+//        char *content;
+//        unsigned long filesize;
+//        FILE *file;
+//        if((file=fopen(argv[1],"r"))==NULL){
+//                perror("openf file error");
+//        }
+//        fseek(file,0,SEEK_END);
+//        filesize=ftell(file);
+//        rewind(file);
+//        content=(char *)malloc(filesize+1);
+//        memset(content,0,filesize+1);
+//        fread(content,1,filesize,file);
+//        fclose(file);
+//        printf("content:\n%s\n",content);
+//        if(parse_xml_file(content,filesize)<0){
+//                perror("parse xml failed");
+//        }
+//        return 0;
+//}

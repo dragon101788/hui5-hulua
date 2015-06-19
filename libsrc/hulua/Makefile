@@ -1,4 +1,9 @@
 TOPDIR:=$(PWD)/output
 CFLAGS+=-DLUA_USE_POSIX -DLUA_C89_NUMBERS -DLUA_ANSI -DLUA_USE_DLOPEN
+
 $all:
 	TOPDIR="$(TOPDIR)" CROSS_COMPILE="$(CROSS_COMPILE)" CFLAGS="$(CFLAGS)" ./build.sh
+
+clean:
+	${MAKE} -C src/ clean
+

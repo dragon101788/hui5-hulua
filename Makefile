@@ -19,9 +19,10 @@ CONF = $(TOPDIR)/script/conf
 MKZLIB = $(TOPDIR)/script/mk.zlib.sh
 MKPNGLIB = $(TOPDIR)/script/mk.libpng.sh
 MKICONVLIB = $(TOPDIR)/script/mk.iconv.sh
+MKXML2LIB = $(TOPDIR)/script/mk.xml2.sh
 HULUA = $(TOPDIR)/libsrc/hulua/
 MKAUTO=Makefile.auto
-
+BUILTIN_LIB=lib/libpng.a lib/libz.a lib/libiconv.a lib/libxml2.a lib/libhulua.a
 MAKE=make CROSS_COMPILE=$(CROSS_COMPILE) CC=$(CC) CFLAG="$(CFLAG)" TOPDIR=$(TOPDIR)
 
 obj-y += XMLInstal.o
@@ -75,9 +76,9 @@ OBJS_MK=$(CC) $(CFLAG) -c $< -o $@
 	$(CC) $(CFLAG) -c $< -o $@
 
 .PHONY: all
-all: .config lib/libz.a lib/libpng.a lib/libiconv.a lib/libhulua.a dragon_auto $(DEPS) $(OBJS) dirobjs
+all: .config $(BUILTIN_LIB) dragon_auto $(DEPS) $(OBJS) dirobjs
 	@echo built-in module: $(patsubst $(TOPDIR)%,%,$(dir-y))
-	@$(CC)  $(OBJS) $(SRCS) lib/libpng.a lib/libz.a lib/libiconv.a $(dir-objs) -o $(TARGET) $(LDFLAG)
+	@$(CC)  $(OBJS) $(SRCS) $(BUILTIN_LIB) $(dir-objs) -o $(TARGET) $(LDFLAG)
 	@#rm $(dir-objs)
 	@#$(STRIP) $(TARGET) 
 	@echo build done 	
@@ -98,7 +99,7 @@ lib/libz.a:
 	CROSS_COMPILE=$(CROSS_COMPILE) $(MKZLIB)
 	rm $(TOPDIR)/bin -rf
 	rm $(TOPDIR)/share -rf
-lib/libpng.a:
+lib/libpng.a: lib/libz.a
 	@mkdir -p `dirname $@`
 	TOPDIR=$(TOPDIR) CC=$(CROSS_COMPILE)gcc $(MKPNGLIB)
 	rm $(TOPDIR)/bin -rf
@@ -108,6 +109,9 @@ lib/libiconv.a:
 	TOPDIR=$(TOPDIR) CC=$(CROSS_COMPILE)gcc $(MKICONVLIB)
 	rm $(TOPDIR)/bin -rf
 	rm $(TOPDIR)/share -rf
+
+lib/libxml2.a:
+	TOPDIR=$(TOPDIR) CROSS_COMPILE=$(CROSS_COMPILE) $(MKXML2LIB)
 
 .PHONY: tools
 tools:

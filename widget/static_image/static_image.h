@@ -38,7 +38,7 @@ public:
 		xpos = mp["xpos"]->getvalue_int();
 		ypos = mp["ypos"]->getvalue_int();
 
-		mp.display();
+		//mp.display();
 		for (int i = 0; i < mp.count("node"); i++)
 		{
 			printf("doFlushConfig %d %s\r\n",i, mp["node"][i]->getvalue());

@@ -5,6 +5,6 @@
 #include "xmlproc.h"
 #define VALID_XML_COMMENT       "##"
 
-void ParseXML_comment(const char * str,xmlproc * xml);
+void ParseXML_comment(const char * str,HUMap & xmlmp);
 
 #endif //__PRASE_XML_COMMENT_H__

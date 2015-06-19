@@ -1,8 +1,10 @@
 #!/bin/bash
 
+FILTER='libsrc|test'
+
 myfunc()
 {
-        for x in $(find .|grep -v libsrc |grep Makefile.in)
+	for x in $(find .|grep -Ev ${FILTER}|grep Makefile.in)
         do
                 if [ -f "$x" ];then
 			#echo $x insert ${AUTOMK}
@@ -13,7 +15,7 @@ myfunc()
         done
 
 
-        for x in $(find .|grep -v libsrc |grep Kconfig.in)
+        for x in $(find .|grep -Ev ${FILTER} |grep Kconfig.in)
         do
 		if [ -f "$x" ];then
 			#echo $x insert ${AUTOMK}

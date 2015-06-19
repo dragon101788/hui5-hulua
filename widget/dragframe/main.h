@@ -66,6 +66,7 @@ public:
 	int SParseXMLFrom_Instan(hustr name, HUMap & xmlmp)
 	{
 	        log_i("$$$HU$$$ Parse [%s]\r\n", name.c_str());
+
 	        //xmlmp.display();
 	        XMLinstan_tf fun = XMLinstan[name];
 	        if (fun != NULL)
@@ -83,6 +84,14 @@ public:
 
 //	    touch_init_area(GetX(), GetY(), GetWidth(), GetHeight());
 //	            xml_mgr->AddEleArea(this);
+
+	     mp.display();
+	    if(mp.exist("linit"))
+             {
+                 printf("exec linit %s\n",mp["linit"]->getvalue());
+                 lua.dostring(mp["linit"]->getvalue());
+             }
+
 
 	    res[0].SetBuffer(GetWidth(),GetHeight());
 
