@@ -92,17 +92,23 @@ public:
 		{
 			return;
 		}
-		char buffer[strlen(fmt)*2];
-		va_list argptr;
-		int cnt;
-
-		va_start(argptr, fmt);
-		cnt = vsprintf(buffer, fmt, argptr);
-		va_end(argptr);
-
-		assign(buffer);
+		for(int cnt=-1,len=strlen(fmt)<<1,brk=1;brk;len=len<<1)
+		{
+                    char buf[len];
+                    va_list argptr;
+                    va_start(argptr, fmt);
+                    cnt = vsnprintf(buf, len,fmt, argptr);
+                    if(cnt > 0&&len>cnt)
+                    {
+                        brk=0;
+                        assign(buf);
+                    }
+                    va_end(argptr);
+                }
 
 	}
+
+
 
 	int format(const char * fmt, ...)
 	{
@@ -111,18 +117,32 @@ public:
 		{
 			errexitf("hustr format error\r\n");
 		}
-		char buffer[strlen(fmt)*2];
-		va_list argptr;
-		int cnt;
-		va_start(argptr, fmt);
-		cnt = vsprintf(buffer, fmt, argptr);
-		va_end(argptr);
-
-		assign(buffer);
-
-		return (cnt);
+		for(int cnt=-1,len=strlen(fmt)<<1,brk=1;brk;len=len<<1)
+                {
+                    char buf[len];
+                    va_list argptr;
+                    va_start(argptr, fmt);
+                    cnt = vsnprintf(buf, len,fmt, argptr);
+                    if(cnt > 0&&len>cnt)
+                    {
+                        brk=0;
+                        assign(buf);
+                    }
+                    va_end(argptr);
+                }
 	}
 
+	hustr & operator=(const char * str)
+	{
+	    if (str == NULL)
+            {
+	          erase();
+            }
+	    else
+            {
+                  assign(str);
+            }
+	}
 	const char * nstr() const
 	{
 		if (empty())
@@ -844,10 +864,13 @@ public:
 			}
 			sort(this->begin(), this->end(), cmp);
 		}
-		OrderList()
+		OrderList(humap & mp)
 		{
-
+		    accept(mp);
 		}
+		OrderList()
+                {
+                }
 	};
 	int exist(const char * key)
 	{
@@ -866,7 +889,15 @@ public:
 	}
 	T * operator->()
 	{
-		return &m_val;
+	  return &m_val;
+	}
+	T & MapValue()
+	{
+	    return m_val;
+	}
+	hustr & MapName()
+	{
+	    return m_key;
 	}
 	iterator operator[](const char * key)
 	{
@@ -984,15 +1015,19 @@ public:
 		{
 			return;
 		}
-		char buffer[strlen(fmt)*2];
-		va_list argptr;
-		int cnt;
-
-		va_start(argptr, fmt);
-		cnt = vsprintf(buffer, fmt, argptr);
-		va_end(argptr);
-
-		assign(buffer);
+		for(int cnt=-1,len=strlen(fmt)<<1,brk=1;brk;len=len<<1)
+                {
+                    char buf[len];
+                    va_list argptr;
+                    va_start(argptr, fmt);
+                    cnt = vsnprintf(buf, len,fmt, argptr);
+                    if(cnt > 0&&len>cnt)
+                    {
+                        brk=0;
+                        assign(buf);
+                    }
+                    va_end(argptr);
+                }
 
 	}
 	const char * getvalue()

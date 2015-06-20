@@ -84,7 +84,7 @@ void JumpToFile(const char * jump)
 	else if(math==".xml")
 	{
                 hustr snapfile("%s.png", jump);
-
+                printf("snapfile=%s\n",snapfile.nstr());
                 if (access_Image(snapfile))
                 {
                     log_i("install snapfile = %s\r\n", snapfile.c_str());

@@ -62,8 +62,7 @@ void xmlproc::StartParseXML(const char * file)
         ParseXmlFile(file, mp);
 
         //mp.display();
-        HUMap::OrderList lst;
-        lst.accept(mp);
+        HUMap::OrderList lst(mp);
         for(HUMap::OrderList::iterator it = lst.begin();it!=lst.end();++it)
         {
           hustr name = (*it).m_key;

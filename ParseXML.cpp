@@ -33,7 +33,7 @@ void ParseUpdateXml(xmlNodePtr node,HUMap & xmlmp)
         else if(XML_CDATA_SECTION_NODE == node->type)
         {
             prase_debug("%s:CDATA:%s\n",node->parent->name,node->content);
-            xmlmp.getfather()[(char *)node->parent->name] = (char *)node->content;
+            xmlmp.getfather()[(char *)node->parent->name].value() += (char *)node->content;
 
         }
         else if(XML_COMMENT_NODE == node->type)
@@ -67,24 +67,19 @@ void ParseUpdateXml(xmlNodePtr node,HUMap & xmlmp)
 int ParseXmlString(const char * buf,unsigned long filesize,HUMap & mp)
 {
     xmlDocPtr doc;
-    xmlNodePtr root,node;
+    xmlNodePtr node;
 
     doc=xmlParseMemory(buf,filesize);    //parse xml in memory
     if(doc==NULL){
             printf("doc == null\n");
             return -1;
     }
-    root=xmlDocGetRootElement(doc);
-    for(node=root->children;node;node=node->next){
-            if(xmlStrcasecmp(node->name,BAD_CAST"content")==0)
-                    break;
-    }
-    node=root;
+    node=xmlDocGetRootElement(doc);
     if(node==NULL){
             printf("no node = content\n");
             return -1;
     }
-
+    mp.MapName() = (char *)node->name;
     ParseUpdateXml(node,mp);
     xmlFreeDoc(doc);
 }

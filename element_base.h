@@ -82,13 +82,15 @@ public:
     return m_hide;
   }
 
-  virtual void doLuaCommand(const char * cmd)
-  {
-      printf("%s virtual doLuaCommand Nothing can be done\n",GetName());
-  }
+
+
   void LuaCommand(const char * cmd)
   {
       doLuaCommand(cmd);
+  }
+  virtual void doLuaCommand(const char * cmd)
+  {
+      printf("%s virtual doLuaCommand Nothing can be done\n",GetName());
   }
   class element_lua_node :public LUA::node
   {

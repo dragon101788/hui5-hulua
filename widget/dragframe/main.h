@@ -7,7 +7,7 @@
 class dragframe: public element , public touch_element ,public touch_manager
 {
 public:
-	dragframe()
+	dragframe() :res(element::res[0])
 	{
 		id = 0;
 		x_pos=0;
@@ -55,9 +55,16 @@ public:
         {
 
         }
-	void LuaCommand(const char * cmd,const char * arg)
+	void doLuaCommand(const char * cmd)
 	{
-
+            if(0==strncmp(cmd,"addele ",strlen("addele ")))
+            {
+                const char * arg = cmd+strlen("addele ");
+                HUMap mp;
+                ParseXmlString(arg,strlen(arg),mp);
+                //mp.display();
+                ParseXML(mp);
+            }
 	}
 	void doDelete()
 	{
@@ -65,6 +72,8 @@ public:
 	}
 	int SParseXMLFrom_Instan(hustr name, HUMap & xmlmp)
 	{
+	        lock();
+	        res.lock();
 	        log_i("$$$HU$$$ Parse [%s]\r\n", name.c_str());
 
 	        //xmlmp.display();
@@ -74,10 +83,36 @@ public:
 	                //xml->done = 0;
 	                xmlmp["parent"].value().m_data = (element *)this;
 	                xmlmp["touch_mgr"].value().m_data = (touch_manager *)this;
+	                int ex = xmlmp["x"]->getvalue_int();
+	                int ey = xmlmp["y"]->getvalue_int();
+	                int ewidth = xmlmp["width"]->getvalue_int();
+	                int eheignt = xmlmp["height"]->getvalue_int();
+
+	                if(ex+ewidth>res.GetImageWidth()||ey+eheignt>res.GetImageHeight())
+                        {
+	                    printf("ReSetBuffer%d %d\n",ex+ewidth,ey+eheignt);
+	                    res.ReSetBuffer(ex+ewidth>res.GetImageWidth()?ex+ewidth:res.GetImageWidth()
+	                                      ,ey+eheignt>res.GetImageHeight()?ey+eheignt:res.GetImageHeight());
+                        }
 	                printf("$$$$HU$$$$ [%s] sub element [%s]\n",GetName(),xmlmp["name"]->getvalue());
 	                fun(xmlmp, xml_mgr);
 	                //xml->done = 1;
 	        }
+	        res.unlock();
+	        unlock();
+	}
+	int ParseXML(HUMap & mp)
+	{
+	        lock();
+	        HUMap::OrderList lst(mp);
+                for(HUMap::OrderList::iterator it = lst.begin();it!=lst.end();++it)
+                {
+                    hustr name = (*it).MapName();
+                    SParseXMLFrom_Instan(name, *it);
+                }
+
+                unlock();
+
 	}
 	void doFlushConfig(HUMap & mp)
 	{
@@ -94,30 +129,37 @@ public:
 //             }
 
 
-	    res[0].SetBuffer(GetWidth(),GetHeight());
+	    res.SetBuffer(GetWidth(),GetHeight());
+	    ParseXML(mp);
 
-            HUMap::OrderList lst;
-            lst.accept(mp);
-            for(HUMap::OrderList::iterator it = lst.begin();it!=lst.end();++it)
-            {
-                hustr name = (*it).m_key;
-                SParseXMLFrom_Instan(name, *it);
-            }
-
-            //lua.dostring(mp.m_val);
+            //printf("lua=[%s]\n",mp.m_val.nstr());
+            lua.dostring(mp.MapValue());
 
 	}
 	void doRender()
 	{
-	        res[0].RenderTo(this, 0, 0, GetWidth(), GetHeight(), x_pos+move_x(), y_pos+move_y());
+	    printf("RenderFrom %d %d %d %d\n",GetWidth(), GetHeight(), x_pos+move_x(), y_pos+move_y());
+	    //RenderFrom(&res,-(x_pos+move_x()), -(y_pos+move_y()), res.GetImageWidth(),res.GetImageHeight(), 0,0);
+	    res.RenderTo(this, -(x_pos+move_x()), -(y_pos+move_y()), GetWidth(), GetHeight(), 0, 0);
+
 	}
+
+	//AreaCopyFrom 被外部绘图逻辑占用，此处不能继承
 	virtual void RenderFrom(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
 	{
-	    res[0].AreaCopyFrom(src_img,src_x,src_y,cp_width,cp_height,dst_x,dst_y);
+	  static int b=0;
+	   lock();
+	    res.lock();
+	    printf("RenderFrom %d %d %d %d %d %d\n",src_x,src_y,cp_width,cp_height,dst_x,dst_y);
+	    res.AreaCopyFrom(src_img,src_x,src_y,cp_width,cp_height,dst_x,dst_y);
+	    //res.SaveResource(hustr("res%d.png",b++));
+	    res.unlock();
+	   unlock();
 	}
 	int id;
 	int x_pos;
 	int y_pos;
+	image & res;
 };
 
 #endif //__STATIC_IMAGE_H__

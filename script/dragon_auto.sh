@@ -5,7 +5,7 @@ AUTOMK=${PWD}/Makefile.auto
 AUTOKC=${PWD}/Kconfig.auto
 
 if [ -f "${AUTOMK}" ] | [ -f "${AUTOKC}" ];then
-	echo remove old $AUTOMK $AUTOKC
+	#echo remove old $AUTOMK $AUTOKC
 	rm ${AUTOMK}
 	rm ${AUTOKC}
 fi

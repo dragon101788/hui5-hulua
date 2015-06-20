@@ -116,10 +116,10 @@ static int backtrace_xy(void **BUFFER, int SIZE)
 
 void errexit(const char * str)
 {
-	printf("**************error exit*****************\r\n");
-	printf(str);
-	printf("\r\n");
-	printf("*****************************************\r\n");
+	fprintf(stderr,"**************error exit*****************\r\n");
+	fprintf(stderr,str);
+	fprintf(stderr,"\r\n");
+	fprintf(stderr,"*****************************************\r\n");
 	dumpstack();
 	exit(-1);
 }

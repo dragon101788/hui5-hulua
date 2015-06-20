@@ -30,7 +30,7 @@
 #endif
 
 #ifdef CONFIG_LOG_E
-#define log_e(a,...)    fprintf(stderr,a,##__VA_ARGS__)
+#define log_e(a,...)    errexitf(a,##__VA_ARGS__)
 #else
 #define log_e(a,...)
 #endif

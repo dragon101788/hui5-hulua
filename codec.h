@@ -177,7 +177,33 @@ public:
 		path = file;
 		pngEndec_to_image(file, this);
 	}
+	int ReSetBuffer(int width, int height)
+	{
+                lock();
 
+                if(width * height == 0)
+                {
+                    log_e("undefined width height is zero\n");
+                }
+
+                int dep = 4;
+
+                int tmpsize = width * height * dep;
+                log_d("ReSetBuffer %d %d %d\n",width,height,tmpsize);
+                pSrcBuffer = realloc(pSrcBuffer,tmpsize);
+                if (pSrcBuffer == NULL)
+                {
+                        errexitf("image malloc failed: width=%d height=%d\n", width, height);
+                }
+                SrcSize = tmpsize;
+
+                u32Width = width;
+                u32Height = height;
+                u32Stride = width * dep;
+
+                unlock();
+                return 0;
+	}
 	int SetBuffer(int width, int height)
 	{
 
@@ -303,7 +329,7 @@ public:
 	virtual void RenderTo(image * dst_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
         {
 	        dst_img->LoadResource();
-                ProcArea(this, dst_img, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
+                ProcArea(dst_img, this, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
                 Render_img_to_img(dst_img, this, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
         }
 

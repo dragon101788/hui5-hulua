@@ -9,5 +9,6 @@
 #include "hulib.h"
 
 int ParseXmlFile(const char *path,HUMap & mp);
+int ParseXmlString(const char * buf,unsigned long filesize,HUMap & mp);
 
 #endif //__PARASE_XML_H__
