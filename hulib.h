@@ -87,11 +87,12 @@ public:
 
 	hustr(const char * fmt, ...)
 	{
-		char buffer[256];
+
 		if (fmt == NULL)
 		{
 			return;
 		}
+		char buffer[strlen(fmt)*2];
 		va_list argptr;
 		int cnt;
 
@@ -105,11 +106,12 @@ public:
 
 	int format(const char * fmt, ...)
 	{
-		char buffer[256];
+
 		if (fmt == NULL)
 		{
 			errexitf("hustr format error\r\n");
 		}
+		char buffer[strlen(fmt)*2];
 		va_list argptr;
 		int cnt;
 		va_start(argptr, fmt);
@@ -756,6 +758,8 @@ public:
 	humap * m_father;
 	int m_order;
 
+
+
 	class iterator: public iterator_base
 	{
 	public:
@@ -952,6 +956,19 @@ public:
 		}
 
 	}
+
+	humap & getfather()
+        {
+	    if(m_father != NULL)
+            {
+	         return *m_father;
+            }
+	    else
+            {
+	        fprintf(stderr,"$$$dragon$$$ can't get father,return this");
+	        return *this;
+            }
+        }
 };
 class mapv: public hustr
 {
@@ -963,11 +980,11 @@ public:
 	mapv(const char * fmt, ...)
 	{
 	        m_data = NULL;
-		char buffer[256];
 		if (fmt == NULL)
 		{
 			return;
 		}
+		char buffer[strlen(fmt)*2];
 		va_list argptr;
 		int cnt;
 

@@ -86,7 +86,7 @@ public:
 //	            xml_mgr->AddEleArea(this);
 
 	     //mp.display();
-	     lua.dostring(mp.m_val);
+
 //	     if(mp.exist("linit"))
 //             {
 //                 printf("exec linit %s\n",mp["linit"]->getvalue());
@@ -104,6 +104,7 @@ public:
                 SParseXMLFrom_Instan(name, *it);
             }
 
+            //lua.dostring(mp.m_val);
 
 	}
 	void doRender()

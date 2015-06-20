@@ -17,7 +17,6 @@ int ParseXMLFrom_Instan(hustr name, HUMap & xmlmp, xmlproc * xml);
 
 void ParseUpdateXml(xmlNodePtr node,HUMap & xmlmp)
 {
-  char value[256];
   for(node=node->children;node;node=node->next)
   {
       if(xmlIsBlankNode(node))
@@ -29,12 +28,13 @@ void ParseUpdateXml(xmlNodePtr node,HUMap & xmlmp)
         if(XML_TEXT_NODE == node->type)
         {
             prase_debug("[%s:%s]\n",node->parent->name,node->content);
-            (*xmlmp.m_father)[(char *)node->parent->name] = (char *)node->content;
+            xmlmp.getfather()[(char *)node->parent->name] = (char *)node->content;
         }
         else if(XML_CDATA_SECTION_NODE == node->type)
         {
             prase_debug("%s:CDATA:%s\n",node->parent->name,node->content);
-            (*xmlmp.m_father)[(char *)node->parent->name] = (char *)node->content;
+            xmlmp.getfather()[(char *)node->parent->name] = (char *)node->content;
+
         }
         else if(XML_COMMENT_NODE == node->type)
         {
@@ -46,8 +46,7 @@ void ParseUpdateXml(xmlNodePtr node,HUMap & xmlmp)
             HUMap &mp = xmlmp.CreateMultiLast((char *)node->name);
 
             //const xmlChar *name,*value;
-            xmlAttrPtr attr = node->properties;
-            for(;attr;attr = attr->next)
+            for(xmlAttrPtr attr = node->properties;attr;attr = attr->next)
             {
 //              name=attr->name;
 //              value=attr->children->content;
@@ -105,9 +104,10 @@ int ParseXmlFile(const char *path,HUMap & mp)
         memset(content,0,filesize+1);
         fread(content,1,filesize,file);
 
+        prase_debug("content:\n%s\n",content);
+
         ParseXmlString(content,filesize,mp);
 
         fclose(file);
         free(content);
-        prase_debug("content:\n%s\n",content);
 }
