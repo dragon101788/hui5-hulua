@@ -14,6 +14,7 @@ class schedule_draw;
 class element_manager;
 class xmlproc;
 
+#define luacmd_is(cmd,name) (strncmp(cmd,name " ",strlen(name " "))==0&&(cmd = cmd+strlen(name " ")))
 
 class element: virtual public element_base,public schedule_ele, public image,virtual public Mutex
 {

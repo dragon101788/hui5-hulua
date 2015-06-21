@@ -618,19 +618,19 @@ void ProcArea(image * dst_img, image * rsc_img, int & src_x, int & src_y, int & 
 
 	if (cp_height > dst_img->GetImageHeight())
         {
-                printf("AreaCopyDH dst_y=%d cp_height=%d dst_img.height=%d\n",dst_y , cp_height , dst_img->GetImageHeight());
+                //printf("AreaCopyDH dst_y=%d cp_height=%d dst_img.height=%d\n",dst_y , cp_height , dst_img->GetImageHeight());
                 cp_height = dst_img->GetImageHeight();
         }
         if (cp_width > dst_img->GetImageWidth())
         {
-                printf("AreaCopyDW dst_x=%d cp_width=%d dst_img.width=%d\n",dst_x , cp_width , dst_img->GetImageWidth());
+                //printf("AreaCopyDW dst_x=%d cp_width=%d dst_img.width=%d\n",dst_x , cp_width , dst_img->GetImageWidth());
                 cp_width = dst_img->GetImageWidth();
         }
 
 	//*************************************
 	if (src_y + cp_height > rsc_img->GetImageHeight())
 	{
-	        printf("AreaCopySH src_y=%d cp_height=%d rsc_img->get_height()=%d\r\n", src_y, cp_height, rsc_img->GetImageHeight());
+	        //printf("AreaCopySH src_y=%d cp_height=%d rsc_img->get_height()=%d\r\n", src_y, cp_height, rsc_img->GetImageHeight());
 		cp_height = rsc_img->GetImageHeight() - src_y;
 		if (cp_height <= 0)
 		{
@@ -639,7 +639,7 @@ void ProcArea(image * dst_img, image * rsc_img, int & src_x, int & src_y, int & 
 	}
 	if (src_x + cp_width > rsc_img->GetImageWidth())
 	{
-	        printf("AreaCopySW src_x=%d cp_width=%d rsc_img->get_width()=%d\r\n", src_x, cp_width, rsc_img->GetImageWidth());
+	        //printf("AreaCopySW src_x=%d cp_width=%d rsc_img->get_width()=%d\r\n", src_x, cp_width, rsc_img->GetImageWidth());
 		cp_width = rsc_img->GetImageWidth() - src_x;
 		if (cp_width <= 0)
 		{

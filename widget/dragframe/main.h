@@ -57,11 +57,12 @@ public:
         }
 	void doLuaCommand(const char * cmd)
 	{
-            if(0==strncmp(cmd,"addele ",strlen("addele ")))
+	    //printf("doLuaCommand [%s] %d\n",cmd,strncmp(cmd,"parsexml ",strlen("parsexml "));
+            //if(strncmp(cmd,"parsexml ",strlen("parsexml "))==0&&(cmd = cmd+strlen("parsexml ")))
+            if(luacmd_is(cmd,"parsexml"))
             {
-                const char * arg = cmd+strlen("addele ");
                 HUMap mp;
-                ParseXmlString(arg,strlen(arg),mp);
+                ParseXmlString(cmd,strlen(cmd),mp);
                 //mp.display();
                 ParseXML(mp);
                 Flush();
@@ -140,7 +141,7 @@ public:
 	}
 	void doRender()
 	{
-	    printf("RenderFrom %d %d %d %d\n",GetWidth(), GetHeight(), x_pos+move_x(), y_pos+move_y());
+	    //printf("RenderFrom %d %d %d %d\n",GetWidth(), GetHeight(), x_pos+move_x(), y_pos+move_y());
 	    //RenderFrom(&res,-(x_pos+move_x()), -(y_pos+move_y()), res.GetImageWidth(),res.GetImageHeight(), 0,0);
 	    res.RenderTo(this, -(x_pos+move_x()), -(y_pos+move_y()), GetWidth(), GetHeight(), 0, 0);
 
@@ -151,11 +152,11 @@ public:
 	{
 	  static int b=0;
 	   lock();
-	    res.lock();
-	    printf("RenderFrom [%s] %d %d %d %d %d %d\n",src_img->path.nstr(),src_x,src_y,cp_width,cp_height,dst_x,dst_y);
-	    res.AreaCopyFrom(src_img,src_x,src_y,cp_width,cp_height,dst_x,dst_y);
-	    //res.SaveResource(hustr("res%d.png",b++));
-	    res.unlock();
+            res.lock();
+            //printf("RenderFrom [%s] %d %d %d %d %d %d\n",src_img->path.nstr(),src_x,src_y,cp_width,cp_height,dst_x,dst_y);
+            res.AreaCopyFrom(src_img,src_x,src_y,cp_width,cp_height,dst_x,dst_y);
+            //res.SaveResource(hustr("res%d.png",b++));
+            res.unlock();
 	   unlock();
 	}
 	int id;
