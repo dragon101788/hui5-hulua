@@ -24,11 +24,20 @@ void Install_Element(HUMap &xmlmp, xmlproc * xml)
 	    te->m_parent = parent;
         }
 
-	te->xml_mgr = xml;
 
+	te->m_proc = xml;
 	if(te->m_flag&ELEMENT_FLAG_DRAWLOGIC)
         {
-          te->FlushConfig(xmlmp);
+
+	    if(xmlmp.exist("touch_mgr"))
+            {
+	        te->m_mgr = (element_manager *)xmlmp["element_manager"].value().m_data;
+            }
+	    else
+            {
+	        te->m_mgr = xml;
+            }
+	    te->FlushConfig(xmlmp);
         }
 
 	if(te->m_flag&ELEMENT_FLAG_TOUCH)

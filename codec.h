@@ -190,11 +190,17 @@ public:
 
                 int tmpsize = width * height * dep;
                 log_d("ReSetBuffer %d %d %d\n",width,height,tmpsize);
-                pSrcBuffer = realloc(pSrcBuffer,tmpsize);
-                if (pSrcBuffer == NULL)
+                void * tmpbuf = malloc(tmpsize);
+                if (tmpbuf == NULL)
+                     errexitf("ReSetBuffer image malloc failed: width=%d height=%d\n", width, height);
+
+                for (int y=0; y < u32Height; y++)
                 {
-                        errexitf("image malloc failed: width=%d height=%d\n", width, height);
+                        memcpy((unsigned int *) tmpbuf + (y  * width),(unsigned int *) pSrcBuffer + (y * u32Width),u32Stride);
                 }
+                free(pSrcBuffer);
+                pSrcBuffer = tmpbuf;
+
                 SrcSize = tmpsize;
 
                 u32Width = width;

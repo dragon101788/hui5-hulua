@@ -35,7 +35,7 @@ public:
 
 	void doDelete()
 	{
-		xml_mgr->DelTouchElement(this);
+		touch_mgr->DelTouchElement(this);
 	}
 	void doFlushConfig(HUMap &mp)
 	{

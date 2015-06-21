@@ -43,7 +43,8 @@ public:
 	{
 	        m_flag |= ELEMENT_FLAG_DRAWLOGIC;
 		m_parent = NULL;
-		xml_mgr = NULL;
+		m_proc = NULL;
+		m_mgr = NULL;
 		//log_d("new element m_parent=%x\n",m_parent);
 	}
 
@@ -250,7 +251,9 @@ public:
 
 
 	element * m_parent;
-	xmlproc * xml_mgr;
+	xmlproc * m_proc;
+
+	element_manager * m_mgr;
 
 	map<int, image> res;
 	//schedule_draw * mgr;
@@ -258,6 +261,7 @@ public:
 	list<element *> eb;					//�ײ�ؼ�
 };
 
+//后续将绘图元素剥离出来
 class element_manager
 {
 public:

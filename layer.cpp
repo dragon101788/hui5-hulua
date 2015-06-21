@@ -5,10 +5,10 @@
 
 void element::Flush()
 {
-	if (xml_mgr != NULL)
+	if (m_proc != NULL)
 	{
 		lock();
-		xml_mgr->que.addele(this);
+		m_proc->que.addele(this);
 		unlock();
 	}
 	else
@@ -19,10 +19,10 @@ void element::Flush()
 }
 void element::revocation()
 {
-	if (xml_mgr != NULL)
+	if (m_proc != NULL)
 	{
 		lock();
-		xml_mgr->que.delele(this);
+		m_proc->que.delele(this);
 		unlock();
 	}
 	else
@@ -81,7 +81,7 @@ void element::initstack()
 //		}
 //	}
 	element_manager::iterator it;
-	for (it = xml_mgr->begin(); it != xml_mgr->end(); ++it)
+	for (it = m_mgr->begin(); it != m_mgr->end(); ++it)
 	{
 		element * ele = it->second;
 		//if(x>ele->x&&y>ele->y&&x+width<ele->x+ele->width&&y+height<ele->y+ele->height)
@@ -150,7 +150,7 @@ void element::Render()
                     log_d("Render %s hide\r\n", GetName());
             }
 	    //printf("draw %s %d %d %d %d\n",GetName(),GetWidth(), GetHeight(), GetX(), GetY());
-            xml_mgr->Draw(this, 0, 0, GetWidth(), GetHeight(), GetX(), GetY());//控件输出到容器
+            m_proc->Draw(this, 0, 0, GetWidth(), GetHeight(), GetX(), GetY());//控件输出到容器
 
             RenderET();
         }
@@ -162,7 +162,7 @@ void element::Back()
 {
 	lock();
 	RenderEB();
-	xml_mgr->Draw(this, 0, 0, GetWidth(), GetHeight(), GetX(), GetY());
+	m_proc->Draw(this, 0, 0, GetWidth(), GetHeight(), GetX(), GetY());
 	RenderET();
 	unlock();
 
@@ -176,7 +176,7 @@ void element::FlushConfig(HUMap &mp)
 	ParseModifRes(mp);
 	Flush();
 
-	xml_mgr->AddElement(GetName(), this);
+	m_mgr->AddElement(GetName(), this);
 	unlock();
 }
 

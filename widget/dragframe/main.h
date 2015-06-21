@@ -4,7 +4,7 @@
 #include "XMLInstal.h"
 #include "layer.h"
 
-class dragframe: public element , public touch_element ,public touch_manager
+class dragframe: public element , public touch_element ,public element_manager,public touch_manager
 {
 public:
 	dragframe() :res(element::res[0])
@@ -64,6 +64,7 @@ public:
                 ParseXmlString(arg,strlen(arg),mp);
                 //mp.display();
                 ParseXML(mp);
+                Flush();
             }
 	}
 	void doDelete()
@@ -83,6 +84,7 @@ public:
 	                //xml->done = 0;
 	                xmlmp["parent"].value().m_data = (element *)this;
 	                xmlmp["touch_mgr"].value().m_data = (touch_manager *)this;
+	                xmlmp["element_manager"].value().m_data = (element_manager *)this;
 	                int ex = xmlmp["x"]->getvalue_int();
 	                int ey = xmlmp["y"]->getvalue_int();
 	                int ewidth = xmlmp["width"]->getvalue_int();
@@ -90,12 +92,12 @@ public:
 
 	                if(ex+ewidth>res.GetImageWidth()||ey+eheignt>res.GetImageHeight())
                         {
-	                    printf("ReSetBuffer%d %d\n",ex+ewidth,ey+eheignt);
+	                    //printf("ReSetBuffer%d %d\n",ex+ewidth,ey+eheignt);
 	                    res.ReSetBuffer(ex+ewidth>res.GetImageWidth()?ex+ewidth:res.GetImageWidth()
 	                                      ,ey+eheignt>res.GetImageHeight()?ey+eheignt:res.GetImageHeight());
                         }
 	                printf("$$$$HU$$$$ [%s] sub element [%s]\n",GetName(),xmlmp["name"]->getvalue());
-	                fun(xmlmp, xml_mgr);
+	                fun(xmlmp, m_proc);
 	                //xml->done = 1;
 	        }
 	        res.unlock();
@@ -150,7 +152,7 @@ public:
 	  static int b=0;
 	   lock();
 	    res.lock();
-	    printf("RenderFrom %d %d %d %d %d %d\n",src_x,src_y,cp_width,cp_height,dst_x,dst_y);
+	    printf("RenderFrom [%s] %d %d %d %d %d %d\n",src_img->path.nstr(),src_x,src_y,cp_width,cp_height,dst_x,dst_y);
 	    res.AreaCopyFrom(src_img,src_x,src_y,cp_width,cp_height,dst_x,dst_y);
 	    //res.SaveResource(hustr("res%d.png",b++));
 	    res.unlock();

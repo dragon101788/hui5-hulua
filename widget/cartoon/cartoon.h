@@ -46,7 +46,7 @@ public:
 	}
 	void doDelete()
 	{
-		xml_mgr->DelTimerElement(this);
+		timer_mgr->DelTimerElement(this);
 	}
 	void doFlushConfig(HUMap & mp)
 	{

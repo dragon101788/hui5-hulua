@@ -91,7 +91,6 @@ public:
 	}
 	void touch_area()
 	{
-
 		lock();
 		origin_in();
 		doTouchDown();
