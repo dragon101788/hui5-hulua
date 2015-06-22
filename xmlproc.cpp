@@ -5,7 +5,6 @@
 
 DebugTimer fps;
 pXmlproc g_cur_xml;
-map<hustr, pXmlproc> g_xml_proc;
 int debug_timer_count=0;
 //ProcTimer g_exec;
 
@@ -52,7 +51,7 @@ void xmlproc::UnDoneProc()
 	done = 0;
 }
 
-void xmlproc::StartParseXML(const char * file)
+void xmlproc::StartParseXML_file(const char * file)
 {
 
         debug("+++++++++++++%s++++++++++++++\r\n", filename.c_str());
@@ -70,5 +69,32 @@ void xmlproc::StartParseXML(const char * file)
         }
         //dbg.debug_timer("ParaseTinyXmlFile3");
         DoneProc();
+        debug("+++++++++++++%s++++++++++++++OK\r\n", filename.c_str());
+}
+
+void xmlproc::StartParseXML_str(const char * str)
+{
+
+        debug("+++++++++++++%s++++++++++++++\r\n", filename.c_str());
+
+        lock();
+        UnDoneProc();
+
+
+        //DebugTimer dbg;
+        HUMap mp;
+        ParseXmlString(str,strlen(str), mp);
+
+        //mp.display();
+        HUMap::OrderList lst(mp);
+        for(HUMap::OrderList::iterator it = lst.begin();it!=lst.end();++it)
+        {
+          hustr name = (*it).m_key;
+          ParseXMLFrom_Instan(name, *it, this);
+        }
+        //dbg.debug_timer("ParaseTinyXmlFile3");
+        DoneProc();
+
+        unlock();
         debug("+++++++++++++%s++++++++++++++OK\r\n", filename.c_str());
 }

@@ -49,11 +49,6 @@ void huErrExit(const char * str)
 	printf("wait g_th_timer OK\r\n");
 	g_th_touch.cancel();
 	printf("wait g_th_touch OK\r\n");
-	map<hustr, pXmlproc>::iterator it;
-	for (it = g_xml_proc.begin(); it != g_xml_proc.end(); ++it)
-	{
-		it->second->cancel();
-	}
 	g_cur_xml->cancel();
 	exit(-1);
 }
@@ -146,15 +141,6 @@ int InitSystem()
 	return 0;
 }
 
-void ParseCUS(HUMap & xmlmp, xmlproc * xml)
-{
-	hustr cus = xmlmp["xmlfile"]->getvalue();
-	//g_cur_xml = &g_xml_proc[cus];
-	printf("$$$HU$$$ CUS xmlfile %s\r\n", cus.c_str());
-	g_xml_proc[cus] = new xmlproc(cus);
-	g_xml_proc[cus]->doLoader();
-}
-
 void Jump(const char * jump)
 {
   if (g_cur_xml->filename != jump)
@@ -180,11 +166,6 @@ void ParseWidget(HUMap & xmlmp, xmlproc * xml)
 }
 
 
-void ParseSAVECUS(HUMap & xmlmp, xmlproc * xml)
-{
-	printf("ParseSAVECUS %s\r\n", xml->filename.c_str());
-	g_xml_proc[xml->filename] = g_cur_xml;
-}
 void ParseEnv(HUMap & xmlmp, xmlproc * xml)
 {
 	HUMap::iterator it;
@@ -337,50 +318,21 @@ void ParseControl(HUMap & xmlmp, xmlproc * xml)
 
 //XMLMap xmlmp;
 
-void ParseInclude(HUMap & xmlmp, xmlproc * xml)
-{
 
-	const char * filename = xmlmp["xmlfile"]->getvalue();
-	if (xmlmp.exist("cus"))
-	{
-		hustr cus = xmlmp["cus"]->getvalue();
-		printf("include xmlfile=[%s] to %s\r\n",  xmlmp["xmlfile"]->getvalue(), cus.c_str());
-		g_xml_proc[cus]->StartParseXML(filename);
-
-	}
-	else
-	{
-		printf("include xmlfile=[%s] to %s\r\n", xmlmp["xmlfile"]->getvalue(), xml->filename.c_str());
-		xml->StartParseXML(filename);
-	}
-
-}
-
-//void ParseCS(HUMap & xmlmp, xmlproc * xml)
-//{
-//	xml->CreateCS(xmlmp["name"]->getvalue(), xmlmp);
-//}
-
-//void Parse_gcfg(HUMap & xmlmp, xmlproc * xml)
-//{
-//	const char * name = xmlmp["name"]->getvalue();
-//	info info;
-//	element * ele = xml->GetElementByName(name);
-//	if (ele != NULL)
-//	{
-//		ele->GetInfo(info);
-//	}
-//	//printf("snd msg:\r\n %s\r\n", info.nstr());
-//	g_th_msg.msg.send_message(101, info);
-//}
 
 void Parse_Import(HUMap & xmlmp, xmlproc * xml)
 {
-        if(xmlmp.exist("lua"))
+        const char * name = xmlmp.MapValue();
+        const char * suffix = strrchr(name,'.')+1;
+        if(strcasecmp(suffix,"lua")==0)
         {
-            const char * name = xmlmp["lua"]->getvalue();
             printf("import lua %s\n",name);
             lua.dofile(name);
+        }
+        else if(strcasecmp(suffix,"xml")==0)
+        {
+            printf("import xml %s\n",name);
+            xml->StartParseXML_file(name);
         }
 }
 
@@ -397,12 +349,9 @@ void Parse_Lua(HUMap & xmlmp, xmlproc * xml)
 //HUTMap<XMLinstan_tf> XMLinstan;
 void init_xml_instan()
 {
-	XMLinstan["include"] = ParseInclude;
 	XMLinstan["control"] = ParseControl;
 	XMLinstan["jump"] = ParseJump;
 	XMLinstan["widget"] = ParseWidget;
-	XMLinstan["cus"] = ParseCUS;
-	XMLinstan["savecus"] = ParseSAVECUS;
 //	XMLinstan["scfg"] = post_scfg;
 //	XMLinstan["gcfg"] = Parse_gcfg;
 //	XMLinstan["cs"] = ParseCS;

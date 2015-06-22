@@ -41,6 +41,11 @@ int LUA::run()
 }
 
 extern void Jump(const char * jump);
+extern void import_xml(const char * str)
+{
+    g_cur_xml->StartParseXML_str(str);
+}
+
 int LUA::init()
 {
   printf("LUA\n");
@@ -52,5 +57,6 @@ int LUA::init()
  hulua::def(L, "_ALERT", LUA::show_error);
  hulua::def(L, "debug_timer", set_debug_timer);
  hulua::def(L, "jump", Jump);
+ hulua::def(L, "import_xml",import_xml);
 }
 

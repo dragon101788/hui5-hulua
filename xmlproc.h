@@ -13,7 +13,6 @@ class xmlproc;
 
 typedef SmartPtr<xmlproc> pXmlproc;
 extern pXmlproc g_cur_xml;
-extern map<hustr, pXmlproc> g_xml_proc;
 extern int go;
 int ParseXMLFrom_Instan(hustr name, HUMap & xmlmp, xmlproc * xml);
 void hui_exit(const char * cmd);
@@ -225,9 +224,10 @@ public:
                 {
                         huErrExit("can't init filename\r\n");
                 }
-		StartParseXML(filename);
+		StartParseXML_file(filename);
 	}
-	void StartParseXML(const char * file);
+	void StartParseXML_file(const char * file);
+	void StartParseXML_str(const char * file);
 //	void ParseXMLElementFile(const char * file)
 //	{
 //	    ParseXMLFile(file, this);
