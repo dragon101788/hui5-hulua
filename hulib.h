@@ -906,7 +906,8 @@ public:
 	iterator CreateMultiLast(const char * key)
 	{
 		//printf("CreateMultiLast [%s]\r\n", key);
-		return iterator(this->insert(pair<hustr, humap>(key, humap(key, this, this->size()))), this);
+		//return iterator(this->insert(pair<hustr, humap>(key, humap(key, this, this->size()))), this);
+	        return Get(key,this->count(key));
 	}
 	iterator Get(const char * key)
 	{
@@ -927,7 +928,19 @@ public:
 		if (it != this->end())
 		{
 			int count = this->count(key);
-			//printf("count=%d id=%d\r\n", count, id);
+
+			//方法一 :使用此方法可能会造成冗余,开辟多余控件,如humap[9999],9998之前都是无意义的浪费
+//			for(int i=count;i<=id;i++)
+//                        {
+//			    iterator(this->insert(pair<hustr, humap>(key, humap(key, this, this->size()))), this);
+//                        }
+//			count = this->count(key);
+			//方法二:使用此方法可能会key not fount,需要按顺序使用,如humap[i++]
+			if(count == id)
+                        {
+                          return iterator(this->insert(pair<hustr, humap>(key, humap(key, this, this->size()))), this);
+                        }
+
 			int i;
 			for (i = 0; i < count; ++i)
 			{
@@ -940,6 +953,7 @@ public:
 			}
 			if (i >= count)
 			{
+
 				printf("key %s id %d not find\r\n", key, i);
 				exit(-1);
 			}

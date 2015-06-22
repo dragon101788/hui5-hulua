@@ -46,6 +46,7 @@ public:
 
 	virtual void doTouchDown()=0;
 	virtual void doTouchUp()=0;
+	virtual void doTouchMove() {}
 	virtual void doTouchActive() = 0;
 
 	void touch_init_area()
@@ -93,7 +94,14 @@ public:
 	{
 		lock();
 		origin_in();
-		doTouchDown();
+		if(isdn==0)
+                {
+                    doTouchDown();
+                }
+		else
+                {
+		    doTouchMove();
+                }
 		unlock();
 	}
 	void free_area()
@@ -213,6 +221,7 @@ public:
 						&& cur_samp.pressure != 0)
 				{
 					//printf("%d %d down\r\n",samp.x,samp.y);
+
 					toe->touch_area();
 					toe->isdn = 1;
 					//ooe = it->second;

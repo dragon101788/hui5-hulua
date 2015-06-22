@@ -50,11 +50,13 @@ public:
 	    int ret = 0;
             if (!sh.empty())
             {
+                printf("sh ! empty\n");
                     system(sh);
                     ret++;
             }
             if (!ldo.empty())
             {
+                  printf("ldo ! empty\n");
                    lua.dostring(ldo);
                    ret++;
             }

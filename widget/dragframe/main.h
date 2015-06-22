@@ -51,11 +51,16 @@ public:
                 Flush();
         }
 
+        void doTouchMove()
+        {
+            Flush();
+        }
+
         void doTouchActive()
         {
 
         }
-	void doLuaCommand(const char * cmd)
+	void doEleLuaCommand(const char * cmd)
 	{
 	    //printf("doLuaCommand [%s] %d\n",cmd,strncmp(cmd,"parsexml ",strlen("parsexml "));
             //if(strncmp(cmd,"parsexml ",strlen("parsexml "))==0&&(cmd = cmd+strlen("parsexml ")))

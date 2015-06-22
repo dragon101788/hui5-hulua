@@ -28,12 +28,12 @@ void ParseUpdateXml(xmlNodePtr node,HUMap & xmlmp)
         if(XML_TEXT_NODE == node->type)
         {
             prase_debug("[%s:%s]\n",node->parent->name,node->content);
-            xmlmp.getfather()[(char *)node->parent->name] = (char *)node->content;
+            xmlmp.m_val = (char *)node->content;
         }
         else if(XML_CDATA_SECTION_NODE == node->type)
         {
             prase_debug("%s:CDATA:%s\n",node->parent->name,node->content);
-            xmlmp.getfather()[(char *)node->parent->name].value() += (char *)node->content;
+            xmlmp.m_val += (char *)node->content;
 
         }
         else if(XML_COMMENT_NODE == node->type)

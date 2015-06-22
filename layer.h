@@ -69,7 +69,29 @@ public:
 
 	void ParseModifRes(HUMap &m_mp);
 
+	virtual void doEleLuaCommand(const char * cmd) {};
 
+	void doLuaCommand(const char * cmd)
+	{
+            if(luacmd_is("hide"))
+            {
+                printf("hide [%s]\n",cmd);
+                if(strstr(cmd,"on"))
+                {
+                    SetHide(1);
+                    Flush();
+                }
+                else if(strstr(cmd,"off"))
+                {
+                    SetHide(0);
+                    Flush();
+                }
+            }
+            else
+            {
+                doEleLuaCommand(cmd);
+            }
+	}
 
         #define defset_element_int(name,member,mp,def) if (mp.exist(name)){member = mp[name]->getvalue_int();} else{member = def;}
         #define defsetf_element_int(name,fun,mp,def) if (mp.exist(name)){fun( mp[name]->getvalue_int());} else{fun(def);}

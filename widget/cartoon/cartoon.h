@@ -23,16 +23,15 @@ public:
 	int doTimer(int tm)
 	{
 		//printf("OnTimer time=%d\r\n", fps_time + images[id].ntime);
-		TimerSet(tm + fps_time + images[id].ntime);
-		if (images[id].exec.doStart())
+	        TimerSet(tm + fps_time + m_ntimes[id]);
+		if (m_nexec[id].doStart())
 		{
 			debug("id[%d] Exec\r\n", id);
 		}
 		else
 		{
-
 			id++;
-			if (id >= images.size())
+			if (id > max_id)
 			{
 				id = 0;
 			}
@@ -54,27 +53,16 @@ public:
 		id = mp["id"]->getvalue_int();
 		release = mp["release"]->getvalue_int();
 
-
+		mp.display();
                 for (int i = 0; i < mp.count("node"); i++)
                 {
-                        HUMap n_mp = mp["node"][i];
-                        if (n_mp.exist("id"))
-                        {
-                                int id = n_mp["id"]->getvalue_int();
-                                //printf("node id=%d\r\n", id);
-                                images[id].SetResource(n_mp->getvalue());
-                                images[id].ntime = n_mp["ntime"]->getvalue_int();
-                                images[id].exec.parse(n_mp);
-                        }
-                        else
-                        {
-                                int id = images.size();
-                                //printf("node id=%d\r\n", id);
-                                images[id].SetResource(n_mp->getvalue());
-                                images[id].ntime = n_mp["ntime"]->getvalue_int();
-                                images[id].exec.parse(n_mp);
-                        }
 
+                        HUMap n_mp = mp["node"][i];
+                        printf("init node = %d %s\n",i,n_mp.MapValue().nstr());
+                        res["node"][i]->SetResource(n_mp->getvalue());
+                        m_ntimes[i] = n_mp["ntime"]->getvalue_int();
+                        m_nexec[i].parse(n_mp);
+                        max_id = i;
                 }
 
 	}
@@ -91,19 +79,22 @@ public:
 	void doRender()
 	{
 		//rob.roll_back_render();
-		if (images[id].LoadResource() == 0)
+		if (res["node"][id]->LoadResource() == 0)
 		{
-			//Draw(&images[id], x, y);
-			image::RenderFrom(&images[id], 0, 0);
+		      //printf("doRender %d %s\n",id,res["node"][id]->path.nstr());
+                      RenderFrom(&res["node"][id].value(), 0, 0,GetWidth(),GetHeight(),0,0);
 
-			if (release)
-			{
-				images[id].Free();
-			}
+                      if (release)
+                      {
+                          res["node"][id]->Free();
+                      }
 		}
 
 	}
-	map<int, ca_image> images;
+	int max_id;
+	humap<image> res;
+	map<int, int> m_ntimes;
+	map<int, HuExec> m_nexec;
 	int id;
 	int fps_time;
 	int release;

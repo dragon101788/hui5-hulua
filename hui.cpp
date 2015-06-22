@@ -386,12 +386,8 @@ void Parse_Import(HUMap & xmlmp, xmlproc * xml)
 
 void Parse_Luado(HUMap & xmlmp, xmlproc * xml)
 {
-        if(xmlmp.exist("fun"))
-        {
-            const char * name = xmlmp["fun"]->getvalue();
-            printf("lua invok func %s\n",name);
-            lua.dostring(name);
-        }
+        printf("lua invok %s\n",xmlmp.MapValue().nstr());
+        lua.dostring(xmlmp.MapValue());
 }
 
 void Parse_Lua(HUMap & xmlmp, xmlproc * xml)
