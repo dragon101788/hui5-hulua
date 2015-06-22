@@ -42,14 +42,14 @@ public:
 		exec.parse(mp);
 //		touch_init_area(GetX(), GetY(), GetWidth(), GetHeight());
 
-		SetRes(0, mp["up"]->getvalue());
-		SetRes(1, mp["dn"]->getvalue());
+		SetRes("up", mp["up"]->getvalue());
+		SetRes("dn", mp["dn"]->getvalue());
 		//xml_mgr->AddEleArea(this);
 
 	}
 	void doRender()
 	{
-		image::RenderFrom(&res[isdn], 0, 0);
+		image::RenderFrom(GetRes(isdn?"dn":"up"), 0, 0);
 	}
 
 	button()

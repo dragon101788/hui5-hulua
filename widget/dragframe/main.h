@@ -7,7 +7,7 @@
 class dragframe: public element , public touch_element ,public element_manager,public touch_manager
 {
 public:
-	dragframe() :res(element::res[0])
+	dragframe() :res(*GetRes("bk"))
 	{
 		id = 0;
 		x_pos=0;

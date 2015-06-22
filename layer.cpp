@@ -186,6 +186,9 @@ void element::ParseModifRes(HUMap &m_mp)
 	{
 		HUMap  xmlmp = m_mp["res"][i];
 		hustr meth = xmlmp["meth"]->getvalue();
+		const char * name = xmlmp["name"]->getvalue();
+		if(strlen(name)==0)
+		  errexitf("ModifRes %s unknown name\n",GetName());
 		int id = xmlmp["id"]->getvalue_int();
 		int src_x = xmlmp["src_x"]->getvalue_int();
 		int src_y = xmlmp["src_y"]->getvalue_int();
@@ -194,11 +197,11 @@ void element::ParseModifRes(HUMap &m_mp)
 		int dst_x = xmlmp["dst_x"]->getvalue_int();
 		int dst_y = xmlmp["dst_y"]->getvalue_int();
 
-		res[id].LoadResource();
+		res[name][id]->LoadResource();
 		if (cp_width + cp_height == 0)
 		{
-			cp_width = res[id].GetImageWidth();
-			cp_height = res[id].GetImageHeight();
+			cp_width = res[name][id]->GetImageWidth();
+			cp_height = res[name][id]->GetImageHeight();
 		}
 		if (meth == "render")
 		{
@@ -211,13 +214,13 @@ void element::ParseModifRes(HUMap &m_mp)
 					file.path.c_str(), GetName(), id, src_x, src_y, cp_width,
 					cp_height, dst_x, dst_y);
 
-			if (!res[id].isNULL())
+			if (!res[name][id]->isNULL())
 			{
 
 				//ele->image::Render(&file, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
 				lock();
 
-				res[id].RenderFrom(&file, src_x, src_y, cp_width, cp_height, dst_x,
+				res[name][id]->RenderFrom(&file, src_x, src_y, cp_width, cp_height, dst_x,
 						dst_y);
 				//ele->Render();
 				unlock();
@@ -252,13 +255,13 @@ void element::ParseModifRes(HUMap &m_mp)
 			tmpttf.DrawText("UTF-8", (char *) txt.c_str(), txt.length());
 
 			log_d("ParseModifRes text=%s [%s] <%x %x>\r\n",txt.c_str(),font.nstr() ,tmpttf.m_font->face,tmpttf.m_font->ft_Lib);
-			if (!res[id].isNULL())
+			if (!res[name][id]->isNULL())
 			{
 
 				//ele->image::Render(&file, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
 				lock();
 
-				res[id].RenderFrom(&tmpttf, src_x, src_y, cp_width, cp_height,
+				res[name][id]->RenderFrom(&tmpttf, src_x, src_y, cp_width, cp_height,
 						dst_x, dst_y);
 				//ele->Render();
 				unlock();

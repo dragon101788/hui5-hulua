@@ -53,11 +53,6 @@ public:
 	{
 		log_i("$$$HU$$$ distroy element %s\r\n", GetName());
 		backstack();
-		map<int, image>::iterator it;
-		for (it = res.begin(); it != res.end(); ++it)
-		{
-			it->second.destroy();
-		}
 	}
 	void Flush();
 	void revocation();
@@ -262,14 +257,30 @@ public:
 			(*it)->deleb(this);
 		}
 	}
-	void SetRes(int id, const char * path)
+	void SetRes(const char * name,int id, const char * path)
 	{
-		if (res[id].path != path || res[id].isNULL())
+		if (res[name][id]->path != path || res[name][id]->isNULL())
 		{
 			//printf("SetRes %d %s\r\n",id,path);
-			res[id].SetResource(path);
+		      res[name][id]->SetResource(path);
 		}
 	}
+	void SetRes(const char * name, const char * path)
+        {
+                if (res[name]->path != path || res[name]->isNULL())
+                {
+                        //printf("SetRes %d %s\r\n",id,path);
+                      res[name]->SetResource(path);
+                }
+        }
+	image * GetRes(const char * name)
+	{
+	    return &res[name].value();
+	}
+	image * GetRes(const char * name,int id)
+        {
+	    return &res[name][id].value();
+        }
 
 
 
@@ -278,7 +289,7 @@ public:
 
 	element_manager * m_mgr;
 
-	map<int, image> res;
+	humap<image> res;
 	//schedule_draw * mgr;
 	list<element *> et;					//�ϲ�ؼ�
 	list<element *> eb;					//�ײ�ؼ�

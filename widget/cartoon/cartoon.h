@@ -92,7 +92,7 @@ public:
 
 	}
 	int max_id;
-	humap<image> res;
+
 	map<int, int> m_ntimes;
 	map<int, HuExec> m_nexec;
 	int id;
