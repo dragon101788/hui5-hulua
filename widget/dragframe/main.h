@@ -59,7 +59,7 @@ public:
 	{
 	    //printf("doLuaCommand [%s] %d\n",cmd,strncmp(cmd,"parsexml ",strlen("parsexml "));
             //if(strncmp(cmd,"parsexml ",strlen("parsexml "))==0&&(cmd = cmd+strlen("parsexml ")))
-            if(luacmd_is(cmd,"parsexml"))
+            if(luacmd_is("parsexml"))
             {
                 HUMap mp;
                 ParseXmlString(cmd,strlen(cmd),mp);
