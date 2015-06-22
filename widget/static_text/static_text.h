@@ -23,21 +23,24 @@ public:
 	~static_text()
 	{
 	}
-//	void doLuaCommand(const char * str)
-//	{
-//
-//	  txt = str;
-//	  ttf.m_font = &font_mp[font];
-//          log_d("get font_mp %x %x\r\n", font_mp[font].face,
-//                          font_mp[font].ft_Lib);
-//          ttf.fontHeight = size;
-//          ttf.color = color;
-//          ttf.style = style;
-//          ttf.SetBuffer(GetWidth(), GetHeight());
-//          ttf.DrawText("UTF-8", (char *) txt.c_str(), txt.length());
-//
-//          Flush();
-//	}
+	void doEleLuaCommand(const char * cmd)
+	{
+	   if(luacmd_is("set_text"))
+           {
+               txt = cmd;
+               ttf.m_font = &font_mp[font];
+               log_d("get font_mp %x %x\r\n", font_mp[font].face,
+                               font_mp[font].ft_Lib);
+               ttf.fontHeight = size;
+               ttf.color = color;
+               ttf.style = style;
+               ttf.SetBuffer(GetWidth(), GetHeight());
+               ttf.DrawText("UTF-8", (char *) txt.c_str(), txt.length());
+
+               Flush();
+           }
+
+	}
 	void test(const char * abc)
 	{
 	}

@@ -43,6 +43,7 @@ int LUA::run()
 extern void Jump(const char * jump);
 extern void import_xml(const char * str)
 {
+    printf("import_xml %s\n",str);
     g_cur_xml->StartParseXML_str(str);
 }
 
