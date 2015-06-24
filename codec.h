@@ -304,7 +304,7 @@ public:
 		printf("u32Width=%d\r\n", u32Width);
 		printf("u32Height=%d\r\n", u32Height);
 		printf("u32Stride=%d\r\n", u32Stride);
-		printf("SrcGPUAddr=0x%x\r\n", SrcGPUAddr());
+		printf("SrcGPUAddr=0x%x\r\n", (int)SrcGPUAddr());
 
 	}
 

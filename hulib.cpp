@@ -84,6 +84,40 @@ void FPSWaitTimer(int ms)
 	intvl = wait;
 }
 
+
+void errexit(const char * str)
+{
+	fprintf(stderr,"**************error exit*****************\r\n");
+	fprintf(stderr,"%s",str);
+	fprintf(stderr,"\r\n");
+	fprintf(stderr,"*****************************************\r\n");
+#ifdef CONFIG_DUMPSTACK_DEBUG
+	dumpstack();
+#endif
+	exit(-1);
+}
+
+void debug_usage()
+{
+	struct rusage buf;
+
+	//int err = getrusage(RUSAGE_CHILDREN, &buf);
+	int err = getrusage(RUSAGE_SELF, &buf);
+	//printf("ERR=%d\r\n", err);
+	//printf("userCPU:%ld.%ld\t", buf.ru_utime.tv_sec, buf.ru_utime.tv_usec);
+	//printf("kernelCPU:%ld.%ld\t", buf.ru_stime.tv_sec, buf.ru_stime.tv_usec);
+	printf("RUSAGE_SELF MEM:%ld\r\n", buf.ru_maxrss);
+
+}
+
+//typedef struct
+//{
+//    const char *dli_fname;  /* File name of defining object.  */
+//    void *dli_fbase;        /* Load address of that object.  */
+//    const char *dli_sname;  /* Name of nearest symbol.���纯����*/
+//    void *dli_saddr;        /* Exact value of nearest symbol.���纯�����ʼ��ַ*/
+//} Dl_info;
+#ifdef CONFIG_DUMPSTACK_DEBUG
 static int backtrace_xy(void **BUFFER, int SIZE)
 {
 	volatile int n = 0;
@@ -114,37 +148,6 @@ static int backtrace_xy(void **BUFFER, int SIZE)
 	return i;
 }
 
-void errexit(const char * str)
-{
-	fprintf(stderr,"**************error exit*****************\r\n");
-	fprintf(stderr,str);
-	fprintf(stderr,"\r\n");
-	fprintf(stderr,"*****************************************\r\n");
-	dumpstack();
-	exit(-1);
-}
-
-void debug_usage()
-{
-	struct rusage buf;
-
-	//int err = getrusage(RUSAGE_CHILDREN, &buf);
-	int err = getrusage(RUSAGE_SELF, &buf);
-	//printf("ERR=%d\r\n", err);
-	//printf("userCPU:%ld.%ld\t", buf.ru_utime.tv_sec, buf.ru_utime.tv_usec);
-	//printf("kernelCPU:%ld.%ld\t", buf.ru_stime.tv_sec, buf.ru_stime.tv_usec);
-	printf("RUSAGE_SELF MEM:%ld\r\n", buf.ru_maxrss);
-
-}
-
-//typedef struct
-//{
-//    const char *dli_fname;  /* File name of defining object.  */
-//    void *dli_fbase;        /* Load address of that object.  */
-//    const char *dli_sname;  /* Name of nearest symbol.���纯����*/
-//    void *dli_saddr;        /* Exact value of nearest symbol.���纯�����ʼ��ַ*/
-//} Dl_info;
-
 struct ucontext_ce123
 {
 	unsigned long uc_flags;
@@ -162,7 +165,7 @@ struct sigframe_ce123
 //struct aux_sigframe aux __attribute__((aligned(8)));
 } sigframe_ce123;
 
-void dumpstack()
+void asm_dumpstack()
 {
 
 	Dl_info info;
@@ -201,4 +204,6 @@ void dumpstack()
 	printf("Backstrace (%d deep)\n", cnt);
 
 }
+
+#endif
 

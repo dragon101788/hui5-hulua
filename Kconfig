@@ -50,5 +50,11 @@ config LOG_W
 config LOG_E
 	bool "enable log_e"
 
+config DUMPSTACK_DEBUG
+	bool "enable DUMPSTACK_DEBUG"
+	help 
+		"with arm uclibc platfrom use this"
+
+
 comment "------------Dragon Auto Configuretion---------"
 source Kconfig.auto

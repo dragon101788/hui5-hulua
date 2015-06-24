@@ -92,7 +92,7 @@ public:
 	}
 	int Accept()
 	{
-		lcm_fd = open("/dev/fb0", O_RDWR);
+		lcm_fd = open("/dev/fb0", O_WRONLY);
 		if (lcm_fd == -1)
 		{
 			errexitf("### Error: cannot open LCM device, returns %d\n", lcm_fd);

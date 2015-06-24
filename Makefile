@@ -1,7 +1,10 @@
 sinclude .config
-#CROSS_COMPILE:=$(HOME)/usr/arm/4.3.3/bin/arm-linux-
 CROSS_COMPILE:=$(HOME)/usr/arm/arm_linux_4.2/bin/arm-linux-
+HOST:=arm-linux
+
 #CROSS_COMPILE:=
+#HOST:=
+
 CC=$(CROSS_COMPILE)g++
 STRIP=$(CROSS_COMPILE)strip
 TOPDIR=$(PWD)/
@@ -100,17 +103,17 @@ lib/libz.a:
 	rm $(TOPDIR)/share -rf
 lib/libpng.a: lib/libz.a
 	@mkdir -p `dirname $@`
-	TOPDIR=$(TOPDIR) CC=$(CROSS_COMPILE)gcc $(MKPNGLIB)
+	TOPDIR=$(TOPDIR) HOST=$(HOST) CROSS_COMPILE=$(CROSS_COMPILE) $(MKPNGLIB)
 	rm $(TOPDIR)/bin -rf
 	rm $(TOPDIR)/share -rf
 
 lib/libiconv.a:
-	TOPDIR=$(TOPDIR) CC=$(CROSS_COMPILE)gcc $(MKICONVLIB)
+	TOPDIR=$(TOPDIR) HOST=$(HOST) CROSS_COMPILE=$(CROSS_COMPILE) $(MKICONVLIB)
 	rm $(TOPDIR)/bin -rf
 	rm $(TOPDIR)/share -rf
 
 lib/libxml2.a:
-	TOPDIR=$(TOPDIR) CROSS_COMPILE=$(CROSS_COMPILE) $(MKXML2LIB)
+	TOPDIR=$(TOPDIR) HOST=$(HOST) CROSS_COMPILE=$(CROSS_COMPILE) $(MKXML2LIB)
 
 .PHONY: tools
 tools:

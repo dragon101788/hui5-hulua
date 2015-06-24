@@ -7,6 +7,7 @@ set -e
 	--with-minimum \
 	--with-sax1 \
 	--without-zlib --host=arm-linux --target=arm-linux \
+	--host=${HOST} \
 	CC=${CROSS_COMPILE}gcc \
 	AR=${CROSS_COMPILE}ar \
 	LD=${CROSS_COMPILE}ld \

@@ -38,7 +38,14 @@ void errexit(const char * str);
 #define errexitf(str,...) errexit(hustr(str, ##__VA_ARGS__ ))
 
 void debug_usage();
-void dumpstack();
+
+#ifdef CONFIG_DUMPSTACK_DEBUG
+extern void asm_dumpstack();
+#define dumpstack() asm_dumpstack() 
+#else
+#define dumpstack() 
+#endif
+
 int system_noblk(const char *cmdstring);
 //#define debug(a,...)	printf(a,##__VA_ARGS__)
 //#define debug(a,...)
