@@ -70,7 +70,6 @@ public:
                 ParseXmlString(cmd,strlen(cmd),mp);
                 //mp.display();
                 ParseXML(mp);
-                Flush();
             }
 	}
 	void doDelete()
@@ -163,6 +162,7 @@ public:
             //res.SaveResource(hustr("res%d.png",b++));
             res.unlock();
 	   unlock();
+	   Flush();
 	}
 	int id;
 	int x_pos;

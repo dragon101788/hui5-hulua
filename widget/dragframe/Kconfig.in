@@ -2,3 +2,13 @@ config  CONTROL_DRAG_FRAME
         bool "drag_frame Control" 
         help 
 			path=$AUTOPATH
+			<dragframe name="frame" x="0" y="16" width="480" height="240" lay="1" x_lock="1">
+				  <![CDATA[
+						ls_dir("/mnt/sdcard/3D");
+				   ]]>
+				<static_image name="jct" x="200" y="30" width="46" height="36" lay="2">
+						<node>res/jct(r).png</node>
+				</static_image>
+				...
+				...
+			</dragframe>

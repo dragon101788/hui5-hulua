@@ -2,3 +2,9 @@ config  CONTROL_BUTTON
         bool "button Control" 
         help 
 			path=$AUTOPATH
+			<button name="jc" x="360" y="16" width="120" height="120" lay="2">
+				<up>res/jc1.png</up>
+				<dn>res/jc2.png</dn>
+				<res meth="text" name="up" red="255" green="255" blue="255" dst_x="25" dst_y="80" font="song" size="18" txt="辅助调平"/>
+				<res meth="text" name="dn" red="255" green="255" blue="255" dst_x="25" dst_y="80" font="song" size="18" txt="辅助调平"/>
+			</button>

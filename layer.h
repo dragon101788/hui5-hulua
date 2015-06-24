@@ -14,7 +14,7 @@ class schedule_draw;
 class element_manager;
 class xmlproc;
 
-#define luacmd_is(name) (strncmp(cmd,name " ",strlen(name " "))==0&&(cmd = cmd+strlen(name " ")))
+#define luacmd_is(name) (strncmp(cmd,name,strlen(name))==0&&(cmd = cmd+strlen(name " ")))
 
 class element: virtual public element_base,public schedule_ele, public image,virtual public Mutex
 {
@@ -81,6 +81,12 @@ public:
                     SetHide(0);
                     Flush();
                 }
+            }
+            else if(luacmd_is("move"))
+            {
+                int x,y;
+                sscanf(cmd,"x=%d y=%d",&x,&y);
+                printf("x=%d y=%d\n",x,y);
             }
             else
             {

@@ -2,3 +2,6 @@ config  CONTROL_STATIC_IMAGE
         bool "static_image Control" 
         help 
 			path=$AUTOPATH
+			<static_image name="bk" x="0" y="0" width="480" height="272" lay="0">
+					<node>res/bk.png</node>
+			</static_image>

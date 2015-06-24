@@ -47,6 +47,19 @@ public:
 	{
 		timer_mgr->DelTimerElement(this);
 	}
+	void doEleLuaCommand(const char * cmd)
+	{
+              if(luacmd_is("stop"))
+              {
+                  printf("stop\n");
+                  timer_stop = 1;
+              }
+              else if(luacmd_is("start"))
+              {
+                  printf("start\n");
+                  timer_stop = 0;
+              }
+	}
 	void doFlushConfig(HUMap & mp)
 	{
 		fps_time = mp["fps"]->getvalue_int();
