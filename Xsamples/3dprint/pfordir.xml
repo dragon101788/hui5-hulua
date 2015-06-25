@@ -1,0 +1,17 @@
+﻿<?xml version="1.0"?>
+
+<root>
+	<static_image name="bk" x="0" y="0" width="480" height="272" lay="0">
+	    	<node>res/bk.png</node>
+	  </static_image>
+	
+	<static_text name="ttt" width="300" height="50"  x="150" y="100" red="255" blue="255" green="255" txt="扫描SD中.." size="20" font="song"  lay="11"/> 
+	  
+<dragframe name="frame" x="0" y="16" width="480" height="240" lay="1" x_lock="1">
+	  <![CDATA[
+				ls_dir("/mnt/sdcard/3D");
+		]]>
+	 
+	  
+  </dragframe>
+</root>

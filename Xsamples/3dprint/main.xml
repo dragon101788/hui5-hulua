@@ -1,0 +1,49 @@
+﻿<?xml version="1.0"?>
+
+<root>
+	<static_image name="bk" x="0" y="0" width="480" height="272" lay="0">
+	    	<node>res/bk.png</node>
+	  </static_image>
+	  
+	  <button name="sd" x="0" y="16" width="120" height="120" lay="2" ldo="ui_print_sd()">
+	  	<up>res/sd1.png</up>
+	  	<dn>res/sd2.png</dn>
+	  	<res meth="text" name="up" red="255" green="255" blue="255" dst_x="10" dst_y="80" font="song" size="18" txt="从SD卡打印"/>
+	  	<res meth="text" name="dn" red="255" green="255" blue="255" dst_x="10" dst_y="80" font="song" size="18" txt="从SD卡打印"/>
+	  </button>
+	  
+	  <button name="wd" x="120" y="16" width="120" height="120" lay="2">
+	  	<up>res/wd1.png</up>
+	  	<dn>res/wd2.png</dn>
+	  	<res meth="text" name="up" red="255" green="255" blue="255" dst_x="45" dst_y="80" font="song" size="18" txt="预热"/>
+	  	<res meth="text" name="dn" red="255" green="255" blue="255" dst_x="45" dst_y="80" font="song" size="18" txt="预热"/>
+	  </button>
+	  
+	  <button name="cz" x="240" y="16" width="120" height="120" lay="2">
+	  	<up>res/cz1.png</up>
+	  	<dn>res/cz2.png</dn>
+	  	<res meth="text" name="up" red="255" green="255" blue="255" dst_x="25" dst_y="80" font="song" size="18" txt="更换耗材"/>
+	  	<res meth="text" name="dn" red="255" green="255" blue="255" dst_x="25" dst_y="80" font="song" size="18" txt="更换耗材"/>
+	  </button>
+	  
+	   <button name="jc" x="360" y="16" width="120" height="120" lay="2">
+	  	<up>res/jc1.png</up>
+	  	<dn>res/jc2.png</dn>
+	  	<res meth="text" name="up" red="255" green="255" blue="255" dst_x="25" dst_y="80" font="song" size="18" txt="辅助调平"/>
+	  	<res meth="text" name="dn" red="255" green="255" blue="255" dst_x="25" dst_y="80" font="song" size="18" txt="辅助调平"/>
+	  </button>
+	  
+	   <button name="sz" x="0" y="136" width="120" height="120" lay="2">
+	  	<up>res/sz1.png</up>
+	  	<dn>res/sz2.png</dn>
+	  	<res meth="text" name="up" red="255" green="255" blue="255" dst_x="25" dst_y="80" font="song" size="18" txt="强制挤出"/>
+	  	<res meth="text" name="dn" red="255" green="255" blue="255" dst_x="25" dst_y="80" font="song" size="18" txt="强制挤出"/>
+	  </button>
+	  
+	  <button name="ys" x="120" y="136" width="120" height="120" lay="2">
+	  	<up>res/ys1.png</up>
+	  	<dn>res/ys2.png</dn>
+	  	<res meth="text" name="up" red="255" green="255" blue="255" dst_x="45" dst_y="80" font="song" size="18" txt="设置"/>
+	  	<res meth="text" name="dn" red="255" green="255" blue="255" dst_x="45" dst_y="80" font="song" size="18" txt="设置"/>
+	  </button>
+</root>

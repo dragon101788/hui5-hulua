@@ -1,0 +1,74 @@
+﻿<?xml version="1.0"?>
+
+<root>
+  <static_image name="bk" x="0" y="0" width="480" height="272" lay="0">
+    	<node>res/bk.png</node>
+  </static_image>
+	
+	
+	<static_image name="rc" x="203" y="70" width="46" height="36" lay="2">
+    	<node>res/rc(r).png</node>
+  </static_image>
+  
+  <static_image name="jct" x="200" y="30" width="46" height="36" lay="2">
+    	<node>res/jct(r).png</node>
+  </static_image>
+  
+	<cartoon name="fan_mov" x="200" y="110" fps="100" width="46" height="36"  lay="2" stop="1">   
+		<node>res/fan1.png</node>
+		<node>res/fan2.png</node>
+		<node>res/fan3.png</node>
+	</cartoon>
+	
+	<static_text name="wd_jct" width="200" height="30"  x="280" y="35" red="255" blue="255" green="255" txt="未读到温度" size="20" font="song"  lay="5"/> 		
+	<static_text name="wd_rc" width="200" height="30"  x="280" y="75" red="255" blue="255" green="255" txt="未读取温度" size="20" font="song" lay="5"/> 		
+	<static_text name="fan_show" width="200" height="30"  x="280" y="115" red="255" blue="255" green="255" txt="未读取温度" size="20" font="song"  lay="5"/> 	
+		<static_text name="cmd" width="200" height="30"  x="280" y="165" red="255" blue="255" green="255" txt="命令" size="20" font="song"  lay="5"/> 	
+
+	
+	<cartoon name="main_mov" x="10" y="20" fps="100" width="180" height="180"  lay="2" stop="1">   
+		<node>res/movie/icon20001.png</node>
+		<node>res/movie/icon20002.png</node>
+		<node>res/movie/icon20003.png</node>
+		<node>res/movie/icon20004.png</node>
+		<node>res/movie/icon20005.png</node>
+		<node>res/movie/icon20006.png</node>
+		<node>res/movie/icon20007.png</node>
+		<node>res/movie/icon20008.png</node>
+		<node>res/movie/icon20009.png</node>
+		<node>res/movie/icon20010.png</node>
+		<node>res/movie/icon20011.png</node>
+		<node>res/movie/icon20012.png</node>
+		<node>res/movie/icon20013.png</node>
+		<node>res/movie/icon20014.png</node>
+		<node>res/movie/icon20015.png</node>
+		<node>res/movie/icon20016.png</node>
+		<node>res/movie/icon20017.png</node>
+		<node>res/movie/icon20018.png</node>
+		<node>res/movie/icon20019.png</node>
+		<node>res/movie/icon20020.png</node>
+		<node>res/movie/icon20021.png</node>
+		<node>res/movie/icon20022.png</node>
+		<node>res/movie/icon20023.png</node>
+		<node>res/movie/icon20024.png</node>
+		<node>res/movie/icon20025.png</node>
+		<node>res/movie/icon20026.png</node>
+		<node>res/movie/icon20027.png</node>
+		<node>res/movie/icon20028.png</node>
+		<node>res/movie/icon20029.png</node>
+		<node>res/movie/icon20030.png</node>
+		<node>res/movie/icon20031.png</node>
+		<node>res/movie/icon20032.png</node>
+		<node>res/movie/icon20033.png</node>
+		<node>res/movie/icon20034.png</node>
+		<node>res/movie/icon20035.png</node>
+		<node>res/movie/icon20036.png</node>
+		<node>res/movie/icon20037.png</node>
+		<node>res/movie/icon20038.png</node>
+		<node>res/movie/icon20039.png</node>
+		<node>res/movie/icon20040.png</node>
+		<node>res/movie/icon20041.png</node>
+		<node>res/movie/icon20042.png</node>
+		<node>res/movie/icon20043.png</node>
+	</cartoon>
+</root>

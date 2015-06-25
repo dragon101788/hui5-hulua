@@ -1,0 +1,7 @@
+﻿<?xml version="1.0"?>
+
+<root>
+	<font  name ="song"   path="./res/msyh.ttf" />
+	<import>hu.lua</import>
+	<import>main.xml</import>
+</root>
