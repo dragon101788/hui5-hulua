@@ -118,6 +118,23 @@ public:
       }
     }
   };
+  #define defset_element_int(name,member,mp,def) if (mp.exist(name)){member = mp[name]->getvalue_int();} else{member = def;}
+  #define defsetf_element_int(name,fun,mp,def) if (mp.exist(name)){fun( mp[name]->getvalue_int());} else{fun(def);}
+
+  void ParseElement(HUMap &m_mp)
+  {
+          log_i("$$$HU$$$ ElementPrase [%s] x=%d y=%d width=%d height=%d hide=%d\r\n",
+                                    GetName(),GetX(), GetY(), GetWidth(), GetHeight(), GetHeight());
+          SetName(m_mp["name"]->getvalue());
+          defsetf_element_int("x",SetX,m_mp,0);
+          defsetf_element_int("y",SetY,m_mp,0);
+          defsetf_element_int("width",SetWidth,m_mp,0);
+          defsetf_element_int("height",SetHeight,m_mp,0);
+          defsetf_element_int("hide",SetHide,m_mp,0);
+          defsetf_element_int("lay",SetLay,m_mp,5);
+
+          lua.regele(this);
+  }
   int m_flag;
 //private:
   hustr m_name;

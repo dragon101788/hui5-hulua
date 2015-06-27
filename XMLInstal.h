@@ -5,6 +5,7 @@
 #include "xmlproc.h"
 #include "element_base.h"
 #include <map>
+#include <typeinfo>
 using namespace std;
 
 typedef void (*XMLinstan_tf)(HUMap & xmlmp, xmlproc * xml);
@@ -17,27 +18,18 @@ void Install_Element(HUMap &xmlmp, xmlproc * xml)
 {
 	//xml->mtx.lock();
 	T * te = new T;
-	if(xmlmp.exist("parent"))
-        {
-	    element * parent = (element *)xmlmp["parent"].value().m_data;
-	    log_d("%s sub element\n",parent->GetName());
-	    te->m_parent = parent;
-        }
+	te->element_base::ParseElement(xmlmp);
+	printf("create object %s name %s\n",typeid(te).name(),te->GetName());
 
 
-	te->m_proc = xml;
+
+
 //	if(te->m_flag&ELEMENT_FLAG_DRAWLOGIC)
 	if(dynamic_cast<element *>(te))
         {
+	    te->m_proc = xml;
+	    te->m_mgr = xml;
 
-	    if(xmlmp.exist("element_manager"))
-            {
-	        te->m_mgr = (element_manager *)xmlmp["element_manager"].value().m_data;
-            }
-	    else
-            {
-	        te->m_mgr = xml;
-            }
 	    te->FlushConfig(xmlmp);
         }
 

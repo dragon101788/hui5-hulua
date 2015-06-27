@@ -94,28 +94,23 @@ public:
             }
 	}
 
-        #define defset_element_int(name,member,mp,def) if (mp.exist(name)){member = mp[name]->getvalue_int();} else{member = def;}
-        #define defsetf_element_int(name,fun,mp,def) if (mp.exist(name)){fun( mp[name]->getvalue_int());} else{fun(def);}
 
 	void PraseElement(HUMap &m_mp)
 	{
-	        log_i("$$$HU$$$ ElementPrase [%s] %x x=%d y=%d width=%d height=%d hide=%d\r\n",
-	                                  GetName(), m_parent,GetX(), GetY(), GetWidth(), GetHeight(), GetHeight());
-		SetName(m_mp["name"]->getvalue());
-		defsetf_element_int("x",SetX,m_mp,0);
-		defsetf_element_int("y",SetY,m_mp,0);
-		defsetf_element_int("width",SetWidth,m_mp,0);
-		defsetf_element_int("height",SetHeight,m_mp,0);
-		defsetf_element_int("hide",SetHide,m_mp,0);
-		defsetf_element_int("lay",SetLay,m_mp,5);
-
-
-		lua.regele(this);
 
 		log_i("$$$HU$$$ ElementPrase [%s] x=%d y=%d width=%d height=%d hide=%d\r\n",
 				GetName(),GetX(), GetY(), GetWidth(), GetHeight(), GetHeight());
 
-
+		if(m_mp.exist("element_manager"))
+                {
+                    m_mgr = (element_manager *)m_mp["element_manager"].value().m_data;
+                }
+                if(m_mp.exist("parent"))
+                {
+                    element * parent = (element *)m_mp["parent"].value().m_data;
+                    log_d("%s sub element\n",parent->GetName());
+                    m_parent = parent;
+                }
 
                 //printf("%s SetBuffer width=%d height=%d\r\n", name.c_str(), width, height);
                 SetBuffer(GetWidth(), GetHeight());
