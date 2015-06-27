@@ -26,10 +26,11 @@ void Install_Element(HUMap &xmlmp, xmlproc * xml)
 
 
 	te->m_proc = xml;
-	if(te->m_flag&ELEMENT_FLAG_DRAWLOGIC)
+//	if(te->m_flag&ELEMENT_FLAG_DRAWLOGIC)
+	if(dynamic_cast<element *>(te))
         {
 
-	    if(xmlmp.exist("touch_mgr"))
+	    if(xmlmp.exist("element_manager"))
             {
 	        te->m_mgr = (element_manager *)xmlmp["element_manager"].value().m_data;
             }
@@ -40,10 +41,11 @@ void Install_Element(HUMap &xmlmp, xmlproc * xml)
 	    te->FlushConfig(xmlmp);
         }
 
-	if(te->m_flag&ELEMENT_FLAG_TOUCH)
+//	if(te->m_flag&ELEMENT_FLAG_TOUCH)
+	if(dynamic_cast<touch_element *>(te))
         {
 	    log_i("$$$dragon$$$ %s init Touch\n",te->GetName());
-	    touch_element * touch_ele = (touch_element *)te;
+	    touch_element * touch_ele = dynamic_cast<touch_element *>(te);
 	    touch_ele->touch_init_area();
 	    touch_ele->TouchParaseXml(xmlmp);
 
@@ -59,10 +61,11 @@ void Install_Element(HUMap &xmlmp, xmlproc * xml)
             }
         }
 
-	if(te->m_flag&ELEMENT_FLAG_TIMER)
+//	if(te->m_flag&ELEMENT_FLAG_TIMER)
+	if(dynamic_cast<timer_element *>(te))
         {
 	    log_i("$$$dragon$$$ %s init Timer\n",te->GetName());
-	    timer_element * timer_ele = (timer_element *)te;
+	    timer_element * timer_ele = dynamic_cast<timer_element *>(te);
 	    timer_ele->TimerParaseXml(xmlmp);
 	    xml->AddTimerElement(timer_ele);
         }
