@@ -906,6 +906,10 @@ public:
 	{
 	    return m_key;
 	}
+	hustr & SetMapName(const char * name)
+        {
+            return m_key = name;
+        }
 	iterator operator[](const char * key)
 	{
 		return Get(key);
@@ -1080,6 +1084,7 @@ public:
 	void * m_data;
 };
 typedef humap<mapv> HUMap;
+void StrToHUMap(const char * str,HUMap &mp);
 
 template<typename T>
 class HUTimer: public thread, public Mutex

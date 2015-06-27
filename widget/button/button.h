@@ -37,6 +37,14 @@ public:
 	{
 		touch_mgr->DelTouchElement(this);
 	}
+
+	void doEleLuaCommand(const char * cmd)
+	{
+	  if(luacmd_is("aaa"))
+          {
+              printf("aaa [%s] %d\n",cmd,top);
+          }
+	}
 	void doFlushConfig(HUMap &mp)
 	{
 		exec.parse(mp);

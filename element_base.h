@@ -82,8 +82,6 @@ public:
     return m_hide;
   }
 
-
-
   void LuaCommand(const char * cmd)
   {
       doLuaCommand(cmd);
@@ -136,7 +134,7 @@ public:
           lua.regele(this);
   }
   int m_flag;
-//private:
+private:
   hustr m_name;
   int m_hide;
   int m_x;
@@ -144,6 +142,7 @@ public:
   int m_width;
   int m_height;
   int m_lay;
+
 };
 
 #endif

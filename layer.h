@@ -14,7 +14,7 @@ class schedule_draw;
 class element_manager;
 class xmlproc;
 
-#define luacmd_is(name) (strncmp(cmd,name,strlen(name))==0&&(cmd = cmd+strlen(name " ")))
+#define luacmd_is(name) (strncmp(cmd,name,strlen(name))==0&&(cmd = cmd+strlen(name)))
 
 class element: virtual public element_base,public schedule_ele, public image,virtual public Mutex
 {
@@ -84,7 +84,10 @@ public:
             }
             else if(luacmd_is("move"))
             {
-                int x,y;
+                HUMap mp;
+                StrToHUMap(cmd,mp);
+                int x = mp["x"]->getvalue_int();
+                int y = mp["y"]->getvalue_int();
                 sscanf(cmd,"x=%d y=%d",&x,&y);
                 printf("x=%d y=%d\n",x,y);
             }
@@ -93,7 +96,6 @@ public:
                 doEleLuaCommand(cmd);
             }
 	}
-
 
 	void PraseElement(HUMap &m_mp)
 	{

@@ -110,6 +110,40 @@ void debug_usage()
 
 }
 
+void StrToHUMap(const char * str,HUMap &mp)
+{
+      if(str==NULL)
+        return;
+
+      const char * p = str;
+      if(*p == ' ')
+      {
+          p++;
+      }
+      if(*p == '<') //如果是xml那么直接返回
+        return;
+      const char * q = NULL;
+      q = strchr(p,'=');
+      if(q==NULL)
+        return;
+
+      char bufk[32] = {0};
+      char bufv[32] = {0};
+
+      strncpy(bufk,p,q-p);
+      p = strchr(q+1,' ');
+      if(p == NULL)
+      {
+          strncpy(bufv,q+1,strlen(q+1));
+      }
+      else
+      {
+          strncpy(bufv,q+1,p-q-1);
+      }
+      mp[bufk] = bufv;
+
+      StrToHUMap(p,mp);
+}
 //typedef struct
 //{
 //    const char *dli_fname;  /* File name of defining object.  */
