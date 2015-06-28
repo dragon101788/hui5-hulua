@@ -102,34 +102,20 @@ public:
   {
       printf("%s virtual doLuaCommand Nothing can be done\n",GetName());
   }
-  class element_lua_node :public LUA::node
-  {
-  public:
-    element_base * m_ele;
-    element_lua_node(element_base * ele)
-    {
-       m_ele = ele;
-    }
-    void DO(lua_State * L)
-    {
-      //if (hulua::get_type(L, m_ele->name) == hulua::lua_nil);
-      if(m_ele->GetName()!=NULL)
-      {
-                printf("lua create %s object\n", m_ele->GetName());
-                hulua::class_add<element_base>(L, m_ele->GetName());
-                hulua::class_mem<element_base>(L, "x", &element_base::m_x);
-                hulua::class_mem<element_base>(L, "y", &element_base::m_y);
-                hulua::class_mem<element_base>(L, "width", &element_base::m_width);
-                hulua::class_mem<element_base>(L, "height", &element_base::m_height);
-                hulua::class_mem<element_base>(L, "lay", &element_base::m_lay);
-                hulua::class_mem<element_base>(L, "hide", &element_base::m_hide);
-                hulua::class_mem<element_base>(L, "base", &element_base::m_basethis);
-                hulua::class_def<element_base>(L, "command", &element_base::LuaCommand);
 
-                hulua::set(L, m_ele->GetName(), m_ele);
-      }
-    }
-  };
+  template<typename T>
+  static void lua_instal(lua_State* L)
+  {
+        hulua::class_mem<T>(L, "x", &T::m_x);
+        hulua::class_mem<T>(L, "y", &element_base::m_y);
+        hulua::class_mem<T>(L, "width", &element_base::m_width);
+        hulua::class_mem<T>(L, "height", &element_base::m_height);
+        hulua::class_mem<T>(L, "lay", &element_base::m_lay);
+        hulua::class_mem<T>(L, "hide", &element_base::m_hide);
+        hulua::class_mem<T>(L, "base", &element_base::m_basethis);
+        hulua::class_def<T>(L, "command", &element_base::LuaCommand);
+  }
+
   #define defset_element_int(name,member,mp,def) if (mp.exist(name)){member = mp[name]->getvalue_int();} else{member = def;}
   #define defsetf_element_int(name,fun,mp,def) if (mp.exist(name)){fun( mp[name]->getvalue_int());} else{fun(def);}
 
@@ -144,10 +130,9 @@ public:
           defsetf_element_int("height",SetHeight,m_mp,0);
           defsetf_element_int("hide",SetHide,m_mp,0);
           defsetf_element_int("lay",SetLay,m_mp,5);
-          lua.regele(this);
   }
   int m_flag;
-private:
+//private:
   hustr m_name;
   int m_hide;
   int m_x;

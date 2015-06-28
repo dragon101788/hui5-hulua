@@ -35,7 +35,9 @@ int LUA::run()
   init();
   while(1)
   {
+      lock();
       q.getele()->DO(L);
+      unlock();
   }
   destory();
 }

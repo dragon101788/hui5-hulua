@@ -4,7 +4,7 @@
 #include "hulua.h"
 
 
-class LUA :public thread
+class LUA :public thread ,public Mutex
 {	
 public:
         class node
@@ -53,7 +53,9 @@ public:
               log_i("lua dostring %s OK\n",m_str.nstr());
           }
         };
-        queue< SmartPtr<node> > q;
+
+        typedef SmartPtr<node> SPNode;
+        queue< SPNode > q;
 	lua_State* L;
 	int run();
 	int destory();
