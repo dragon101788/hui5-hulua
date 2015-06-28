@@ -11,12 +11,21 @@ struct A
 
 struct base
 {
-	base() {}
-
+	base() {n1=1;}
+	int n1;
+	void printn1() {printf("printn1 n1=%d\n",n1);};
 	const char* is_base(){ return "this is base"; }
 };
 
-class test : public base
+struct base2
+{
+        base2() {n2=2;}
+        int n2;
+        void printn2() {printf("printn2 n2=%d\n",n2);};
+        const char* is_base(){ return "this is base2"; }
+};
+
+class test : public base ,public base2
 {
 public:
 	test(int val) : _test(val) {}
@@ -56,7 +65,10 @@ int main()
 	hulua::class_def<test>(L, "get", &test::get);
 	hulua::class_def<test>(L, "set", &test::set);
 	hulua::class_mem<test>(L, "_test", &test::_test);
-	
+	hulua::class_mem<test>(L, "n1", &test::n1);
+	hulua::class_mem<test>(L, "n2", &test::n2);
+	hulua::class_def<test>(L, "printn1", &test::printn1);
+	hulua::class_def<test>(L, "printn2", &test::printn2);
 	hulua::set(L, "g_test", &g_test);
 
 	hulua::dofile(L, "sample3.lua");

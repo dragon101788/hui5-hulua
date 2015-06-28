@@ -1,4 +1,3 @@
-
 print(g_test._test)
 
 print(g_test:is_test())
@@ -64,3 +63,7 @@ objinfo(temp)
 print("objinfo(a)")
 objinfo(a)
 
+print("n1="..g_test.n1);
+print("n2="..g_test.n2);
+g_test:printn1();
+g_test:printn2();
