@@ -10,6 +10,7 @@ public:
         static void lua_instal(lua_State* L)
         {
               element_base::lua_instal<static_image>(L);
+              element::lua_instal<static_image>(L);
         }
 
 	static_image()

@@ -10,6 +10,7 @@ public:
         static void lua_instal(lua_State* L)
         {
               element_base::lua_instal<dragframe>(L);
+              element::lua_instal<dragframe>(L);
               touch_element::lua_instal<dragframe>(L);
         }
 	dragframe() :res(*GetRes("bk"))

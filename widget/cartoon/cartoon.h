@@ -10,7 +10,8 @@ class cartoon: public element, public timer_element
 public:
         static void lua_instal(lua_State* L)
         {
-              element_base::lua_instal<element>(L);
+              element_base::lua_instal<cartoon>(L);
+              element::lua_instal<cartoon>(L);
         }
 	class ca_image: public image
 	{

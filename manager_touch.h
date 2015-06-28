@@ -148,6 +148,8 @@ public:
               hulua::class_mem<T>(L, "left", &touch_element::left);
               hulua::class_mem<T>(L, "right", &touch_element::right);
               hulua::class_def<T>(L, "GetTouchX", &touch_element::GetTouchX);
+              hulua::class_def<T>(L, "GetTouchY", &touch_element::GetTouchY);
+              hulua::class_def<T>(L, "GetTouchP", &touch_element::GetTouchP);
         }
 	int top;
 	int bottom;

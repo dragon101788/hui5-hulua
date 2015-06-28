@@ -10,6 +10,7 @@ public:
         static void lua_instal(lua_State* L)
         {
               element_base::lua_instal<button>(L);
+              element::lua_instal<button>(L);
               touch_element::lua_instal<button>(L);
         }
 	void doTouchDown()

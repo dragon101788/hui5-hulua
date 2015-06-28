@@ -64,6 +64,12 @@ public:
 
 	void ParseModifRes(HUMap &m_mp);
 
+	template<typename T>
+        static void lua_instal(lua_State* L)
+        {
+              hulua::class_def<T>(L, "flush", &element::Flush);
+        }
+
 	virtual void doEleLuaCommand(const char * cmd) {};
 
 	void doLuaCommand(const char * cmd)

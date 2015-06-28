@@ -12,6 +12,7 @@ public:
         static void lua_instal(lua_State* L)
         {
               element_base::lua_instal<static_text>(L);
+              element::lua_instal<static_text>(L);
         }
 
 	text ttf;
