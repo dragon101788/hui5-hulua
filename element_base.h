@@ -115,16 +115,17 @@ public:
       //if (hulua::get_type(L, m_ele->name) == hulua::lua_nil);
       if(m_ele->GetName()!=NULL)
       {
-        printf("lua create %s object\n", m_ele->GetName());
-                hulua::class_add<element_base>(L, "element_base");
+                printf("lua create %s object\n", m_ele->GetName());
+                hulua::class_add<element_base>(L, m_ele->GetName());
                 hulua::class_mem<element_base>(L, "x", &element_base::m_x);
                 hulua::class_mem<element_base>(L, "y", &element_base::m_y);
                 hulua::class_mem<element_base>(L, "width", &element_base::m_width);
                 hulua::class_mem<element_base>(L, "height", &element_base::m_height);
                 hulua::class_mem<element_base>(L, "lay", &element_base::m_lay);
                 hulua::class_mem<element_base>(L, "hide", &element_base::m_hide);
-                hulua::class_mem<element_base>(L, "this", &element_base::m_basethis);
+                hulua::class_mem<element_base>(L, "base", &element_base::m_basethis);
                 hulua::class_def<element_base>(L, "command", &element_base::LuaCommand);
+
                 hulua::set(L, m_ele->GetName(), m_ele);
       }
     }
@@ -143,7 +144,6 @@ public:
           defsetf_element_int("height",SetHeight,m_mp,0);
           defsetf_element_int("hide",SetHide,m_mp,0);
           defsetf_element_int("lay",SetLay,m_mp,5);
-
           lua.regele(this);
   }
   int m_flag;
