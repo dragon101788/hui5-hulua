@@ -7,6 +7,11 @@
 class static_image: public element
 {
 public:
+        static void lua_instal(lua_State* L)
+        {
+              element_base::lua_instal<static_image>(L);
+        }
+
 	static_image()
 	{
 		xpos = 0;

@@ -13,6 +13,7 @@ static void set_debug_timer(int cnt)
 LUA::LUA()
 {
   L = NULL;
+  init();
   create();
 }
 
@@ -32,11 +33,11 @@ int LUA::destory()
 }
 int LUA::run()
 {
-  init();
   while(1)
   {
+      SPNode ptr = q.getele();
       lock();
-      q.getele()->DO(L);
+      ptr->DO(L);
       unlock();
   }
   destory();
@@ -51,6 +52,7 @@ extern void import_xml(const char * str)
 
 int LUA::init()
 {
+  lock();
   printf("LUA\n");
  L = lua_open();
          luaL_checkversion(L);  /* check that interpreter has correct version */
@@ -61,5 +63,6 @@ int LUA::init()
  hulua::def(L, "debug_timer", set_debug_timer);
  hulua::def(L, "jump", Jump);
  hulua::def(L, "import_xml",import_xml);
+ unlock();
 }
 

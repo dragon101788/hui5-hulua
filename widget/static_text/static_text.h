@@ -9,6 +9,11 @@
 class static_text: public element
 {
 public:
+        static void lua_instal(lua_State* L)
+        {
+              element_base::lua_instal<static_text>(L);
+        }
+
 	text ttf;
 
 	static_text()

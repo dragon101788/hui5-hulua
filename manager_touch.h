@@ -140,6 +140,15 @@ public:
 	int GetTouchY() const;
 	int GetTouchP() const;
 
+	template<typename T>
+        static void lua_instal(lua_State* L)
+        {
+              hulua::class_mem<T>(L, "top", &touch_element::top);
+              hulua::class_mem<T>(L, "bottom", &touch_element::bottom);
+              hulua::class_mem<T>(L, "left", &touch_element::left);
+              hulua::class_mem<T>(L, "right", &touch_element::right);
+              hulua::class_def<T>(L, "GetTouchX", &touch_element::GetTouchX);
+        }
 	int top;
 	int bottom;
 	int left;

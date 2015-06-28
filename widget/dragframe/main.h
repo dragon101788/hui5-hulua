@@ -7,6 +7,11 @@
 class dragframe: public element , public touch_element ,public element_manager,public touch_manager
 {
 public:
+        static void lua_instal(lua_State* L)
+        {
+              element_base::lua_instal<dragframe>(L);
+              touch_element::lua_instal<dragframe>(L);
+        }
 	dragframe() :res(*GetRes("bk"))
 	{
 		id = 0;

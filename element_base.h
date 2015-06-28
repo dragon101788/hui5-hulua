@@ -106,7 +106,7 @@ public:
   template<typename T>
   static void lua_instal(lua_State* L)
   {
-        hulua::class_mem<T>(L, "x", &T::m_x);
+        hulua::class_mem<T>(L, "x", &element_base::m_x);
         hulua::class_mem<T>(L, "y", &element_base::m_y);
         hulua::class_mem<T>(L, "width", &element_base::m_width);
         hulua::class_mem<T>(L, "height", &element_base::m_height);
@@ -143,5 +143,7 @@ public:
   element_base * m_basethis;
 
 };
+
+
 
 #endif

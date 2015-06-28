@@ -7,6 +7,11 @@
 class button: public element, public touch_element
 {
 public:
+        static void lua_instal(lua_State* L)
+        {
+              element_base::lua_instal<button>(L);
+              touch_element::lua_instal<button>(L);
+        }
 	void doTouchDown()
 	{
 		//printf("$$$HU$$$ %s %s tx=%d ty=%d t%d b%d l%d r%d\r\n",name,__FUNCTION__,tx,ty,top,bottom,left,right);

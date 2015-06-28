@@ -28,6 +28,7 @@ MKAUTO=Makefile.auto
 BUILTIN_LIB=lib/libpng.a lib/libz.a lib/libiconv.a lib/libxml2.a lib/libhulua.a
 MAKE=make CROSS_COMPILE=$(CROSS_COMPILE) CC=$(CC) CFLAG="$(CFLAG)" TOPDIR=$(TOPDIR)
 
+obj-y += hui_hulua.o
 obj-y += XMLInstal.o
 obj-y += loaderDL.o
 obj-$(CONFIG_ALPHA_BLT) += platfrom/alpha_w55.o
@@ -43,7 +44,6 @@ obj-y += ParseXML.o
 obj-y += hulib.o
 obj-y += codec.o
 obj-y += Framebuffer.o
-obj-y += hui_hulua.o
 obj-y += lua_command.o
 obj-y += hui.o 
 obj-$(CONFIG_TOUCH_EKTF2K) += platfrom/touch_ektf2k.o

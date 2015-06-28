@@ -126,14 +126,16 @@ public:
                 }
                 //xml->mtx.unlock();
         }
+
+
         InstallELEinstan(const char * name)
         {
                 lua.lock();
+
                 hulua::class_add<T>(lua.L, name);
-                element_base::lua_instal<T>(lua.L);
+                T::lua_instal(lua.L);
 
                 lua.unlock();
-                //
                 XMLinstan[name] = CreateObject;
         }
 };
