@@ -19,6 +19,18 @@ public:
     m_width = 0;
     m_lay = 0;
     m_flag = 0;
+    m_basethis = this;
+  }
+  ~element_base()
+  {
+    m_hide = 0;
+    m_x = 0;
+    m_y = 0;
+    m_height = 0;
+    m_width = 0;
+    m_lay = 0;
+    m_flag = 0;
+    m_basethis = NULL;
   }
   virtual void SetName(const char * name)
   {
@@ -111,6 +123,7 @@ public:
                 hulua::class_mem<element_base>(L, "height", &element_base::m_height);
                 hulua::class_mem<element_base>(L, "lay", &element_base::m_lay);
                 hulua::class_mem<element_base>(L, "hide", &element_base::m_hide);
+                hulua::class_mem<element_base>(L, "this", &element_base::m_basethis);
                 hulua::class_def<element_base>(L, "command", &element_base::LuaCommand);
                 hulua::set(L, m_ele->GetName(), m_ele);
       }
@@ -142,6 +155,7 @@ private:
   int m_width;
   int m_height;
   int m_lay;
+  element_base * m_basethis;
 
 };
 
