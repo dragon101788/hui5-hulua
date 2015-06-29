@@ -6,6 +6,8 @@ set -e
 ./configure \
 	--with-minimum \
 	--with-sax1 \
+	--with-writer \
+	--with-tree \
 	--without-zlib --host=arm-linux --target=arm-linux \
 	--host=${HOST} \
 	CC=${CROSS_COMPILE}gcc \

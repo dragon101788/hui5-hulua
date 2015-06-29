@@ -6,7 +6,7 @@
 #include "manager_touch.h"
 #include "manager_timer.h"
 #include "Framebuffer.h"
-#include "ParseXML.h"
+#include "HumapXML.h"
 
 class xmlproc;
 

@@ -73,7 +73,7 @@ public:
             if(luacmd_is("parsexml"))
             {
                 HUMap mp;
-                ParseXmlString(cmd,strlen(cmd),mp);
+                HumapFromXmlString(cmd,strlen(cmd),mp);
                 //mp.display();
                 ParseXML(mp);
             }

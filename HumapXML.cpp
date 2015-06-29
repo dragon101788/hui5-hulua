@@ -1,4 +1,4 @@
-#include "ParseXML.h"
+#include "HumapXML.h"
 
 #include <errno.h>
 #include "xmlproc.h"
@@ -15,7 +15,7 @@ int ParseXMLFrom_Instan(hustr name, HUMap & xmlmp, xmlproc * xml);
 #define prase_debug(a,...)
 #endif
 
-void ParseUpdateXml(xmlNodePtr node,HUMap & xmlmp)
+void HumapFromXmlLoopDec(xmlNodePtr node,HUMap & xmlmp)
 {
   for(node=node->children;node;node=node->next)
   {
@@ -53,7 +53,7 @@ void ParseUpdateXml(xmlNodePtr node,HUMap & xmlmp)
               mp[(char *)attr->name] = (char *)attr->children->content;
               prase_debug("[%s:%s]",(char*)attr->name,(char*)attr->children->content);   //get value, CDATA is not parse and don't take into value
             }
-            ParseUpdateXml(node,mp);
+            HumapFromXmlLoopDec(node,mp);
 
             prase_debug("\n");
         }
@@ -64,7 +64,92 @@ void ParseUpdateXml(xmlNodePtr node,HUMap & xmlmp)
       }
   }
 }
-int ParseXmlString(const char * buf,unsigned long filesize,HUMap & mp)
+
+void HumapToXmlLoopEnc(xmlNodePtr node,HUMap & mp)
+{
+
+    HUMap::OrderList lst(mp);
+    for(HUMap::OrderList::iterator it = lst.begin();it!=lst.end();++it)
+    {
+      const char * name = (*it).MapName();
+      const char * value = (*it).MapValue();
+      HUMap * father = (*it).m_father;
+      if(strchr(value,'&'))
+      {//CDATA
+          xmlNodePtr node1 = xmlNewNode(NULL, BAD_CAST (name));
+          xmlNodePtr cdata = xmlNewCDataBlock(NULL,BAD_CAST(value),strlen(value));
+          xmlAddChild(node1, cdata);
+          xmlAddChild(node, node1);
+      }
+      else if(strlen(value)<1)
+      {//node
+          xmlNodePtr node1 = xmlNewNode(NULL, BAD_CAST (name));
+          HumapToXmlLoopEnc(node1, (*it));
+          xmlAddChild(node, node1);
+      }
+      else if(strlen(value)<30&&father->count(name)==1)
+      {//ATTTIBUTE
+          xmlNewProp(node, BAD_CAST(name), BAD_CAST(value));
+      }
+      else
+      {//TEXT
+          xmlNewChild(node, NULL, BAD_CAST(name),BAD_CAST(value));
+      }
+
+
+    }
+}
+int HumapToXmlString(hustr & outstr,HUMap & mp)
+{
+    //mp.display();
+    xmlDocPtr doc = NULL;
+    xmlNodePtr root_node = NULL, node = NULL;
+    doc = xmlNewDoc(BAD_CAST "1.0");
+    root_node = xmlNewNode(NULL, BAD_CAST(mp.MapName().nstr()));
+    xmlDocSetRootElement(doc, root_node);
+
+    HumapToXmlLoopEnc(root_node,mp);
+
+    xmlChar *outbuf;
+    int outlen;
+    xmlDocDumpFormatMemoryEnc(doc, &outbuf, &outlen, "UTF-8", 1);
+    outstr = (const char *)outbuf;
+    xmlFree(outbuf);
+
+
+    xmlFreeDoc(doc);
+
+    xmlCleanupParser();
+
+    xmlMemoryDump();
+
+    return(0);
+
+}
+
+int HumapToXmlFile(const char * path,HUMap & mp)
+{
+    //mp.display();
+    xmlDocPtr doc = NULL;
+    xmlNodePtr root_node = NULL, node = NULL;
+    doc = xmlNewDoc(BAD_CAST "1.0");
+    root_node = xmlNewNode(NULL, BAD_CAST(mp.MapName().nstr()));
+    xmlDocSetRootElement(doc, root_node);
+
+    HumapToXmlLoopEnc(root_node,mp);
+
+    xmlSaveFormatFileEnc(path, doc, "UTF-8", 1);
+
+    xmlFreeDoc(doc);
+
+    xmlCleanupParser();
+
+    xmlMemoryDump();
+
+    return(0);
+
+}
+int HumapFromXmlString(const char * buf,unsigned long filesize,HUMap & mp)
 {
     xmlDocPtr doc;
     xmlNodePtr node;
@@ -80,11 +165,13 @@ int ParseXmlString(const char * buf,unsigned long filesize,HUMap & mp)
             return -1;
     }
     mp.MapName() = (char *)node->name;
-    ParseUpdateXml(node,mp);
+    HumapFromXmlLoopDec(node,mp);
     xmlFreeDoc(doc);
 }
-int ParseXmlFile(const char *path,HUMap & mp)
+
+int HumapFromXmlFile(const char *path,HUMap & mp)
 {
+
         FILE *file = NULL;
         char *content = NULL;
         unsigned long filesize = 0;
@@ -101,7 +188,8 @@ int ParseXmlFile(const char *path,HUMap & mp)
 
         prase_debug("content:\n%s\n",content);
 
-        ParseXmlString(content,filesize,mp);
+        HumapFromXmlString(content,filesize,mp);
+        HumapToXmlFile(hustr("out/%s",path),mp);
 
         fclose(file);
         free(content);

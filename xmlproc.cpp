@@ -1,7 +1,7 @@
 #include "xmlproc.h"
 #include "thread_touch.h"
 #include "thread_timer.h"
-#include "ParseXML.h"
+#include "HumapXML.h"
 
 DebugTimer fps;
 pXmlproc g_cur_xml;
@@ -58,7 +58,7 @@ void xmlproc::StartParseXML_file(const char * file)
         UnDoneProc();
         //DebugTimer dbg;
         HUMap mp;
-        ParseXmlFile(file, mp);
+        HumapFromXmlFile(file, mp);
 
         //mp.display();
         HUMap::OrderList lst(mp);
@@ -83,7 +83,7 @@ void xmlproc::StartParseXML_str(const char * str)
 
         //DebugTimer dbg;
         HUMap mp;
-        ParseXmlString(str,strlen(str), mp);
+        HumapFromXmlString(str,strlen(str), mp);
 
         //mp.display();
         HUMap::OrderList lst(mp);

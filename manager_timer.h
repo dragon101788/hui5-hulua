@@ -2,7 +2,7 @@
 #define __TIMER_H__
 
 #include "hulib.h"
-#include "ParseXML.h"
+#include "HumapXML.h"
 #include "element_base.h"
 #include <set>
 

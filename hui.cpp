@@ -6,7 +6,7 @@
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 #include <signal.h>
-#include "ParseXML.h"
+#include "HumapXML.h"
 #include "hui.h"
 #include "manager_touch.h"
 #include "manager_timer.h"
