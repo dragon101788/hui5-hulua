@@ -493,13 +493,13 @@ namespace hulua
 		virtual void set(lua_State *L) = 0;
 	};
 
-	template<typename T, typename V>
+	template<typename BASE,typename T, typename V>
 	struct mem_var : var_base
 	{
 		V T::*_var;
 		mem_var(V T::*val) : _var(val) {}
-		void get(lua_State *L)	{ push(L, read<T*>(L,1)->*(_var));		}
-		void set(lua_State *L)	{ read<T*>(L,1)->*(_var) = read<V>(L, 3);	}
+		void get(lua_State *L)	{ push(L, read<BASE*>(L,1)->*(_var));		}
+		void set(lua_State *L)	{ read<BASE*>(L,1)->*(_var) = read<V>(L, 3);	}
 	};
 
 	// member function dragon RVal
@@ -577,11 +577,11 @@ namespace hulua
 
 	// push_functor dragon
 	// push_functor
-    template<typename BASE,typename RVal, typename T>
-    void push_functor(lua_State *L, RVal (T::*func)())
-    {
-		lua_pushcclosure(L, mem_functor<RVal,BASE,T>::invoke, 1);
-    }
+        template<typename BASE,typename RVal, typename T>
+        void push_functor(lua_State *L, RVal (T::*func)())
+        {
+                    lua_pushcclosure(L, mem_functor<RVal,BASE,T>::invoke, 1);
+        }
 
 	template<typename BASE,typename RVal, typename T>
 	void push_functor(lua_State *L, RVal (T::*func)() const) 
@@ -935,7 +935,7 @@ namespace hulua
 		if(lua_istable(L, -1))
 		{
 			lua_pushstring(L, name);
-			new(lua_newuserdata(L,sizeof(mem_var<T,VAR>))) mem_var<T,VAR>(val);
+			new(lua_newuserdata(L,sizeof(mem_var<T,BASE,VAR>))) mem_var<T,BASE,VAR>(val);
 			lua_rawset(L, -3);
 		}
 		lua_pop(L, 1);
