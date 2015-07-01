@@ -21,47 +21,7 @@ void JumpToFile(const char * jump, const char * snap);
 extern DebugTimer fps;
 extern int debug_timer_count;
 
-class HuExec
-{
-public:
-	hustr sh;
-	hustr ldo;
-	HuExec()
-	{
-	}
-	HuExec(HUMap & mp)
-	{
-		parse(mp);
-	}
-	int parse(HUMap & mp)
-	{
-		if (mp.exist("sh"))
-		{
-		        sh = mp["sh"]->getvalue();
-		}
-		if (mp.exist("ldo"))
-                {
-                        ldo = mp["ldo"]->getvalue();
-                }
-	}
-	int doStart()
-	{
-	    int ret = 0;
-            if (!sh.empty())
-            {
-                printf("sh ! empty\n");
-                    system(sh);
-                    ret++;
-            }
-            if (!ldo.empty())
-            {
-                  printf("ldo ! empty\n");
-                   lua.dostring(ldo);
-                   ret++;
-            }
-            return ret;
-	}
-};
+
 //
 //typedef HUTimer<HuExec> ProcTimer;
 //extern ProcTimer g_exec;

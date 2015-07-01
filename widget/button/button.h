@@ -36,7 +36,7 @@ public:
 
 	void doTouchActive()
 	{
-		exec.doStart();
+		lua.dostring(ldo);
 	}
 
 	void doDelete()
@@ -53,7 +53,7 @@ public:
 	}
 	void doFlushConfig(HUMap &mp)
 	{
-		exec.parse(mp);
+		ldo = mp["ldo"]->getvalue();
 //		touch_init_area(GetX(), GetY(), GetWidth(), GetHeight());
 
 		SetRes("up", mp["up"]->getvalue());
@@ -70,8 +70,7 @@ public:
 	{
 	}
 
-	HuExec exec;
-	//hustr cmd;
+	hustr ldo;
 };
 
 #endif //__STATIC_IMAGE_H__

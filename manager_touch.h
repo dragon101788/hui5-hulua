@@ -19,10 +19,17 @@ class touch_manager;
 class touch_element :virtual public element_base,virtual public Mutex
 {
 public:
-//	virtual void doFlushConfig()
-//	{
-//		errexit("$$$HU$$$ can't virtual doFlushConfig\r\n");
-//	}
+        template<typename T>
+        static void lua_instal(lua_State* L)
+        {
+              hulua::class_mem<T>(L, "top", &touch_element::top);
+              hulua::class_mem<T>(L, "bottom", &touch_element::bottom);
+              hulua::class_mem<T>(L, "left", &touch_element::left);
+              hulua::class_mem<T>(L, "right", &touch_element::right);
+              hulua::class_def<T>(L, "GetTouchX", &touch_element::GetTouchX);
+              hulua::class_def<T>(L, "GetTouchY", &touch_element::GetTouchY);
+              hulua::class_def<T>(L, "GetTouchP", &touch_element::GetTouchP);
+        }
 	touch_element()
 	{
 	        m_flag |= ELEMENT_FLAG_TOUCH;
@@ -96,18 +103,40 @@ public:
 		origin_in();
 		if(isdn==0)
                 {
-                    doTouchDown();
+                    if (!luaTouchDown.empty())
+                    {
+                      lua.dostring(luaTouchDown);
+                    }
+                    else
+                    {
+                        doTouchDown();
+                    }
                 }
 		else
                 {
-		    doTouchMove();
+                    if (!luaTouchMove.empty())
+                    {
+                      lua.dostring(luaTouchMove);
+                    }
+                    else
+                    {
+                      doTouchMove();
+                    }
                 }
 		unlock();
 	}
 	void free_area()
 	{
 		lock();
-		doTouchUp();
+
+                if (!luaTouchUp.empty())
+                {
+                  lua.dostring(luaTouchUp);
+                }
+                else
+                {
+                    doTouchUp();
+                }
 		origin_out();
 		if (GetTouchP() == 0 && isArea(GetTouchX(), GetTouchY()))
 		{
@@ -118,7 +147,15 @@ public:
 	void touch_activate()
 	{
 		lock();
-		doTouchActive();
+		if(!luaTouchActive.empty())
+                {
+		    lua.dostring(luaTouchActive);
+                }
+		else
+                {
+                    doTouchActive();
+                }
+
 		unlock();
 	}
 	void TouchParaseXml(HUMap & mp)
@@ -127,6 +164,10 @@ public:
 		touch_lock = mp["lock"]->getvalue_int();
 		x_lock = mp["x_lock"]->getvalue_int();
 		y_lock = mp["y_lock"]->getvalue_int();
+		luaTouchActive = mp["doTouchActive"]->getvalue();
+		luaTouchMove = mp["doTouchMove"]->getvalue();
+		luaTouchDown = mp["doTouchDown"]->getvalue();
+		luaTouchUp = mp["doTouchUp"]->getvalue();
 		log_d("TouchParaseXml %d %d %d\r\n", touch_lock, x_lock, y_lock);
 		unlock();
 	}
@@ -140,17 +181,7 @@ public:
 	int GetTouchY() const;
 	int GetTouchP() const;
 
-	template<typename T>
-        static void lua_instal(lua_State* L)
-        {
-              hulua::class_mem<T>(L, "top", &touch_element::top);
-              hulua::class_mem<T>(L, "bottom", &touch_element::bottom);
-              hulua::class_mem<T>(L, "left", &touch_element::left);
-              hulua::class_mem<T>(L, "right", &touch_element::right);
-              hulua::class_def<T>(L, "GetTouchX", &touch_element::GetTouchX);
-              hulua::class_def<T>(L, "GetTouchY", &touch_element::GetTouchY);
-              hulua::class_def<T>(L, "GetTouchP", &touch_element::GetTouchP);
-        }
+
 	int top;
 	int bottom;
 	int left;
@@ -160,6 +191,10 @@ public:
 	int ox, oy;
 	int x_lock;
 	int y_lock;
+	hustr luaTouchActive;
+	hustr luaTouchMove;
+	hustr luaTouchDown;
+	hustr luaTouchUp;
 	touch_manager * touch_mgr;
 };
 

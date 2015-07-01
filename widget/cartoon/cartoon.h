@@ -13,23 +13,14 @@ public:
               element_base::lua_instal<cartoon>(L);
               element::lua_instal<cartoon>(L);
         }
-	class ca_image: public image
-	{
-	public:
-		int ntime;
-		HuExec exec;
-		ca_image()
-		{
-			ntime = 0;
-		}
-	};
 
 	int doTimer(int tm)
 	{
 		//printf("OnTimer time=%d\r\n", fps_time + images[id].ntime);
 	        TimerSet(tm + fps_time + m_ntimes[id]);
-		if (m_nexec[id].doStart())
+		if (!m_nexec[id].empty())
 		{
+		        lua.dostring(m_nexec[id]);
 			debug("id[%d] Exec\r\n", id);
 		}
 		else
@@ -78,7 +69,7 @@ public:
                         printf("init node = %d %s\n",i,n_mp.MapValue().nstr());
                         res["node"][i]->SetResource(n_mp->getvalue());
                         m_ntimes[i] = n_mp["ntime"]->getvalue_int();
-                        m_nexec[i].parse(n_mp);
+                        m_nexec[i] = n_mp["ldo"]->getvalue();
                         max_id = i;
                 }
 
@@ -111,7 +102,7 @@ public:
 	int max_id;
 
 	map<int, int> m_ntimes;
-	map<int, HuExec> m_nexec;
+	map<int, hustr> m_nexec;
 	int id;
 	int fps_time;
 	int release;
