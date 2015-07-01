@@ -24,20 +24,18 @@ public:
 
 	}
 
+        void subTouch()
+        {
+          touch_sample tp;
+          tp.x = x_pos + GetTouchX();
+          tp.y = y_pos + GetTouchY();
+          tp.pressure = GetTouchP();
+          touch_proc_event(&tp);
+        }
+
 	void doTouchDown()
         {
-                //printf("$$$HU$$$ %s %s tx=%d ty=%d t%d b%d l%d r%d\r\n",name,__FUNCTION__,tx,ty,top,bottom,left,right);
-
-	        //printf("tx=%d ty=%d\n",GetTouchX(),GetTouchY());
-
-
-	         touch_sample tp;
-	         tp.x = GetTouchX()-x_pos;
-	         tp.y = GetTouchY()-y_pos;
-	         tp.pressure = GetTouchP();
-	         touch_proc_event(&tp);
-
-                //printf("%s touch\r\n", name.c_str());
+	        subTouch();
 
                 Flush();
         }
@@ -45,12 +43,8 @@ public:
         void doTouchUp()
         {
 
-                touch_sample tp;
-                 tp.x = GetTouchX()-x_pos;
-                 tp.y = GetTouchY()-y_pos;
-                 tp.pressure = GetTouchP();
-                 touch_proc_event(&tp);
-                //printf("%s free\r\n", name.c_str());
+                subTouch();
+
                  x_pos-=move_x();
                  y_pos-=move_y();
 

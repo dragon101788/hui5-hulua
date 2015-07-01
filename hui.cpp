@@ -189,16 +189,6 @@ void ParseControl(HUMap & xmlmp, xmlproc * xml)
 
 		xml->element_manager::DelElement(name);
 	}
-//	else if (event == "proc")
-//	{
-//		int ptimer=0;
-//		if (xmlmp.exist("ptimer"))
-//		{
-//			//xml->AddExec();
-//			ptimer = xmlmp["ptimer"]->getvalue_int();
-//		}
-//		xml->AddExec(ptimer,xmlmp);
-//	}
 	else if (event == "sleep")
 	{
 		int msec = xmlmp["msec"]->getvalue_int();
@@ -233,8 +223,6 @@ void ParseControl(HUMap & xmlmp, xmlproc * xml)
 				xml->UnForeProc();
 			}
 		}
-//		printf("%s done=%d fore=%d\r\n", xml->filename.c_str(), xml->done,
-//				xml->fore);
 	}
 	else if (event == "snap")
 	{
@@ -256,40 +244,6 @@ void ParseControl(HUMap & xmlmp, xmlproc * xml)
 		}
 		xml->ScheduleSaveSnap(file);
 	}
-//	else if (event == "cs")
-//	{
-//		hustr cont = xmlmp["cont"]->getvalue();
-//		if (cont == "stop")
-//		{
-//			printf("stop\r\n");
-//			g_cur_xml->CS_manager::Stop();
-//		}
-//		else if (cont == "start")
-//		{
-//			printf("start\r\n");
-//			g_cur_xml->CS_manager::Start();
-//		}
-//		else if (cont == "clear")
-//		{
-//			printf("clear\r\n");
-//			//g_th_timer.create();
-//			g_cur_xml->m_cs.clear();
-//		}
-//		if (xmlmp.exist("post"))
-//		{
-//			hustr post = xmlmp["post"]->getvalue();
-//			if (xmlmp.exist("cus"))
-//			{
-//				g_xml_proc[xmlmp["cus"]->getvalue()]->PostCS(post);
-//			}
-//			else
-//			{
-//				g_cur_xml->PostCS(post);
-//			}
-//
-//		}
-//
-//	}
 	else if (event == "timer")
 	{
 		hustr cont = xmlmp["cont"]->getvalue();

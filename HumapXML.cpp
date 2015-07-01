@@ -177,7 +177,7 @@ int HumapFromXmlFile(const char *path,HUMap & mp)
         unsigned long filesize = 0;
         if((file=fopen(path,"r"))==NULL)
         {
-                perror("openf file error");
+                errexitf("open file error:",strerror(errno));
         }
         fseek(file,0,SEEK_END);
         filesize=ftell(file);

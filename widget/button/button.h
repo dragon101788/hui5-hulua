@@ -39,6 +39,7 @@ public:
 		lua.dostring(ldo);
 	}
 
+
 	void doDelete()
 	{
 		touch_mgr->DelTouchElement(this);
