@@ -51,9 +51,23 @@ public:
                  tp.pressure = GetTouchP();
                  touch_proc_event(&tp);
                 //printf("%s free\r\n", name.c_str());
-                 x_pos+=move_x();
-                 y_pos+=move_y();
+                 x_pos-=move_x();
+                 y_pos-=move_y();
 
+                 printf("x_pos=%d y_pos=%d\n",x_pos,y_pos);
+                 if(y_pos < 0)
+                    y_pos = 0;
+                 if(y_pos>res.GetImageHeight() - GetHeight())
+                 {
+                      y_pos= res.GetImageHeight() - GetHeight();
+                 }
+
+                if(x_pos < 0)
+                   x_pos = 0;
+                if(x_pos>res.GetImageWidth() - GetWidth())
+                {
+                     x_pos= res.GetImageWidth() - GetWidth();
+                }
                 Flush();
         }
 
@@ -130,18 +144,6 @@ public:
 	void doFlushConfig(HUMap & mp)
 	{
 
-//	    touch_init_area(GetX(), GetY(), GetWidth(), GetHeight());
-//	            xml_mgr->AddEleArea(this);
-
-	     //mp.display();
-
-//	     if(mp.exist("linit"))
-//             {
-//                 printf("exec linit %s\n",mp["linit"]->getvalue());
-//                 lua.dostring(mp["linit"]->getvalue());
-//             }
-
-
 	    res.SetBuffer(GetWidth(),GetHeight());
 	    ParseXML(mp);
 
@@ -153,7 +155,10 @@ public:
 	{
 	    //printf("RenderFrom %d %d %d %d\n",GetWidth(), GetHeight(), x_pos+move_x(), y_pos+move_y());
 	    //RenderFrom(&res,-(x_pos+move_x()), -(y_pos+move_y()), res.GetImageWidth(),res.GetImageHeight(), 0,0);
-	    res.RenderTo(this, -(x_pos+move_x()), -(y_pos+move_y()), GetWidth(), GetHeight(), 0, 0);
+	    int resx = x_pos-move_x();
+	    int resy = y_pos-move_y();
+	    //printf("resx=%d resy=%d\n",resx,resy);
+	    res.RenderTo(this, resx, resy, GetWidth(), GetHeight(), 0, 0);
 
 	}
 
