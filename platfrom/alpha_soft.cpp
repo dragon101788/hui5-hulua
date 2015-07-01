@@ -25,7 +25,7 @@ void Render_img_to_img(image * dst, image * src, int src_x, int src_y, int cp_wi
 			{
 				continue;
 			}
-			else
+			else if(alpha >250)
 			{
 				*dst_pix = *src_pix;
 				continue;
