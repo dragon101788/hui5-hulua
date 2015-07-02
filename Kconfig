@@ -38,6 +38,31 @@ config TOUCH_EKTF2K
 		2d Bltting
 endchoice
 
+choice 
+        prompt "readonly resource manager"
+        default RESOURCE_RUNTIME_DECODER
+        help
+			readonly resource manager
+
+config  RESOURCE_RUNTIME_DECODER
+        bool "runtime decoder"
+        help
+		old meth runtime decoder image
+		[Minimum  disk use]
+		[decode each]
+config  RESOURCE_RUNTIME_INDEX
+        bool "runtime index"
+        help
+		mmap meth index virtual memory
+		[Minimum  memory use]
+		[decode once]
+config  RESOURCE_RUNTIME_FETCH
+        bool "runtime fetch"
+        help
+		[decode once]
+endchoice
+
+menu "hui debug option"
 config DEBUG
 	bool "enable debug"
 
@@ -54,7 +79,7 @@ config DUMPSTACK_DEBUG
 	bool "enable DUMPSTACK_DEBUG"
 	help 
 		"with arm uclibc platfrom use this"
-
+endmenu
 
 comment "------------Dragon Auto Configuretion---------"
 source Kconfig.auto

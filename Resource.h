@@ -2,58 +2,23 @@
 #define __HUI_RESOURCE_H__
 
 #include "codec.h"
+#include "include/autoconf.h"
 
-class Resource :public image
-{
-public:
-        hustr path;
-        void SetResource(const char * filepath)
-        {
-                //printf("SetResource %s\r\n",filepath);
+#if defined(CONFIG_RESOURCE_RUNTIME_DECODER)
+#include "Resource_runtime_decoder.h"
+typedef Resource_Runtime_Decoder Resource;
 
-                if (path != filepath)
-                {
-                        destroy();
-                        path = filepath;
-                }
-        }
-        int LoadResource()
-        {
-                if (pSrcBuffer != NULL)
-                {
-                        return 0;
-                }
-                if (path.empty())
-                {
-                        debug("warning LoadResource empty path\r\n");
-                        return -1;
-                }
-                return codec_to_Image(this, path.nstr());//装载图片
-        }
-        void ReSetResource(const char * filepath)
-        {
-                if (path != filepath)
-                {
-                        path = filepath;
-                        codec_to_Image(this, path.c_str());
-                }
-        }
-        //释放空间并不改变其他内容
-        virtual void Free()
-        {
-                if (pSrcBuffer != NULL)
-                {
-                        debug("destory image pSrcBuffer [%s] %dx%d\r\n", path.c_str(), u32Width, u32Height);
-                        free(pSrcBuffer);
-                        pSrcBuffer = NULL;
-                }
-        }
-};
+#elif defined(CONFIG_RESOURCE_RUNTIME_INDEX)
+#include "Resource_runtime_decoder.h"
+typedef Resource_Runtime_Decoder Resource;
 
+#elif defined(CONFIG_RESOURCE_RUNTIME_FETCH)
+#include "Resource_runtime_decoder.h"
+typedef Resource_Runtime_Decoder Resource;
 
-
-
-
-
+#else
+#error "!!!dragon!!! Undefined resources management style"
+#error "!!!dragon!!! --> plase menuconfig select [readonly resource manager]"
+#endif //CONFIG_RESOURCE_RUNTIME
 
 #endif //__HUI_RESOURCE_H__
