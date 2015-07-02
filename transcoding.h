@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include "hulib.h"
 typedef int32_t unichar;
-typedef uint32_t size_t;
+//typedef uint32_t size_t;
 #define ToS8(x)   ((int8_t)(x))
 #define ToU8(x)   ((uint8_t)(x))
 #define ToS16(x)  ((int16_t)(x))
