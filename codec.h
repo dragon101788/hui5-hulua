@@ -50,7 +50,6 @@ protected:
 	int transp;             //透明度
 
 public:
-	hustr path;
 	friend void Render_img_to_img(image * dst, image * src, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y);
 	friend int image_write_to_snap(image * img, const char * rawpath);
 	friend int image_read_from_snap(image * img, const char * rawpath);
@@ -100,7 +99,6 @@ public:
 		}
 		SetBuffer(img.u32Width, img.u32Height);
 		memcpy(pSrcBuffer, img.pSrcBuffer, SrcSize);
-		path = img.path;
 	}
 
 //	inline void SetPix(int pos, int r, int g, int b, int a)
@@ -123,7 +121,7 @@ public:
 	{
 		if (x > u32Width || y > u32Height)
 		{
-			huErrExitf("Get pixels beyond the range %s x=%d y=%d width=%d height=%d\r\n", path.c_str(), x, y, u32Width, u32Height);
+			huErrExitf("Get pixels beyond the range x=%d y=%d width=%d height=%d\r\n", x, y, u32Width, u32Height);
 		}
 		return GetPix(y * u32Width + x);
 	}
@@ -131,7 +129,7 @@ public:
 	{
 		if ((pos * 4) > SrcSize)
 		{
-			huErrExitf("Get pixels beyond the range %s pos=%d width=%d height=%d\r\n", path.c_str(), pos, u32Width, u32Height);
+			huErrExitf("Get pixels beyond the range pos=%d width=%d height=%d\r\n", pos, u32Width, u32Height);
 		}
 		return ((IMG_PIX *) pSrcBuffer + pos);
 	}
@@ -141,41 +139,13 @@ public:
 		return (unsigned long) pSrcBuffer;
 	}
 
-	void SetResource(const char * filepath)
+	int Load(const char * path)
 	{
-		//printf("SetResource %s\r\n",filepath);
-
-		if (path != filepath)
-		{
-			destroy();
-			path = filepath;
-		}
+		return codec_to_Image(this,path);//装载图片
 	}
-	int LoadResource()
+	int Save(const char * file)
 	{
-		if (pSrcBuffer != NULL)
-		{
-			return 0;
-		}
-		if (path.empty())
-		{
-			debug("warning LoadResource empty path\r\n");
-			return -1;
-		}
-		return codec_to_Image(this, path.nstr());//装载图片
-	}
-	void ReSetResource(const char * filepath)
-	{
-		if (path != filepath)
-		{
-			path = filepath;
-			codec_to_Image(this, path.c_str());
-		}
-	}
-	void SaveResource(const char * file)
-	{
-		path = file;
-		pngEndec_to_image(file, this);
+	        return pngEndec_to_image(file, this);
 	}
 	int ReSetBuffer(int width, int height)
 	{
@@ -310,31 +280,22 @@ public:
 
 	virtual void RenderFrom(image * img, int x, int y)
 	{
-		//AreaCopy(img, 0, 0, img->u32Width, img->u32Height, x, y);
-		//printf("$$$HU$$$ Render %s to %s\r\n",this->path.c_str(),img->path.c_str());
-
-		img->LoadResource();
 		Render_img_to_img(this, img, 0, 0, img->u32Width, img->u32Height, x, y);
 	}
 	virtual void RenderFrom(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
 	{
-		src_img->LoadResource();
 		ProcArea(this, src_img, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
 		Render_img_to_img(this, src_img, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
 	}
 
 	virtual void RenderTo(image * img, int x, int y)
         {
-                //AreaCopy(img, 0, 0, img->u32Width, img->u32Height, x, y);
-                //printf("$$$HU$$$ Render %s to %s\r\n",this->path.c_str(),img->path.c_str());
 
-                img->LoadResource();
                 Render_img_to_img(img,this, 0, 0, img->u32Width, img->u32Height, x, y);
         }
 
 	virtual void RenderTo(image * dst_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
         {
-	        dst_img->LoadResource();
                 ProcArea(dst_img, this, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
                 Render_img_to_img(dst_img, this, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
         }
@@ -392,17 +353,8 @@ public:
 		destroy();
 	}
 
-	//释放空间并不改变其他内容
-	void Free()
-	{
-		if (pSrcBuffer != NULL)
-		{
-			debug("destory image pSrcBuffer [%s] %dx%d\r\n", path.c_str(), u32Width, u32Height);
-			free(pSrcBuffer);
-			pSrcBuffer = NULL;
-		}
-	}
-	void destroy()
+
+	virtual void destroy()
 	{
 
 		if (pSrcBuffer != NULL)
@@ -414,7 +366,6 @@ public:
 			u32Width = 0;       // crop width
 			u32Height = 0;      // crop height
 			u32Stride = 0;
-			path.clear();
 		}
 	}
 

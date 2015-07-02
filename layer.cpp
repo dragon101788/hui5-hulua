@@ -206,8 +206,7 @@ void element::ParseModifRes(HUMap &m_mp)
 		if (meth == "render")
 		{
 			image file;
-			file.SetResource(xmlmp["file"]->getvalue());
-			file.LoadResource();
+			file.Load(xmlmp["file"]->getvalue());
 
 			log_d(
 					"$$$HU$$$ XML Draw Render %s to %s res=%d %d %d %d %d %d %d\r\n",

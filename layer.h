@@ -6,7 +6,7 @@
 #include "schedule.h"
 #include <deque>
 #include <set>
-
+#include "Resource.h"
 #include "element_base.h"
 using namespace std;
 
@@ -122,7 +122,6 @@ public:
 
                 //printf("%s SetBuffer width=%d height=%d\r\n", name.c_str(), width, height);
                 SetBuffer(GetWidth(), GetHeight());
-                path.format("ele-%s %dx%d", GetName(), GetWidth(), GetHeight());
 
 		initstack();
 	}
@@ -284,10 +283,12 @@ public:
         }
 	image * GetRes(const char * name)
 	{
+	    res[name].value().LoadResource();
 	    return &res[name].value();
 	}
 	image * GetRes(const char * name,int id)
         {
+	    res[name][id].value().LoadResource();
 	    return &res[name][id].value();
         }
 
@@ -298,7 +299,7 @@ public:
 
 	element_manager * m_mgr;
 
-	humap<image> res;
+	humap<Resource> res;
 	//schedule_draw * mgr;
 	list<element *> et;					//�ϲ�ؼ�
 	list<element *> eb;					//�ײ�ؼ�

@@ -37,7 +37,7 @@ int codec_to_Image(image * enode, const char * filename)
 {
 	if (filename == NULL)
 	{
-		errexitf("codec_to_Image path is unvalid [%s] [%s]\r\n", filename, enode->path.nstr());
+		errexitf("codec_to_Image path is unvalid [%s]\r\n", filename);
 	}
 	enode->lock();
 
@@ -319,7 +319,6 @@ int image_write_to_snap(image * img, const char * rawpath)
 		}
 
 	}
-	img->LoadResource();
 	fseek(fp, SEEK_SET, 0);
 	fwrite(&img->SrcSize, sizeof(unsigned long), 1, fp);
 	fwrite(&img->u32Width, sizeof(unsigned int), 1, fp);

@@ -72,7 +72,7 @@ private:
 			if (!access_Image(file))
 			{
 				printf("%s no exist , save Snap !!!\r\n", file);
-				m_xml->out.SaveResource(file);
+				m_xml->out.Save(file);
 				return 1;
 
 			}
@@ -208,7 +208,6 @@ public:
 	xmlproc(const char * file)
 	{
 		init();
-		out.path.format("xml-%s", file);
 		filename = file;
 
 	}

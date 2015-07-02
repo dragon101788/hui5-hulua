@@ -392,8 +392,7 @@ void Dir(hustr dir, int l)
 				{
 					image tmp;
 					hustr file("%s/%s", dir.c_str(), entry->d_name);
-					tmp.SetResource(file);
-					tmp.LoadResource();
+					tmp.Load(file);
 					printf("image_write_to_snap %s\r\n", entry->d_name);
 					image_write_to_snap(&tmp, file);
 				}
