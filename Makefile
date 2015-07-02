@@ -1,6 +1,6 @@
 sinclude .config
-CROSS_COMPILE:=$(compile)
-HOST:=arm-linux
+CROSS_COMPILE?=$(HOME)/usr/arm/arm_linux_4.2/bin/arm-linux-
+HOST?=arm-linux
 
 #CROSS_COMPILE:=
 #HOST:=
