@@ -9,12 +9,12 @@
 typedef Resource_Runtime_Decoder Resource;
 
 #elif defined(CONFIG_RESOURCE_RUNTIME_INDEX)
-#include "Resource_runtime_decoder.h"
-typedef Resource_Runtime_Decoder Resource;
+#include "Resource_runtime_index.h"
+typedef Resource_Runtime_Index Resource;
 
 #elif defined(CONFIG_RESOURCE_RUNTIME_FETCH)
-#include "Resource_runtime_decoder.h"
-typedef Resource_Runtime_Decoder Resource;
+#include "Resource_runtime_fetch.h"
+typedef Resource_Runtime_Fetch Resource;
 
 #else
 #error "!!!dragon!!! Undefined resources management style"
