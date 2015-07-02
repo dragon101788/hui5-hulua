@@ -243,7 +243,16 @@ void element::ParseModifRes(HUMap &m_mp)
 			hustr txt = xmlmp["txt"]->getvalue();
 			int style = (unsigned char) m_mp["style"]->getvalue_int();
 			int size = xmlmp["size"]->getvalue_int();
-
+			/**
+			 * padding_left:左边留白距离
+			 * padding_top:顶部留白距离
+			 * align_center：是否中心对齐
+			 */
+			int align_center=0;
+			int padding_left=xmlmp["padding_left"]->getvalue_int();
+			int padding_top=xmlmp["padding_top"]->getvalue_int();
+			if (xmlmp.exist("align_center"))
+			align_center=xmlmp["align_center"]->getvalue_int();
 
 			text tmpttf;
 			tmpttf.m_font = &font_mp[font];
@@ -252,7 +261,16 @@ void element::ParseModifRes(HUMap &m_mp)
 			tmpttf.color = color;
 			tmpttf.style = style;
 			tmpttf.SetBuffer(cp_width, cp_height);
-			tmpttf.drawText((char *) txt.c_str(), txt.length());
+			if(align_center){
+				padding_left+=(GetWidth()-dst_x)/2-(txt.length())*size/4;
+				padding_left>0?padding_left:0;
+				padding_top+=(GetHeight()-dst_y-size)/2;
+				padding_top>0?padding_top:0;
+				}
+
+			tmpttf.drawText( (char *) txt.c_str(), txt.length(),padding_left,padding_top);
+
+			//tmpttf.drawText((char *) txt.c_str(), txt.length());
 
 			log_d("ParseModifRes text=%s [%s] <%x %x>\r\n",txt.c_str(),font.nstr() ,tmpttf.m_font->face,tmpttf.m_font->ft_Lib);
 			if (!res[name][id]->isNULL())

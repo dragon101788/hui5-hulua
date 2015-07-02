@@ -3,4 +3,6 @@ config  CONTROL_STATIC_TEXT
         bool "static_text Control" 
         help 
 			path=$AUTOPATH
-			<static_text name="ttt" width="300" height="50"  x="150" y="100" red="255" blue="255" green="255" txt="扫描SD中.." size="20" font="song"  lay="11"/> 
+			<static_text name="ttt" width="300" height="50"  x="150" y="100" padding_left=3 padding_top=0 align_center=1 red="255" blue="255" green="255" txt="扫描SD中.." size="20" font="song"  lay="11"/> 
+
+            
