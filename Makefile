@@ -1,6 +1,6 @@
 sinclude .config
-CROSS_COMPILE:=$(HOME)/usr/arm/arm_linux_4.2/bin/arm-linux-
-HOST:=arm-linux
+CROSS_COMPILE?=$(HOME)/usr/arm/arm_linux_4.2/bin/arm-linux-
+HOST?=arm-linux
 
 #CROSS_COMPILE:=
 #HOST:=
@@ -8,24 +8,28 @@ HOST:=arm-linux
 CC=$(CROSS_COMPILE)g++
 STRIP=$(CROSS_COMPILE)strip
 TOPDIR=$(PWD)/
+FREETYPE=$(TOPDIR)/include/freetype2
 CFLAG+= -DLUA_C89_NUMBERS
 CFLAG+=-I$(TOPDIR)
 CFLAG+=-I$(TOPDIR)include
+CFLAG+=-I$(FREETYPE)
 LDFLAG += -L$(TOPDIR)/lib/
 LDFLAG += -lpthread -lc -lgcc -ldl -rdynamic -lrt -lhulua -lreadline -ltermcap
 OUTPUT =../output/
 TARGET = $(OUTPUT)hui
 OBJS_DIR = $(TOPDIR)/objs/
 DRAGON_AUTO = $(TOPDIR)/script/dragon_auto.sh
+
 MCONF = $(TOPDIR)/script/mconf
 CONF = $(TOPDIR)/script/conf
 MKZLIB = $(TOPDIR)/script/mk.zlib.sh
 MKPNGLIB = $(TOPDIR)/script/mk.libpng.sh
 MKICONVLIB = $(TOPDIR)/script/mk.iconv.sh
 MKXML2LIB = $(TOPDIR)/script/mk.xml2.sh
+MKFREETYPELIB = $(TOPDIR)/script/mk.freetype.sh
 HULUA = $(TOPDIR)/libsrc/hulua/
 MKAUTO=Makefile.auto
-BUILTIN_LIB=lib/libpng.a lib/libz.a lib/libiconv.a lib/libxml2.a lib/libhulua.a
+BUILTIN_LIB=lib/libpng.a lib/libz.a lib/libfreetype.a lib/libxml2.a lib/libhulua.a
 MAKE=make CROSS_COMPILE=$(CROSS_COMPILE) CC=$(CC) CFLAG="$(CFLAG)" TOPDIR=$(TOPDIR)
 
 obj-y += hui_hulua.o
@@ -50,9 +54,9 @@ obj-$(CONFIG_TOUCH_EKTF2K) += platfrom/touch_ektf2k.o
 obj-$(CONFIG_TOUCH_NONE) += platfrom/touch_none.o
 
 ifeq ($(CONFIG_USING_FONT),y) 
-	#LDFLAG+=-liconv 
-	obj-y += $(patsubst %.c,%.o,$(wildcard trueType/*.c))
+
 	obj-$(CONFIG_USING_FONT) += ttf_font.o
+	obj-$(CONFIG_USING_FONT) += transcoding.o
 else
 endif 
 
@@ -107,14 +111,15 @@ lib/libpng.a: lib/libz.a
 	rm $(TOPDIR)/bin -rf
 	rm $(TOPDIR)/share -rf
 
-lib/libiconv.a:
-	TOPDIR=$(TOPDIR) HOST=$(HOST) CROSS_COMPILE=$(CROSS_COMPILE) $(MKICONVLIB)
-	rm $(TOPDIR)/bin -rf
-	rm $(TOPDIR)/share -rf
 
 lib/libxml2.a:
 	TOPDIR=$(TOPDIR) HOST=$(HOST) CROSS_COMPILE=$(CROSS_COMPILE) $(MKXML2LIB)
 
+lib/libfreetype.a:
+	TOPDIR=$(TOPDIR) CC=$(CROSS_COMPILE)gcc $(MKFREETYPELIB)
+	rm $(TOPDIR)/bin -rf
+	rm $(TOPDIR)/share -rf
+	
 .PHONY: tools
 tools:
 	$(MAKE) -C tools/

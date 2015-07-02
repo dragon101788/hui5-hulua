@@ -41,7 +41,7 @@ public:
                ttf.color = color;
                ttf.style = style;
                ttf.SetBuffer(GetWidth(), GetHeight());
-               ttf.DrawText("UTF-8", (char *) txt.c_str(), txt.length());
+               ttf.drawText( (char *) txt.c_str(), txt.length());
 
                Flush();
            }
@@ -82,7 +82,7 @@ public:
 		ttf.color = color;
 		ttf.style = style;
 		ttf.SetBuffer(GetWidth(), GetHeight());
-		ttf.DrawText("UTF-8", (char *) txt.c_str(), txt.length());
+		ttf.drawText((char *) txt.c_str(), txt.length());
 
 	}
 	void doRender()

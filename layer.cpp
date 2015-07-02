@@ -251,7 +251,7 @@ void element::ParseModifRes(HUMap &m_mp)
 			tmpttf.color = color;
 			tmpttf.style = style;
 			tmpttf.SetBuffer(cp_width, cp_height);
-			tmpttf.DrawText("UTF-8", (char *) txt.c_str(), txt.length());
+			tmpttf.drawText((char *) txt.c_str(), txt.length());
 
 			log_d("ParseModifRes text=%s [%s] <%x %x>\r\n",txt.c_str(),font.nstr() ,tmpttf.m_font->face,tmpttf.m_font->ft_Lib);
 			if (!res[name][id]->isNULL())

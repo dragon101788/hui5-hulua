@@ -88,7 +88,7 @@ co = coroutine.create(function (path)
     end
 		
 		--os.execute("stty -F /dev/ttyS0 raw speed 115200");
-		require("mcu");
+		require("mcu");//libmcu.so
     mcu:open("/dev/ttyS0");
     i=0;
     for lbuf in file:lines() do
