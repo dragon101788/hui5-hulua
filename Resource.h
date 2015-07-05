@@ -102,39 +102,62 @@ public:
 			}
 			else if (meth == "text")
 			{
-	#ifdef CONFIG_USING_FONT
-				int red = xmlmp["red"]->getvalue_int();
-				int green = xmlmp["green"]->getvalue_int();
-				int blue = xmlmp["blue"]->getvalue_int();
-				int color = (red & 0xff) << 16 | (green & 0xff) << 8 | blue & 0xff;
-				//bkcolor = m_mp["bkcolor"]->getvalue_int();
-				hustr font = xmlmp["font"]->getvalue();
-				hustr txt = xmlmp["txt"]->getvalue();
-				int style = (unsigned char) m_mp["style"]->getvalue_int();
-				int size = xmlmp["size"]->getvalue_int();
+#ifdef CONFIG_USING_FONT
+					int red = xmlmp["red"]->getvalue_int();
+					int green = xmlmp["green"]->getvalue_int();
+					int blue = xmlmp["blue"]->getvalue_int();
+					int color = (red & 0xff) << 16 | (green & 0xff) << 8 | blue & 0xff;
+					//bkcolor = m_mp["bkcolor"]->getvalue_int();
+					hustr font = xmlmp["font"]->getvalue();
+					hustr txt = xmlmp["txt"]->getvalue();
+					int style = (unsigned char) m_mp["style"]->getvalue_int();
+					int size = xmlmp["size"]->getvalue_int();
+					/**
+					 * padding_left:左边留白距离
+					 * padding_top:顶部留白距离
+					 * align_center：是否中心对齐
+					 */
+					int align_center=0;
+					int padding_left=xmlmp["padding_left"]->getvalue_int();
+					int padding_top=xmlmp["padding_top"]->getvalue_int();
+					if (xmlmp.exist("align_center"))
+					align_center=xmlmp["align_center"]->getvalue_int();
+
+					text tmpttf;
+					tmpttf.m_font = &font_mp[font];
+					//log_d("get font_mp %s %x %x\r\n",);
+					tmpttf.fontHeight = size;
+					tmpttf.color = color;
+					tmpttf.style = style;
 
 
-				text tmpttf;
-				tmpttf.m_font = &font_mp[font];
-				//log_d("get font_mp %s %x %x\r\n",);
-				tmpttf.fontHeight = size;
-				tmpttf.color = color;
-				tmpttf.style = style;
-				tmpttf.SetBuffer(cp_width, cp_height);
-				tmpttf.drawText((char *) txt.c_str(), txt.length());
-
-				log_d("ParseModifRes text=%s [%s] <%x %x>\r\n",txt.c_str(),font.nstr() ,tmpttf.m_font->face,tmpttf.m_font->ft_Lib);
 				if (!res[name][id]->isNULL())
 				{
 
-					//ele->image::Render(&file, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
+					image & img = res[name][id].value();
+					tmpttf.SetBuffer(cp_width, cp_height);
+					if (align_center)
+					{
+						padding_left += (img.GetImageWidth() - dst_x) / 2
+								- (txt.length()) * size / 4;
+						padding_left > 0 ? padding_left : 0;
+						padding_top += (img.GetImageHeight() - dst_y - size) / 2;
+						padding_top > 0 ? padding_top : 0;
+					}
 
-					res[name][id]->RenderFrom(&tmpttf, src_x, src_y, cp_width, cp_height,
-							dst_x, dst_y);
+					tmpttf.drawText((char *) txt.c_str(), txt.length(),
+							padding_left, padding_top);
+
+					//tmpttf.drawText((char *) txt.c_str(), txt.length());
+
+					log_d("ParseModifRes text=%s [%s] <%x %x>\r\n",txt.c_str(),font.nstr() ,tmpttf.m_font->face,tmpttf.m_font->ft_Lib);
+
+					res[name][id]->RenderFrom(&tmpttf, src_x, src_y, cp_width,
+							cp_height, dst_x, dst_y);
 					//ele->Render();
 
 				}
-	#endif
+#endif
 			}
 
 		}
