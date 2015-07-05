@@ -817,6 +817,7 @@ public:
 			(**this).second.m_val = key;
 			//return m_val = key;
 		}
+
 		iterator operator[](const char * key)
 		{
 			return (**this).second.Get(key);
@@ -832,6 +833,10 @@ public:
 		T & value()
 		{
 			return (**this).second.m_val;
+		}
+		void fetch(humap & mp)
+		{
+			(**this).second.fetch(mp);
 		}
 		operator humap &()
 		{
@@ -907,9 +912,9 @@ public:
 	    return m_key;
 	}
 	hustr & SetMapName(const char * name)
-        {
-            return m_key = name;
-        }
+	{
+		return m_key = name;
+	}
 	iterator operator[](const char * key)
 	{
 		return Get(key);

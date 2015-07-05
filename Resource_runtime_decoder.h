@@ -44,7 +44,7 @@ public:
                 if (pSrcBuffer != NULL)
                 {
                         debug("destory image pSrcBuffer [%s] %dx%d\r\n", path.c_str(), u32Width, u32Height);
-                        free(pSrcBuffer);
+                        free_memory(pSrcBuffer);
                         pSrcBuffer = NULL;
                 }
         }

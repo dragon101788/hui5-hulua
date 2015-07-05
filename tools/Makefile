@@ -1,15 +1,13 @@
-CC:=arm-linux-g++
-STRIP:=arm-linux-strip
-OUTPUT:=/mnt/hgfs/giant_share/joyoung/output/
+CC:=g++
+CFLAG:=-I../ -I../include
+OUTPUT:=../../output
+SRC:=packres.cpp ../codec.cpp ../hulib.cpp ../platfrom/alpha_soft.cpp ../HumapXML.cpp lib/libpng.a lib/libxml2.a -lpthread -lrt -lz
 
+all: lib/libpng.a lib/libxml2.a
+	$(CC)  $(CFLAG) $(SRC) -o $(OUTPUT)/packres
 
-all:
-	$(CC)  $(CFLAG) updatetime.cpp -o $(OUTPUT)/updatetime
-	$(CC)  $(CFLAG) nl.cpp -o $(OUTPUT)/nl
-	$(CC)  $(CFLAG) p.cpp ../hulib.cpp -o $(OUTPUT)/p -ldl
-	$(CC)  $(CFLAG) g.cpp ../hulib.cpp -o $(OUTPUT)/g -ldl
-	$(CC)  $(CFLAG) getvar.cpp -o $(OUTPUT)/getvar
-	$(CC)  $(CFLAG) line.cpp -o $(OUTPUT)/line
+lib/libpng.a:
+	LIBSRCDIR=$(PWD)/../libsrc TOPDIR=$(PWD)  ../script/mk.libpng.sh 
 
-
-
+lib/libxml2.a:
+	LIBSRCDIR=$(PWD)/../libsrc TOPDIR=$(PWD)  ../script/mk.xml2.sh 

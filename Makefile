@@ -19,7 +19,7 @@ OUTPUT =../output/
 TARGET = $(OUTPUT)hui
 OBJS_DIR = $(TOPDIR)/objs/
 DRAGON_AUTO = $(TOPDIR)/script/dragon_auto.sh
-
+LIBSRCDIR := $(PWD)/libsrc
 MCONF = $(TOPDIR)/script/mconf
 CONF = $(TOPDIR)/script/conf
 MKZLIB = $(TOPDIR)/script/mk.zlib.sh
@@ -59,6 +59,10 @@ ifeq ($(CONFIG_USING_FONT),y)
 	obj-$(CONFIG_USING_FONT) += transcoding.o
 else
 endif 
+
+obj-$(CONFIG_RESOURCE_RUNTIME_INDEX) += Resource_runtime_index.o
+obj-$(CONFIG_RESOURCE_RUNTIME_FETCH) += Resource_runtime_fetch.o
+obj-$(CONFIG_RESOURCE_RUNTIME_DECODER) += Resource_runtime_decoder.o
 
 
 sinclude  $(MKAUTO)
@@ -102,21 +106,21 @@ lib/libhulua.a:
 
 lib/libz.a:
 	@mkdir -p `dirname $@`
-	CROSS_COMPILE=$(CROSS_COMPILE) $(MKZLIB)
+	LIBSRCDIR=$(LIBSRCDIR) CROSS_COMPILE=$(CROSS_COMPILE) $(MKZLIB)
 	rm $(TOPDIR)/bin -rf
 	rm $(TOPDIR)/share -rf
 lib/libpng.a: lib/libz.a
 	@mkdir -p `dirname $@`
-	TOPDIR=$(TOPDIR) HOST=$(HOST) CROSS_COMPILE=$(CROSS_COMPILE) $(MKPNGLIB)
+	LIBSRCDIR=$(LIBSRCDIR) TOPDIR=$(TOPDIR) HOST=$(HOST) CROSS_COMPILE=$(CROSS_COMPILE) $(MKPNGLIB)
 	rm $(TOPDIR)/bin -rf
 	rm $(TOPDIR)/share -rf
 
 
 lib/libxml2.a:
-	TOPDIR=$(TOPDIR) HOST=$(HOST) CROSS_COMPILE=$(CROSS_COMPILE) $(MKXML2LIB)
+	LIBSRCDIR=$(LIBSRCDIR) TOPDIR=$(TOPDIR) HOST=$(HOST) CROSS_COMPILE=$(CROSS_COMPILE) $(MKXML2LIB)
 
 lib/libfreetype.a:
-	TOPDIR=$(TOPDIR) CC=$(CROSS_COMPILE)gcc $(MKFREETYPELIB)
+	LIBSRCDIR=$(LIBSRCDIR) TOPDIR=$(TOPDIR) HOST=$(HOST) CC=$(CROSS_COMPILE)gcc $(MKFREETYPELIB)
 	rm $(TOPDIR)/bin -rf
 	rm $(TOPDIR)/share -rf
 	

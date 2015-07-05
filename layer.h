@@ -16,7 +16,7 @@ class xmlproc;
 
 #define luacmd_is(name) (strncmp(cmd,name,strlen(name))==0&&(cmd = cmd+strlen(name)))
 
-class element: virtual public element_base,public schedule_ele, public image,virtual public Mutex
+class element: virtual public element_base,public schedule_ele, public image,public ResourceContainer,virtual public Mutex
 {
 public:
 	//HUMap m_mp;
@@ -62,7 +62,6 @@ public:
 
 	void FlushConfig(HUMap &m_mp);
 
-	void ParseModifRes(HUMap &m_mp);
 
 	template<typename T>
         static void lua_instal(lua_State* L)
@@ -265,32 +264,7 @@ public:
 			(*it)->deleb(this);
 		}
 	}
-	void SetRes(const char * name,int id, const char * path)
-	{
-		if (res[name][id]->path != path || res[name][id]->isNULL())
-		{
-			//printf("SetRes %d %s\r\n",id,path);
-		      res[name][id]->SetResource(path);
-		}
-	}
-	void SetRes(const char * name, const char * path)
-        {
-                if (res[name]->path != path || res[name]->isNULL())
-                {
-                        //printf("SetRes %d %s\r\n",id,path);
-                      res[name]->SetResource(path);
-                }
-        }
-	image * GetRes(const char * name)
-	{
-	    res[name].value().LoadResource();
-	    return &res[name].value();
-	}
-	image * GetRes(const char * name,int id)
-        {
-	    res[name][id].value().LoadResource();
-	    return &res[name][id].value();
-        }
+
 
 
 
@@ -299,7 +273,7 @@ public:
 
 	element_manager * m_mgr;
 
-	humap<Resource> res;
+
 	//schedule_draw * mgr;
 	list<element *> et;					//�ϲ�ؼ�
 	list<element *> eb;					//�ײ�ؼ�
