@@ -173,7 +173,7 @@ public:
 
 		if (pSrcBuffer != NULL)
 		{
-			debug("destory image pSrcBuffer [%s] %dx%d\r\n", path.c_str(), u32Width, u32Height);
+			debug("destory image pSrcBuffer %dx%d\r\n", u32Width, u32Height);
 			free_memory(pSrcBuffer);
 			pSrcBuffer = NULL;
 			SrcSize = 0;

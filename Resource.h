@@ -82,7 +82,7 @@ public:
 
 				log_d(
 						"$$$HU$$$ XML Draw Render %s to %s res=%d %d %d %d %d %d %d\r\n",
-						file.path.c_str(), GetName(), id, src_x, src_y, cp_width,
+						xmlmp["file"]->getvalue(), name, id, src_x, src_y, cp_width,
 						cp_height, dst_x, dst_y);
 
 				if (!res[name][id]->isNULL())

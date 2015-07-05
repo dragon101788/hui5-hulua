@@ -24,50 +24,60 @@ public:
 
 	}
 
-        void subTouch()
-        {
-          touch_sample tp;
-          tp.x = x_pos + GetTouchX();
-          tp.y = y_pos + GetTouchY();
-          tp.pressure = GetTouchP();
-          touch_proc_event(&tp);
-        }
+	void subTouch()
+	{
+		lock();
+		touch_sample tp;
+		tp.x = x_pos + GetTouchX();
+		tp.y = y_pos + GetTouchY();
+		tp.pressure = GetTouchP();
+		touch_proc_event(&tp);
+		unlock();
+	}
 
 	void doTouchDown()
-        {
-	        subTouch();
+	{
+		lock();
+		subTouch();
 
-                Flush();
-        }
+		Flush();
 
-        void doTouchUp()
-        {
+		unlock();
+	}
 
-                subTouch();
+	void doTouchUp()
+	{
+		lock();
 
-                 x_pos-=move_x();
-                 y_pos-=move_y();
+		subTouch();
 
-                 printf("x_pos=%d y_pos=%d\n",x_pos,y_pos);
-                 if(y_pos < 0)
-                    y_pos = 0;
-                 if(y_pos>res.GetImageHeight() - GetHeight())
-                 {
-                      y_pos= res.GetImageHeight() - GetHeight();
-                 }
+		x_pos -= move_x();
+		y_pos -= move_y();
 
-                if(x_pos < 0)
-                   x_pos = 0;
-                if(x_pos>res.GetImageWidth() - GetWidth())
-                {
-                     x_pos= res.GetImageWidth() - GetWidth();
-                }
-                Flush();
-        }
+		printf("x_pos=%d y_pos=%d\n", x_pos, y_pos);
+		if (y_pos < 0)
+			y_pos = 0;
+		if (y_pos > res.GetImageHeight() - GetHeight())
+		{
+			y_pos = res.GetImageHeight() - GetHeight();
+		}
+
+		if (x_pos < 0)
+			x_pos = 0;
+		if (x_pos > res.GetImageWidth() - GetWidth())
+		{
+			x_pos = res.GetImageWidth() - GetWidth();
+		}
+		Flush();
+
+		unlock();
+	}
 
         void doTouchMove()
         {
+        	lock();
             Flush();
+            unlock();
         }
 
         void doTouchActive()
@@ -141,19 +151,21 @@ public:
 	    res.SetBuffer(GetWidth(),GetHeight());
 	    ParseXML(mp);
 
-            //printf("lua=[%s]\n",mp.m_val.nstr());
-            lua.dostring(mp.MapValue());
+		//printf("lua=[%s]\n",mp.m_val.nstr());
+		lua.dostring(mp.MapValue());
 
 	}
 	void doRender()
 	{
 	    //printf("RenderFrom %d %d %d %d\n",GetWidth(), GetHeight(), x_pos+move_x(), y_pos+move_y());
 	    //RenderFrom(&res,-(x_pos+move_x()), -(y_pos+move_y()), res.GetImageWidth(),res.GetImageHeight(), 0,0);
+		lock();
 	    int resx = x_pos-move_x();
 	    int resy = y_pos-move_y();
 	    //printf("resx=%d resy=%d\n",resx,resy);
 	    res.RenderTo(this, resx, resy, GetWidth(), GetHeight(), 0, 0);
-
+	    unlock();
+	    printf("Dragframe doRender OK\n");
 	}
 
 	//AreaCopyFrom 被外部绘图逻辑占用，此处不能继承
@@ -166,8 +178,8 @@ public:
             res.AreaCopyFrom(src_img,src_x,src_y,cp_width,cp_height,dst_x,dst_y);
             //res.SaveResource(hustr("res%d.png",b++));
             res.unlock();
+            Flush();
 	   unlock();
-	   Flush();
 	}
 	int id;
 	int x_pos;

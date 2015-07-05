@@ -39,6 +39,7 @@ public:
 	{
 		log_d("$$$HU$$$ Render_layer::[%s]\r\n", GetName());
 		Render();
+		log_d("$$$HU$$$ Render_layer::[%s] OK\r\n", GetName());
 	}
 	element()
 	{
@@ -64,10 +65,10 @@ public:
 
 
 	template<typename T>
-        static void lua_instal(lua_State* L)
-        {
-              hulua::class_def<T>(L, "flush", &element::Flush);
-        }
+	static void lua_instal(lua_State* L)
+	{
+		  hulua::class_def<T>(L, "flush", &element::Flush);
+	}
 
 	virtual void doEleLuaCommand(const char * cmd) {};
 

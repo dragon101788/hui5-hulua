@@ -123,37 +123,41 @@ void element::Render()
 	lock();
 
 
-	if(m_parent)
-        {
-	    if (GetHide() == 0)
-            {
-                 doRender();
-            }
-	    else
-            {
-                    log_d("Render %s hide\r\n", GetName());
-            }
-	    //printf("draw %s parent %s  %d %d %d %d\n",m_parent->GetName(),GetName(),GetWidth(), GetHeight(), GetX(), GetY());
-	    m_parent->RenderFrom(this, 0, 0, GetWidth(), GetHeight(), GetX(), GetY());//控件输出到父亲
-	    //m_parent->Flush();
-        }
+	if (m_parent)
+	{
+		m_parent->lock();
+		if (GetHide() == 0)
+		{
+			log_d("%s doRender",GetName());
+			doRender();
+		}
+		else
+		{
+			log_d("Render %s hide\r\n", GetName());
+		}
+		//printf("draw %s parent %s  %d %d %d %d\n",m_parent->GetName(),GetName(),GetWidth(), GetHeight(), GetX(), GetY());
+		m_parent->RenderFrom(this, 0, 0, GetWidth(), GetHeight(), GetX(), GetY());	//控件输出到父亲
+		m_parent->unlock();
+		//m_parent->Flush();
+	}
 	else
-        {
-	    RenderEB();
+	{
+		RenderEB();
 
-            if (GetHide() == 0)
-            {
-                    doRender();
-            }
-            else
-            {
-                    log_d("Render %s hide\r\n", GetName());
-            }
-	    //printf("draw %s %d %d %d %d\n",GetName(),GetWidth(), GetHeight(), GetX(), GetY());
-            m_proc->Draw(this, 0, 0, GetWidth(), GetHeight(), GetX(), GetY());//控件输出到容器
+		if (GetHide() == 0)
+		{
+			log_d("%s doRender",GetName());
+			doRender();
+		}
+		else
+		{
+			log_d("Render %s hide\r\n", GetName());
+		}
+		//printf("draw %s %d %d %d %d\n",GetName(),GetWidth(), GetHeight(), GetX(), GetY());
+		m_proc->Draw(this, 0, 0, GetWidth(), GetHeight(), GetX(), GetY());//控件输出到容器
 
-            RenderET();
-        }
+		RenderET();
+	}
 
 	unlock();
 }
