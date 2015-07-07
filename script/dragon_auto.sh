@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 FILTER='libsrc|test'
 AUTOMK=${PWD}/Makefile.auto
 AUTOKC=${PWD}/Kconfig.auto
@@ -12,7 +13,7 @@ fi
 
 myfunc()
 {
-	for x in $(find .|grep -Ev ${FILTER}|grep Makefile.in)
+		for x in $(find $1|grep -Ev ${FILTER}|grep Makefile.in)
         do
                 if [ -f "$x" ];then
 			#echo $x insert ${AUTOMK}
@@ -23,7 +24,7 @@ myfunc()
         done
 
 
-        for x in $(find .|grep -Ev ${FILTER} |grep Kconfig.in)
+        for x in $(find $1|grep -Ev ${FILTER} |grep Kconfig.in)
         do
 		if [ -f "$x" ];then
 			#echo $x insert ${AUTOMK}
@@ -35,7 +36,17 @@ myfunc()
         done
 }
 
+for dir in $(ls -d ${TOPDIR}/*/ |grep -Ev "widget| bjs|lib|libsrcXsamples" )
+do
+	myfunc $dir
+done
 
-myfunc
+
+echo 'comment "------------Dragon Widget Configuretion---------"' >>${AUTOKC}
+
+#echo 'menu "HUI widget Option"' >>${AUTOKC}
+myfunc ${TOPDIR}/widget
+#echo 'endmenu' >>${AUTOKC}
+
 #cat ${AUTOMK}
 #cat ${AUTOKC}

@@ -60,9 +60,6 @@ ifeq ($(CONFIG_USING_FONT),y)
 else
 endif 
 
-obj-$(CONFIG_RESOURCE_RUNTIME_INDEX) += Resource_runtime_index.o
-obj-$(CONFIG_RESOURCE_RUNTIME_FETCH) += Resource_runtime_fetch.o
-obj-$(CONFIG_RESOURCE_RUNTIME_DECODER) += Resource_runtime_decoder.o
 
 
 sinclude  $(MKAUTO)
@@ -95,7 +92,7 @@ all: .config $(BUILTIN_LIB) dragon_auto $(DEPS) $(OBJS) dirobjs
 
 .PHONY: dragon_auto
 dragon_auto:
-	@$(DRAGON_AUTO)
+	@TOPDIR=$(TOPDIR) $(DRAGON_AUTO)
 
 lib/libhulua.a:
 	echo build hulib
@@ -137,7 +134,7 @@ dirobjs:
 	@for dir in $(dir-y);do echo build $$dir ;$(MAKE) -s -C $$dir built-in.o;done
 
 $(MKAUTO):
-	@$(DRAGON_AUTO)
+	@TOPDIR=$(TOPDIR) $(DRAGON_AUTO)
 
 $(MCONF) : 
 	make OUTDIR=$(dir $@) -C script/kconfig
