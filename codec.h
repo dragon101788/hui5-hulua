@@ -168,7 +168,7 @@ public:
 		free(buf);
 	}
 
-	void destroy()
+	virtual void destroy()
 	{
 
 		if (pSrcBuffer != NULL)
@@ -224,10 +224,10 @@ public:
 		//path.format("SetBuffer-%dx%d",width,height);
 		lock();
 
-		if(width * height == 0)
-                {
-		    log_w("undefined width height is zero\n");
-                }
+		if (width * height == 0)
+		{
+			log_w("undefined width height is zero\n");
+		}
 
 		int dep = 4;
 
@@ -321,51 +321,44 @@ public:
 	}
 
 	virtual void RenderTo(image * img, int x, int y)
-        {
+	{
 
-                Render_img_to_img(img,this, 0, 0, img->u32Width, img->u32Height, x, y);
-        }
+		Render_img_to_img(img, this, 0, 0, img->u32Width, img->u32Height, x, y);
+	}
 
-	virtual void RenderTo(image * dst_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
-        {
-                ProcArea(dst_img, this, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
-                Render_img_to_img(dst_img, this, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
-        }
+	virtual void RenderTo(image * dst_img, int src_x, int src_y, int cp_width,
+			int cp_height, int dst_x, int dst_y)
+	{
+		ProcArea(dst_img, this, src_x, src_y, cp_width, cp_height, dst_x,
+				dst_y);
+		Render_img_to_img(dst_img, this, src_x, src_y, cp_width, cp_height,
+				dst_x, dst_y);
+	}
 
 	virtual void AreaCopyFrom(image * img, int x, int y)
-        {
-                ::AreaCopy(this , img, 0, 0, img->u32Width, img->u32Height, x, y);
-        }
-	virtual void AreaCopyFrom(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
-        {
+	{
+		::AreaCopy(this, img, 0, 0, img->u32Width, img->u32Height, x, y);
+	}
+	virtual void AreaCopyFrom(image * src_img, int src_x, int src_y,
+			int cp_width, int cp_height, int dst_x, int dst_y)
+	{
 
-                ::AreaCopy(this, src_img, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
-        }
+		::AreaCopy(this, src_img, src_x, src_y, cp_width, cp_height, dst_x,
+				dst_y);
+	}
 
 	virtual void AreaCopyTo(image * img, int x, int y)
-        {
-                ::AreaCopy(img,this, 0, 0, img->u32Width, img->u32Height, x, y);
-        }
-	virtual void AreaCopyTo(image * dst_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
-        {
+	{
+		::AreaCopy(img, this, 0, 0, img->u32Width, img->u32Height, x, y);
+	}
+	virtual void AreaCopyTo(image * dst_img, int src_x, int src_y, int cp_width,
+			int cp_height, int dst_x, int dst_y)
+	{
 
-                ::AreaCopy(dst_img , this, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
-        }
+		::AreaCopy(dst_img, this, src_x, src_y, cp_width, cp_height, dst_x,
+				dst_y);
+	}
 
-//	int SetConfig(const char * key,const char * value)
-//	{
-//		if(strcasecmp(key,"alpha")==0)
-//		{
-//			stransformation.colorMultiplier.i16Alpha = strtoul(value,NULL,10);
-//		}
-//		else
-//		{
-//			return -1;
-//		}
-//		return 0;
-//	}
-
-//	
 	image()
 	{
 

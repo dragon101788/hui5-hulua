@@ -165,7 +165,6 @@ public:
 	    //printf("resx=%d resy=%d\n",resx,resy);
 	    res.RenderTo(this, resx, resy, GetWidth(), GetHeight(), 0, 0);
 	    unlock();
-	    printf("Dragframe doRender OK\n");
 	}
 
 	//AreaCopyFrom 被外部绘图逻辑占用，此处不能继承

@@ -1,12 +1,10 @@
 #include "HumapXML.h"
 
 #include <errno.h>
-#include "xmlproc.h"
 
 
 #include<libxml/parser.h>
 #include<libxml/tree.h>
-int ParseXMLFrom_Instan(hustr name, HUMap & xmlmp, xmlproc * xml);
 
 //#define DEBUG_PARSE_XML
 #ifdef DEBUG_PARSE_XML

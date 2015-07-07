@@ -48,6 +48,14 @@ public:
                         pSrcBuffer = NULL;
                 }
         }
+
+        //外来资源绘制到这个资源上
+        virtual void RenderResFrom(image * src_img, int src_x, int src_y,
+        				int cp_width, int cp_height, int dst_x, int dst_y)
+		{
+
+			RenderFrom(src_img,src_x,src_y,cp_width,cp_height,dst_x,dst_y);
+		}
 };
 
 

@@ -8,7 +8,7 @@ int ResourceRuntimeIndexManager::IndexResource(const char * path,Resource_Runtim
 {
 	if(m_index.find(path)==m_index.end())
 	{////未找到资源 解码并且写入文件 加入map
-		errexitf("res file can't find %s\n",path);
+		return -1;
 	}
 	img->pSrcBuffer = m_resbuf + m_index[path]["offset"]->getvalue_int();
 	img->u32Width = m_index[path]["width"]->getvalue_int();

@@ -16,6 +16,11 @@ void huErrExit(char const* str)
 	fprintf(stderr,"%s",str);
 	exit(-1);
 }
+void errexit(char const* str)
+{
+	fprintf(stderr,"%s",str);
+	exit(-1);
+}
 void Dir(hustr dir, int l)
 {
 	DIR *dp;

@@ -19,7 +19,6 @@ void hui_exit(const char * cmd);
 void JumpToFile(const char * jump, const char * snap);
 
 extern DebugTimer fps;
-extern int debug_timer_count;
 
 
 //
@@ -137,11 +136,10 @@ public:
 		{
 			//printf("%s RenderFromBuffer\r\n",filename.c_str());
 			out.RenderToFramebuffer(&fb);
-			if(debug_timer_count)
-			{
-			    fps.debug_timer("<fps>");
-			    debug_timer_count--;
-			}
+
+//#ifdef CONFIG_DEBUG_FPS
+			  fps.debug_timer("<fps>");
+//#endif
 			isDraw = 0;
 		}
 		unlock();

@@ -90,7 +90,7 @@ public:
 
 					//ele->image::Render(&file, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
 
-					res[name][id]->RenderFrom(&file, src_x, src_y, cp_width, cp_height, dst_x,
+					res[name][id]->RenderResFrom(&file, src_x, src_y, cp_width, cp_height, dst_x,
 							dst_y);
 					//ele->Render();
 
@@ -152,7 +152,7 @@ public:
 
 					log_d("ParseModifRes text=%s [%s] <%x %x>\r\n",txt.c_str(),font.nstr() ,tmpttf.m_font->face,tmpttf.m_font->ft_Lib);
 
-					res[name][id]->RenderFrom(&tmpttf, src_x, src_y, cp_width,
+					res[name][id]->RenderResFrom(&tmpttf, src_x, src_y, cp_width,
 							cp_height, dst_x, dst_y);
 					//ele->Render();
 

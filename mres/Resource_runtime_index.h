@@ -3,7 +3,6 @@
 
 #include <sys/mman.h>
 
-#define RESOURCE_NAME "hui.res"
 //#define RESOURCE_DEFSIZE (1024*1024*16)   //16M
 
 #define RESOURCE_PATH_MAX_SIZE		256
@@ -30,30 +29,36 @@ public:
 
 		HumapFromXmlFile("./hu.res.xml",m_mp);
 
-		for(HUMap::iterator it = m_mp.begin();it!=m_mp.end();++it)
+		for (HUMap::iterator it = m_mp.begin(); it != m_mp.end(); ++it)
 		{
-				HUMap & mp = it;
-				const char * name = mp["name"]->getvalue();
-				m_index[name] = it;
-				//printf("%s %s\n",it.key().nstr(),it.value().nstr());
+			HUMap & mp = it;
+			const char * name = mp["name"]->getvalue();
+			m_index[name] = it;
+			//printf("%s %s\n",it.key().nstr(),it.value().nstr());
 		}
 
-		m_fd = open(RESOURCE_NAME, O_RDONLY|O_CREAT,0666);
+		m_fd = open("./hu.res", O_RDONLY | O_CREAT, 0666);
 		if (m_fd == -1)
 		{
-			errexitf("### Error: cannot init ResourceRuntimeIndexManager, returns %d\n", m_fd);
+			errexitf(
+					"### Error: cannot init ResourceRuntimeIndexManager, returns %d\n",
+					m_fd);
 		}
-		lseek(m_fd, 0 ,SEEK_END);
+		lseek(m_fd, 0, SEEK_END);
 		int size = lseek(m_fd, 0, SEEK_CUR);
-		if(size != 0)
+		if (size != 0)
 		{
-			m_resbuf = (char *)mmap(NULL, size, PROT_READ , MAP_SHARED, m_fd, 0);
+			m_resbuf = (char *) mmap(NULL, size, PROT_READ, MAP_SHARED, m_fd,
+					0);
 			if (m_resbuf == MAP_FAILED)
 			{
-				errexitf("### Error: failed to map ResourceRuntimeIndexManager to memory %d: %s\n",size ,strerror(errno));
+				errexitf(
+						"### Error: failed to map ResourceRuntimeIndexManager to memory %d: %s\n",
+						size, strerror(errno));
 			}
 			m_size = size;
-			printf("ResourceRuntimeIndexManager mmap 0x%p %ld\n",m_resbuf,m_size);
+			printf("ResourceRuntimeIndexManager mmap 0x%p %ld\n", m_resbuf,
+					m_size);
 		}
 	}
 	~ResourceRuntimeIndexManager()
@@ -80,31 +85,26 @@ extern ResourceRuntimeIndexManager resmgr;
 
 class Resource_Runtime_Index :public image
 {
-private:
-		void ReSetResource(const char * filepath)
-		{
-			if (path != filepath)
-			{
-				path = filepath;
-				codec_to_Image(this, path.c_str());
-			}
-		}
-public:
-        hustr path;
-        friend class ResourceRuntimeIndexManager;
 
-        virtual void * alloc_memory(size_t size)
+public:
+		virtual ~Resource_Runtime_Index()
 		{
-        	printf("$$$HU$$$ Resource_Runtime_Index alloc_memory\n");
+
+		}
+		virtual void * alloc_memory(size_t size)
+		{
+			//return malloc(size);
 		}
 		virtual void free_memory(void * buf)
 		{
-			printf("$$$HU$$$ Resource_Runtime_Index free_memory\n");
+			//free(buf);
 		}
-
+        hustr path;
+        friend class ResourceRuntimeIndexManager;
         void SetResource(const char * filepath)
         {
                 //printf("SetResource %s\r\n",filepath);
+
                 if (path != filepath)
                 {
                         destroy();
@@ -119,22 +119,49 @@ public:
                 }
                 if (path.empty())
                 {
-                        errexitf("warning LoadResource empty path\r\n");
+                        debug("warning LoadResource empty path\r\n");
+                        return -1;
                 }
-                resmgr.IndexResource(path,this);
-                return 0;//codec_to_Image(this, path.nstr());//装载图片
+                if(resmgr.IndexResource(path,this) < 0)
+                {
+                	log_w("can't find Packres %s\n");
+                	codec_to_Image(this, path.nstr());//装载图片
+                }
+                return 0;
+        }
+        void ReSetResource(const char * filepath)
+        {
+                if (path != filepath)
+                {
+                        path = filepath;
+                        codec_to_Image(this, path.c_str());
+                }
         }
 
+        //控件手动释放内容，一般可能会用在动画控件上
         //释放空间并不改变其他内容
         virtual void Free()
         {
                 if (pSrcBuffer != NULL)
                 {
                         debug("destory image pSrcBuffer [%s] %dx%d\r\n", path.c_str(), u32Width, u32Height);
-                        free_memory(pSrcBuffer);
+                        //free(pSrcBuffer);
                         pSrcBuffer = NULL;
                 }
         }
+
+        //外来资源绘制到这个资源上
+		virtual void RenderResFrom(image * src_img, int src_x, int src_y,
+				int cp_width, int cp_height, int dst_x, int dst_y)
+		{
+			return;
+			RenderFrom(src_img,src_x,src_y,cp_width,cp_height,dst_x,dst_y);
+		}
+
+		virtual void destroy()
+		{
+
+		}
 };
 
 

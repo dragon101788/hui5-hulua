@@ -5,7 +5,6 @@
 
 DebugTimer fps;
 pXmlproc g_cur_xml;
-int debug_timer_count=0;
 //ProcTimer g_exec;
 
 

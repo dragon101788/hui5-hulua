@@ -51,6 +51,8 @@ config LOG_W
 	bool "enable log_w"
 config LOG_E
 	bool "enable log_e"
+config DEBUG_FPS
+	bool "debug fps"
 
 config DUMPSTACK_DEBUG
 	bool "enable DUMPSTACK_DEBUG"

@@ -761,7 +761,7 @@ public:
 	{
 		int usetime = GetTickCount() - oldtime;
 		if (str != NULL)
-			debug("debug_timer [%s] %dfps/S fps/%dms\r\n", str,
+			printf("debug_timer [%s] %dfps/S fps/%dms\r\n", str,
 					usetime ? 1000 / usetime : 1000, usetime);
 		oldtime = GetTickCount();
 	}

@@ -5,10 +5,6 @@
 LUA lua;
 
 
-static void set_debug_timer(int cnt)
-{
-    debug_timer_count = cnt;
-}
 
 LUA::LUA()
 {
@@ -60,7 +56,6 @@ int LUA::init()
          luaL_openlibs(L);  /* open standard libraries */
 
  hulua::def(L, "_ALERT", LUA::show_error);
- hulua::def(L, "debug_timer", set_debug_timer);
  hulua::def(L, "jump", Jump);
  hulua::def(L, "import_xml",import_xml);
  unlock();
