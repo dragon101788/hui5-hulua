@@ -6,7 +6,7 @@
 #include "schedule.h"
 #include <deque>
 #include <set>
-
+#include "Resource.h"
 #include "element_base.h"
 using namespace std;
 
@@ -16,7 +16,7 @@ class xmlproc;
 
 #define luacmd_is(name) (strncmp(cmd,name,strlen(name))==0&&(cmd = cmd+strlen(name)))
 
-class element: virtual public element_base,public schedule_ele, public image,virtual public Mutex
+class element: virtual public element_base,public schedule_ele, public image,public ResourceContainer,virtual public Mutex
 {
 public:
 	//HUMap m_mp;
@@ -39,6 +39,7 @@ public:
 	{
 		log_d("$$$HU$$$ Render_layer::[%s]\r\n", GetName());
 		Render();
+		log_d("$$$HU$$$ Render_layer::[%s] OK\r\n", GetName());
 	}
 	element()
 	{
@@ -62,13 +63,12 @@ public:
 
 	void FlushConfig(HUMap &m_mp);
 
-	void ParseModifRes(HUMap &m_mp);
 
 	template<typename T>
-        static void lua_instal(lua_State* L)
-        {
-              hulua::class_def<T>(L, "flush", &element::Flush);
-        }
+	static void lua_instal(lua_State* L)
+	{
+		  hulua::class_def<T>(L, "flush", &element::Flush);
+	}
 
 	virtual void doEleLuaCommand(const char * cmd) {};
 
@@ -122,7 +122,6 @@ public:
 
                 //printf("%s SetBuffer width=%d height=%d\r\n", name.c_str(), width, height);
                 SetBuffer(GetWidth(), GetHeight());
-                path.format("ele-%s %dx%d", GetName(), GetWidth(), GetHeight());
 
 		initstack();
 	}
@@ -266,30 +265,7 @@ public:
 			(*it)->deleb(this);
 		}
 	}
-	void SetRes(const char * name,int id, const char * path)
-	{
-		if (res[name][id]->path != path || res[name][id]->isNULL())
-		{
-			//printf("SetRes %d %s\r\n",id,path);
-		      res[name][id]->SetResource(path);
-		}
-	}
-	void SetRes(const char * name, const char * path)
-        {
-                if (res[name]->path != path || res[name]->isNULL())
-                {
-                        //printf("SetRes %d %s\r\n",id,path);
-                      res[name]->SetResource(path);
-                }
-        }
-	image * GetRes(const char * name)
-	{
-	    return &res[name].value();
-	}
-	image * GetRes(const char * name,int id)
-        {
-	    return &res[name][id].value();
-        }
+
 
 
 
@@ -298,7 +274,7 @@ public:
 
 	element_manager * m_mgr;
 
-	humap<image> res;
+
 	//schedule_draw * mgr;
 	list<element *> et;					//�ϲ�ؼ�
 	list<element *> eb;					//�ײ�ؼ�

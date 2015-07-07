@@ -123,37 +123,41 @@ void element::Render()
 	lock();
 
 
-	if(m_parent)
-        {
-	    if (GetHide() == 0)
-            {
-                 doRender();
-            }
-	    else
-            {
-                    log_d("Render %s hide\r\n", GetName());
-            }
-	    //printf("draw %s parent %s  %d %d %d %d\n",m_parent->GetName(),GetName(),GetWidth(), GetHeight(), GetX(), GetY());
-	    m_parent->RenderFrom(this, 0, 0, GetWidth(), GetHeight(), GetX(), GetY());//控件输出到父亲
-	    //m_parent->Flush();
-        }
+	if (m_parent)
+	{
+		m_parent->lock();
+		if (GetHide() == 0)
+		{
+			log_d("%s doRender",GetName());
+			doRender();
+		}
+		else
+		{
+			log_d("Render %s hide\r\n", GetName());
+		}
+		//printf("draw %s parent %s  %d %d %d %d\n",m_parent->GetName(),GetName(),GetWidth(), GetHeight(), GetX(), GetY());
+		m_parent->RenderFrom(this, 0, 0, GetWidth(), GetHeight(), GetX(), GetY());	//控件输出到父亲
+		m_parent->unlock();
+		//m_parent->Flush();
+	}
 	else
-        {
-	    RenderEB();
+	{
+		RenderEB();
 
-            if (GetHide() == 0)
-            {
-                    doRender();
-            }
-            else
-            {
-                    log_d("Render %s hide\r\n", GetName());
-            }
-	    //printf("draw %s %d %d %d %d\n",GetName(),GetWidth(), GetHeight(), GetX(), GetY());
-            m_proc->Draw(this, 0, 0, GetWidth(), GetHeight(), GetX(), GetY());//控件输出到容器
+		if (GetHide() == 0)
+		{
+			log_d("%s doRender",GetName());
+			doRender();
+		}
+		else
+		{
+			log_d("Render %s hide\r\n", GetName());
+		}
+		//printf("draw %s %d %d %d %d\n",GetName(),GetWidth(), GetHeight(), GetX(), GetY());
+		m_proc->Draw(this, 0, 0, GetWidth(), GetHeight(), GetX(), GetY());//控件输出到容器
 
-            RenderET();
-        }
+		RenderET();
+	}
 
 	unlock();
 }
@@ -180,117 +184,8 @@ void element::FlushConfig(HUMap &mp)
 	unlock();
 }
 
-void element::ParseModifRes(HUMap &m_mp)
-{
-	for (int i = 0; i < m_mp.count("res"); ++i)
-	{
-		HUMap  xmlmp = m_mp["res"][i];
-		hustr meth = xmlmp["meth"]->getvalue();
-		const char * name = xmlmp["name"]->getvalue();
-		if(strlen(name)==0)
-		  errexitf("ModifRes %s unknown name\n",GetName());
-		int id = xmlmp["id"]->getvalue_int();
-		int src_x = xmlmp["src_x"]->getvalue_int();
-		int src_y = xmlmp["src_y"]->getvalue_int();
-		int cp_width = xmlmp["cp_width"]->getvalue_int();
-		int cp_height = xmlmp["cp_height"]->getvalue_int();
-		int dst_x = xmlmp["dst_x"]->getvalue_int();
-		int dst_y = xmlmp["dst_y"]->getvalue_int();
 
-		res[name][id]->LoadResource();
-		if (cp_width + cp_height == 0)
-		{
-			cp_width = res[name][id]->GetImageWidth();
-			cp_height = res[name][id]->GetImageHeight();
-		}
-		if (meth == "render")
-		{
-			image file;
-			file.SetResource(xmlmp["file"]->getvalue());
-			file.LoadResource();
 
-			log_d(
-					"$$$HU$$$ XML Draw Render %s to %s res=%d %d %d %d %d %d %d\r\n",
-					file.path.c_str(), GetName(), id, src_x, src_y, cp_width,
-					cp_height, dst_x, dst_y);
-
-			if (!res[name][id]->isNULL())
-			{
-
-				//ele->image::Render(&file, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
-				lock();
-
-				res[name][id]->RenderFrom(&file, src_x, src_y, cp_width, cp_height, dst_x,
-						dst_y);
-				//ele->Render();
-				unlock();
-
-			}
-			else
-			{
-				errexitf("%s res %d no init\r\n", GetName(), id);
-			}
-		}
-		else if (meth == "text")
-		{
-#ifdef CONFIG_USING_FONT
-			int red = xmlmp["red"]->getvalue_int();
-			int green = xmlmp["green"]->getvalue_int();
-			int blue = xmlmp["blue"]->getvalue_int();
-			int color = (red & 0xff) << 16 | (green & 0xff) << 8 | blue & 0xff;
-			//bkcolor = m_mp["bkcolor"]->getvalue_int();
-			hustr font = xmlmp["font"]->getvalue();
-			hustr txt = xmlmp["txt"]->getvalue();
-			int style = (unsigned char) m_mp["style"]->getvalue_int();
-			int size = xmlmp["size"]->getvalue_int();
-			/**
-			 * padding_left:左边留白距离
-			 * padding_top:顶部留白距离
-			 * align_center：是否中心对齐
-			 */
-			int align_center=0;
-			int padding_left=xmlmp["padding_left"]->getvalue_int();
-			int padding_top=xmlmp["padding_top"]->getvalue_int();
-			if (xmlmp.exist("align_center"))
-			align_center=xmlmp["align_center"]->getvalue_int();
-
-			text tmpttf;
-			tmpttf.m_font = &font_mp[font];
-			//log_d("get font_mp %s %x %x\r\n",);
-			tmpttf.fontHeight = size;
-			tmpttf.color = color;
-			tmpttf.style = style;
-			tmpttf.SetBuffer(cp_width, cp_height);
-			if(align_center){
-				padding_left+=(GetWidth()-dst_x)/2-(txt.length())*size/4;
-				padding_left>0?padding_left:0;
-				padding_top+=(GetHeight()-dst_y-size)/2;
-				padding_top>0?padding_top:0;
-				}
-
-			tmpttf.drawText( (char *) txt.c_str(), txt.length(),padding_left,padding_top);
-
-			//tmpttf.drawText((char *) txt.c_str(), txt.length());
-
-			log_d("ParseModifRes text=%s [%s] <%x %x>\r\n",txt.c_str(),font.nstr() ,tmpttf.m_font->face,tmpttf.m_font->ft_Lib);
-			if (!res[name][id]->isNULL())
-			{
-
-				//ele->image::Render(&file, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
-				lock();
-
-				res[name][id]->RenderFrom(&tmpttf, src_x, src_y, cp_width, cp_height,
-						dst_x, dst_y);
-				//ele->Render();
-				unlock();
-
-			}
-#endif
-		}
-
-	}
-	m_mp.erase("res");
-}
 //image * RollBack::dst = NULL;
 //image * RollBack::src = NULL;
 //map<hustr, SmartPtr<element> > layer::elem; //ʹ������ָ��

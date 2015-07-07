@@ -1,0 +1,5 @@
+
+CFLAG+=-I$AUTOPATH/
+obj-$(CONFIG_RESOURCE_RUNTIME_INDEX) += $AUTOPATH/Resource_runtime_index.o
+obj-$(CONFIG_RESOURCE_RUNTIME_FETCH) += $AUTOPATH/Resource_runtime_fetch.o
+obj-$(CONFIG_RESOURCE_RUNTIME_DECODER) += $AUTOPATH/Resource_runtime_decoder.o

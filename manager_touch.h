@@ -101,42 +101,42 @@ public:
 	{
 		lock();
 		origin_in();
-		if(isdn==0)
-                {
-                    if (!luaTouchDown.empty())
-                    {
-                      lua.dostring(luaTouchDown);
-                    }
-                    else
-                    {
-                        doTouchDown();
-                    }
-                }
+		if (isdn == 0)
+		{
+			if (!luaTouchDown.empty())
+			{
+				lua.dostring(luaTouchDown);
+			}
+			else
+			{
+				doTouchDown();
+			}
+		}
 		else
-                {
-                    if (!luaTouchMove.empty())
-                    {
-                      lua.dostring(luaTouchMove);
-                    }
-                    else
-                    {
-                      doTouchMove();
-                    }
-                }
+		{
+			if (!luaTouchMove.empty())
+			{
+				lua.dostring(luaTouchMove);
+			}
+			else
+			{
+				doTouchMove();
+			}
+		}
 		unlock();
 	}
 	void free_area()
 	{
 		lock();
 
-                if (!luaTouchUp.empty())
-                {
-                  lua.dostring(luaTouchUp);
-                }
-                else
-                {
-                    doTouchUp();
-                }
+		if (!luaTouchUp.empty())
+		{
+			lua.dostring(luaTouchUp);
+		}
+		else
+		{
+			doTouchUp();
+		}
 		origin_out();
 		if (GetTouchP() == 0 && isArea(GetTouchX(), GetTouchY()))
 		{
@@ -147,14 +147,14 @@ public:
 	void touch_activate()
 	{
 		lock();
-		if(!luaTouchActive.empty())
-                {
-		    lua.dostring(luaTouchActive);
-                }
+		if (!luaTouchActive.empty())
+		{
+			lua.dostring(luaTouchActive);
+		}
 		else
-                {
-                    doTouchActive();
-                }
+		{
+			doTouchActive();
+		}
 
 		unlock();
 	}

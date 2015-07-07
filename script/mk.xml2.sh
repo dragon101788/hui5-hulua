@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd libsrc/libxml2-2.7.2/
+cd ${LIBSRCDIR}/libxml2-2.7.2/
 make distclean
 set -e
 ./configure \

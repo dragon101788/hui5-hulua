@@ -19,7 +19,7 @@ OUTPUT =../output/
 TARGET = $(OUTPUT)hui
 OBJS_DIR = $(TOPDIR)/objs/
 DRAGON_AUTO = $(TOPDIR)/script/dragon_auto.sh
-
+LIBSRCDIR := $(PWD)/libsrc
 MCONF = $(TOPDIR)/script/mconf
 CONF = $(TOPDIR)/script/conf
 MKZLIB = $(TOPDIR)/script/mk.zlib.sh
@@ -61,6 +61,7 @@ else
 endif 
 
 
+
 sinclude  $(MKAUTO)
 
 
@@ -91,7 +92,7 @@ all: .config $(BUILTIN_LIB) dragon_auto $(DEPS) $(OBJS) dirobjs
 
 .PHONY: dragon_auto
 dragon_auto:
-	@$(DRAGON_AUTO)
+	@TOPDIR=$(TOPDIR) $(DRAGON_AUTO)
 
 lib/libhulua.a:
 	echo build hulib
@@ -102,21 +103,21 @@ lib/libhulua.a:
 
 lib/libz.a:
 	@mkdir -p `dirname $@`
-	CROSS_COMPILE=$(CROSS_COMPILE) $(MKZLIB)
+	LIBSRCDIR=$(LIBSRCDIR) CROSS_COMPILE=$(CROSS_COMPILE) $(MKZLIB)
 	rm $(TOPDIR)/bin -rf
 	rm $(TOPDIR)/share -rf
 lib/libpng.a: lib/libz.a
 	@mkdir -p `dirname $@`
-	TOPDIR=$(TOPDIR) HOST=$(HOST) CROSS_COMPILE=$(CROSS_COMPILE) $(MKPNGLIB)
+	LIBSRCDIR=$(LIBSRCDIR) TOPDIR=$(TOPDIR) HOST=$(HOST) CROSS_COMPILE=$(CROSS_COMPILE) $(MKPNGLIB)
 	rm $(TOPDIR)/bin -rf
 	rm $(TOPDIR)/share -rf
 
 
 lib/libxml2.a:
-	TOPDIR=$(TOPDIR) HOST=$(HOST) CROSS_COMPILE=$(CROSS_COMPILE) $(MKXML2LIB)
+	LIBSRCDIR=$(LIBSRCDIR) TOPDIR=$(TOPDIR) HOST=$(HOST) CROSS_COMPILE=$(CROSS_COMPILE) $(MKXML2LIB)
 
 lib/libfreetype.a:
-	TOPDIR=$(TOPDIR) CC=$(CROSS_COMPILE)gcc $(MKFREETYPELIB)
+	LIBSRCDIR=$(LIBSRCDIR) TOPDIR=$(TOPDIR) HOST=$(HOST) CC=$(CROSS_COMPILE)gcc $(MKFREETYPELIB)
 	rm $(TOPDIR)/bin -rf
 	rm $(TOPDIR)/share -rf
 	
@@ -133,7 +134,7 @@ dirobjs:
 	@for dir in $(dir-y);do echo build $$dir ;$(MAKE) -s -C $$dir built-in.o;done
 
 $(MKAUTO):
-	@$(DRAGON_AUTO)
+	@TOPDIR=$(TOPDIR) $(DRAGON_AUTO)
 
 $(MCONF) : 
 	make OUTDIR=$(dir $@) -C script/kconfig

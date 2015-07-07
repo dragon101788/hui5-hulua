@@ -43,7 +43,7 @@ public:
 		if (!snap.empty())
 		{
 			printf("fbf snap = %s\r\n", snap.c_str());
-			out_img.ReSetResource(snap);
+			out_img.Load(snap);
 			snap.clear();
 		}
 		//put.cleanBuf();
@@ -78,9 +78,9 @@ public:
 	{
 		Accept();
 
-		put.path = "framebuffer change put buf";
-		in_img.path = "framebuffer change in buf";
-		out_img.path = "framebuffer change out buf";
+//		put.path = "framebuffer change put buf";
+//		in_img.path = "framebuffer change in buf";
+//		out_img.path = "framebuffer change out buf";
 
 		put.SetBuffer(u32Width, u32Height);
 		in_img.SetBuffer(u32Width, u32Height);

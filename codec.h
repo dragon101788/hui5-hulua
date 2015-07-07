@@ -50,22 +50,31 @@ protected:
 	int transp;             //透明度
 
 public:
-	hustr path;
 	friend void Render_img_to_img(image * dst, image * src, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y);
 	friend int image_write_to_snap(image * img, const char * rawpath);
 	friend int image_read_from_snap(image * img, const char * rawpath);
 	friend void AreaCopy(image * dst_img, image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y);
-	int getSize()
+
+	void * GetAddr()	const
+	{
+		return pSrcBuffer;
+	}
+
+	int getSize()		const
 	{
 		return SrcSize;
 	}
-	int GetImageWidth()
+	int GetImageWidth()	const
 	{
 		return u32Width;
 	}
-	int GetImageHeight()
+	int GetImageHeight() const
 	{
 		return u32Height;
+	}
+	int GetImageStride()
+	{
+		return u32Stride;
 	}
 
 	void setTransp(int n)
@@ -100,7 +109,6 @@ public:
 		}
 		SetBuffer(img.u32Width, img.u32Height);
 		memcpy(pSrcBuffer, img.pSrcBuffer, SrcSize);
-		path = img.path;
 	}
 
 //	inline void SetPix(int pos, int r, int g, int b, int a)
@@ -123,7 +131,7 @@ public:
 	{
 		if (x > u32Width || y > u32Height)
 		{
-			huErrExitf("Get pixels beyond the range %s x=%d y=%d width=%d height=%d\r\n", path.c_str(), x, y, u32Width, u32Height);
+			huErrExitf("Get pixels beyond the range x=%d y=%d width=%d height=%d\r\n", x, y, u32Width, u32Height);
 		}
 		return GetPix(y * u32Width + x);
 	}
@@ -131,52 +139,51 @@ public:
 	{
 		if ((pos * 4) > SrcSize)
 		{
-			huErrExitf("Get pixels beyond the range %s pos=%d width=%d height=%d\r\n", path.c_str(), pos, u32Width, u32Height);
+			huErrExitf("Get pixels beyond the range pos=%d width=%d height=%d\r\n", pos, u32Width, u32Height);
 		}
 		return ((IMG_PIX *) pSrcBuffer + pos);
 	}
+
 
 	unsigned long SrcGPUAddr()
 	{
 		return (unsigned long) pSrcBuffer;
 	}
 
-	void SetResource(const char * filepath)
+	int Load(const char * path)
 	{
-		//printf("SetResource %s\r\n",filepath);
-
-		if (path != filepath)
-		{
-			destroy();
-			path = filepath;
-		}
+		return codec_to_Image(this,path);//装载图片
 	}
-	int LoadResource()
+	int Save(const char * file)
 	{
+	        return pngEndec_to_image(file, this);
+	}
+
+	virtual void * alloc_memory(size_t size)
+	{
+		return malloc(size);
+	}
+	virtual void free_memory(void * buf)
+	{
+		free(buf);
+	}
+
+	virtual void destroy()
+	{
+
 		if (pSrcBuffer != NULL)
 		{
-			return 0;
-		}
-		if (path.empty())
-		{
-			debug("warning LoadResource empty path\r\n");
-			return -1;
-		}
-		return codec_to_Image(this, path.nstr());//装载图片
-	}
-	void ReSetResource(const char * filepath)
-	{
-		if (path != filepath)
-		{
-			path = filepath;
-			codec_to_Image(this, path.c_str());
+			debug("destory image pSrcBuffer %dx%d\r\n", u32Width, u32Height);
+			free_memory(pSrcBuffer);
+			pSrcBuffer = NULL;
+			SrcSize = 0;
+			u32Width = 0;       // crop width
+			u32Height = 0;      // crop height
+			u32Stride = 0;
 		}
 	}
-	void SaveResource(const char * file)
-	{
-		path = file;
-		pngEndec_to_image(file, this);
-	}
+
+
 	int ReSetBuffer(int width, int height)
 	{
                 lock();
@@ -190,19 +197,20 @@ public:
 
                 int tmpsize = width * height * dep;
                 log_d("ReSetBuffer %d %d %d\n",width,height,tmpsize);
-                void * tmpbuf = malloc(tmpsize);
+                void * tmpbuf = alloc_memory(tmpsize);
                 if (tmpbuf == NULL)
-                     errexitf("ReSetBuffer image malloc failed: width=%d height=%d\n", width, height);
+                     errexitf("ReSetBuffer image alloc_memory failed: width=%d height=%d\n", width, height);
 
                 for (int y=0; y < u32Height; y++)
                 {
                         memcpy((unsigned int *) tmpbuf + (y  * width),(unsigned int *) pSrcBuffer + (y * u32Width),u32Stride);
                 }
-                free(pSrcBuffer);
+
+                destroy();
+
                 pSrcBuffer = tmpbuf;
 
                 SrcSize = tmpsize;
-
                 u32Width = width;
                 u32Height = height;
                 u32Stride = width * dep;
@@ -216,10 +224,10 @@ public:
 		//path.format("SetBuffer-%dx%d",width,height);
 		lock();
 
-		if(width * height == 0)
-                {
-		    log_w("undefined width height is zero\n");
-                }
+		if (width * height == 0)
+		{
+			log_w("undefined width height is zero\n");
+		}
 
 		int dep = 4;
 
@@ -227,24 +235,18 @@ public:
 		if (tmpsize > SrcSize)
 		{
 			destroy();
-
 		}
 		if (pSrcBuffer == NULL)
 		{
 		        log_d("SetBuffer %d %d %d\n",width,height,tmpsize);
-			pSrcBuffer = malloc(tmpsize);
+			pSrcBuffer = alloc_memory(tmpsize);
 			if (pSrcBuffer == NULL)
 			{
-				errexitf("image malloc failed: width=%d height=%d\n", width, height);
+				errexitf("image alloc_memory failed: width=%d height=%d\n", width, height);
 			}
 		}
-		SrcSize = tmpsize;
-//		int err = posix_memalign(&pSrcBuffer, 4, SrcSize);
-//		if (err)
-//		{
-//			errexitf("posix_memalign failed: width=%d height=%d %s\n", width, height, strerror(err));
-//		}
 
+		SrcSize = tmpsize;
 		u32Width = width;
 		u32Height = height;
 		u32Stride = width * dep;
@@ -310,69 +312,53 @@ public:
 
 	virtual void RenderFrom(image * img, int x, int y)
 	{
-		//AreaCopy(img, 0, 0, img->u32Width, img->u32Height, x, y);
-		//printf("$$$HU$$$ Render %s to %s\r\n",this->path.c_str(),img->path.c_str());
-
-		img->LoadResource();
 		Render_img_to_img(this, img, 0, 0, img->u32Width, img->u32Height, x, y);
 	}
 	virtual void RenderFrom(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
 	{
-		src_img->LoadResource();
 		ProcArea(this, src_img, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
 		Render_img_to_img(this, src_img, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
 	}
 
 	virtual void RenderTo(image * img, int x, int y)
-        {
-                //AreaCopy(img, 0, 0, img->u32Width, img->u32Height, x, y);
-                //printf("$$$HU$$$ Render %s to %s\r\n",this->path.c_str(),img->path.c_str());
+	{
 
-                img->LoadResource();
-                Render_img_to_img(img,this, 0, 0, img->u32Width, img->u32Height, x, y);
-        }
+		Render_img_to_img(img, this, 0, 0, img->u32Width, img->u32Height, x, y);
+	}
 
-	virtual void RenderTo(image * dst_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
-        {
-	        dst_img->LoadResource();
-                ProcArea(dst_img, this, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
-                Render_img_to_img(dst_img, this, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
-        }
+	virtual void RenderTo(image * dst_img, int src_x, int src_y, int cp_width,
+			int cp_height, int dst_x, int dst_y)
+	{
+		ProcArea(dst_img, this, src_x, src_y, cp_width, cp_height, dst_x,
+				dst_y);
+		Render_img_to_img(dst_img, this, src_x, src_y, cp_width, cp_height,
+				dst_x, dst_y);
+	}
 
 	virtual void AreaCopyFrom(image * img, int x, int y)
-        {
-                ::AreaCopy(this , img, 0, 0, img->u32Width, img->u32Height, x, y);
-        }
-	virtual void AreaCopyFrom(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
-        {
+	{
+		::AreaCopy(this, img, 0, 0, img->u32Width, img->u32Height, x, y);
+	}
+	virtual void AreaCopyFrom(image * src_img, int src_x, int src_y,
+			int cp_width, int cp_height, int dst_x, int dst_y)
+	{
 
-                ::AreaCopy(this, src_img, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
-        }
+		::AreaCopy(this, src_img, src_x, src_y, cp_width, cp_height, dst_x,
+				dst_y);
+	}
 
 	virtual void AreaCopyTo(image * img, int x, int y)
-        {
-                ::AreaCopy(img,this, 0, 0, img->u32Width, img->u32Height, x, y);
-        }
-	virtual void AreaCopyTo(image * dst_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
-        {
+	{
+		::AreaCopy(img, this, 0, 0, img->u32Width, img->u32Height, x, y);
+	}
+	virtual void AreaCopyTo(image * dst_img, int src_x, int src_y, int cp_width,
+			int cp_height, int dst_x, int dst_y)
+	{
 
-                ::AreaCopy(dst_img , this, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
-        }
+		::AreaCopy(dst_img, this, src_x, src_y, cp_width, cp_height, dst_x,
+				dst_y);
+	}
 
-//	int SetConfig(const char * key,const char * value)
-//	{
-//		if(strcasecmp(key,"alpha")==0)
-//		{
-//			stransformation.colorMultiplier.i16Alpha = strtoul(value,NULL,10);
-//		}
-//		else
-//		{
-//			return -1;
-//		}
-//		return 0;
-//	}
-
-//	
 	image()
 	{
 
@@ -392,31 +378,8 @@ public:
 		destroy();
 	}
 
-	//释放空间并不改变其他内容
-	void Free()
-	{
-		if (pSrcBuffer != NULL)
-		{
-			debug("destory image pSrcBuffer [%s] %dx%d\r\n", path.c_str(), u32Width, u32Height);
-			free(pSrcBuffer);
-			pSrcBuffer = NULL;
-		}
-	}
-	void destroy()
-	{
 
-		if (pSrcBuffer != NULL)
-		{
-			debug("destory image pSrcBuffer [%s] %dx%d\r\n", path.c_str(), u32Width, u32Height);
-			free(pSrcBuffer);
-			pSrcBuffer = NULL;
-			SrcSize = 0;
-			u32Width = 0;       // crop width
-			u32Height = 0;      // crop height
-			u32Stride = 0;
-			path.clear();
-		}
-	}
+
 
 };
 

@@ -19,7 +19,6 @@ void hui_exit(const char * cmd);
 void JumpToFile(const char * jump, const char * snap);
 
 extern DebugTimer fps;
-extern int debug_timer_count;
 
 
 //
@@ -72,7 +71,7 @@ private:
 			if (!access_Image(file))
 			{
 				printf("%s no exist , save Snap !!!\r\n", file);
-				m_xml->out.SaveResource(file);
+				m_xml->out.Save(file);
 				return 1;
 
 			}
@@ -137,11 +136,10 @@ public:
 		{
 			//printf("%s RenderFromBuffer\r\n",filename.c_str());
 			out.RenderToFramebuffer(&fb);
-			if(debug_timer_count)
-			{
-			    fps.debug_timer("<fps>");
-			    debug_timer_count--;
-			}
+
+//#ifdef CONFIG_DEBUG_FPS
+			  fps.debug_timer("<fps>");
+//#endif
 			isDraw = 0;
 		}
 		unlock();
@@ -208,7 +206,6 @@ public:
 	xmlproc(const char * file)
 	{
 		init();
-		out.path.format("xml-%s", file);
 		filename = file;
 
 	}

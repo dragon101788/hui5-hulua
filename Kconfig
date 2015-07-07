@@ -38,6 +38,8 @@ config TOUCH_EKTF2K
 		2d Bltting
 endchoice
 
+
+menu "hui debug option"
 config DEBUG
 	bool "enable debug"
 
@@ -49,12 +51,13 @@ config LOG_W
 	bool "enable log_w"
 config LOG_E
 	bool "enable log_e"
+config DEBUG_FPS
+	bool "debug fps"
 
 config DUMPSTACK_DEBUG
 	bool "enable DUMPSTACK_DEBUG"
 	help 
 		"with arm uclibc platfrom use this"
+endmenu
 
-
-comment "------------Dragon Auto Configuretion---------"
 source Kconfig.auto
