@@ -1,5 +1,5 @@
-#ifndef __LAYER_H__
-#define __LAYER_H__
+#ifndef __DTAWLOGIC_BQF_H__
+#define __DTAWLOGIC_BQF_H__
 
 #include "HumapXML.h"
 #include "codec.h"
@@ -8,6 +8,7 @@
 #include <set>
 #include "Resource.h"
 #include "element_base.h"
+#include "drawlogic.h"
 using namespace std;
 
 class schedule_draw;
@@ -16,7 +17,9 @@ class xmlproc;
 
 #define luacmd_is(name) (strncmp(cmd,name,strlen(name))==0&&(cmd = cmd+strlen(name)))
 
-class element: virtual public element_base,public schedule_ele, public image,public ResourceContainer,virtual public Mutex
+class drawlogic_BQF;
+typedef drawlogic_BQF element;
+class drawlogic_BQF: virtual public element_base,public schedule_ele, public image,public ResourceContainer,virtual public Mutex
 {
 public:
 	//HUMap m_mp;
@@ -41,7 +44,7 @@ public:
 		Render();
 		log_d("$$$HU$$$ Render_layer::[%s] OK\r\n", GetName());
 	}
-	element()
+	drawlogic_BQF()
 	{
 	        m_flag |= ELEMENT_FLAG_DRAWLOGIC;
 		m_parent = NULL;
@@ -50,7 +53,7 @@ public:
 		//log_d("new element m_parent=%x\n",m_parent);
 	}
 
-	virtual ~element()
+	virtual ~drawlogic_BQF()
 	{
 		log_i("$$$HU$$$ distroy element %s\r\n", GetName());
 		backstack();
@@ -346,4 +349,4 @@ public:
 
 };
 
-#endif //__LAYER_H__
+#endif //__DTAWLOGIC_BQF_H__

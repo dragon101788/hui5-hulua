@@ -2,7 +2,7 @@
 #define __BUTTON_IMAGE_H__
 
 #include "XMLInstal.h"
-#include "layer.h"
+#include "drawlogic.h"
 
 class button: public element, public touch_element
 {

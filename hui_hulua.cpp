@@ -1,6 +1,6 @@
 #include "hui_hulua.h"
 #include "xmlproc.h"
-#include "layer.h"
+#include "drawlogic.h"
 
 LUA lua;
 

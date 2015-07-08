@@ -1,0 +1,3 @@
+
+CFLAG+=-I$AUTOPATH/
+obj-$(CONFIG_DRAWLOGIC_BFQ) += $AUTOPATH/drawlogic_BFQ.o

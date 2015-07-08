@@ -43,7 +43,6 @@ obj-y += manager_timer.o
 obj-y += manager_touch.o
 obj-y += schedule.o
 obj-y += xmlproc.o
-obj-y += layer.o
 obj-y += HumapXML.o
 obj-y += hulib.o
 obj-y += codec.o

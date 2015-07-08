@@ -2,7 +2,7 @@
 #define __STATIC_IMAGE_H__
 
 #include "XMLInstal.h"
-#include "layer.h"
+#include "drawlogic.h"
 
 class static_image: public element
 {

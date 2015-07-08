@@ -2,7 +2,7 @@
 #define __STATIC_IMAGE_H__
 
 #include "XMLInstal.h"
-#include "layer.h"
+#include "drawlogic.h"
 
 class dragframe: public element , public touch_element ,public element_manager,public touch_manager
 {

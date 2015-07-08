@@ -2,7 +2,7 @@
 #define __STATIC_IMAGE_H__
 
 #include "XMLInstal.h"
-#include "layer.h"
+#include "drawlogic.h"
 
 
 class cartoon: public element, public timer_element

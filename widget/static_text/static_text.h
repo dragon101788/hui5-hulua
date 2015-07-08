@@ -2,7 +2,7 @@
 #define __STATIC_IMAGE_H__
 
 #include "XMLInstal.h"
-#include "layer.h"
+#include "drawlogic.h"
 #include "ttf_font.h"
 #include "hui_hulua.h"
 

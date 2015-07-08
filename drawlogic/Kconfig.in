@@ -1,0 +1,16 @@
+
+choice 
+        prompt "draw logic"
+        default DRAWLOGIC_BFQ
+        help
+			readonly resource manager
+
+config  DRAWLOGIC_BFQ
+        bool "BFQ begin after queue >dragon"
+        help
+			BFQ
+config  DRAWLOGIC_NONE
+        bool "none"
+        help
+			???
+endchoice

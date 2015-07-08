@@ -2,7 +2,7 @@
 #define __XML_PORG_H__
 
 #include "hulib.h"
-#include "layer.h"
+#include "drawlogic.h"
 #include "manager_touch.h"
 #include "manager_timer.h"
 #include "Framebuffer.h"
