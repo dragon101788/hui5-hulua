@@ -22,6 +22,21 @@ typedef drawlogic_BQF element;
 class drawlogic_BQF: virtual public element_base,public schedule_ele, public image,public ResourceContainer,virtual public Mutex
 {
 public:
+	template<typename T>
+	static void lua_instal(lua_State* L)
+	{
+		  hulua::class_def<T>(L, "flush", &element::Flush);
+		  hulua::class_def<T>(L, "move", &element::move);
+	}
+
+	void move(int x,int y)
+	{
+		SetX(x);
+		SetY(y);
+		initstack();
+		Flush();
+	}
+
 	//HUMap m_mp;
 	virtual void doFlushConfig(HUMap &m_mp) = 0;
 	virtual void doRender() = 0;
@@ -67,11 +82,6 @@ public:
 	void FlushConfig(HUMap &m_mp);
 
 
-	template<typename T>
-	static void lua_instal(lua_State* L)
-	{
-		  hulua::class_def<T>(L, "flush", &element::Flush);
-	}
 
 	virtual void doEleLuaCommand(const char * cmd) {};
 
@@ -179,7 +189,6 @@ public:
 						//d_ofy = height - (y + height - ele->y);
 						d_ofy = ele->GetY() - GetY();
 					}
-
 					AreaCopyFrom(ele, s_ofx, s_ofy, GetWidth(), GetHeight(), d_ofx, d_ofy);
 				}
 				//RollBack::RollBackBlock(*it, x, y, width, height);

@@ -2,7 +2,7 @@
 CC=$(CROSS_COMPILE)g++
 CFLAG=-I$(HOME)/hui/src/include/
 all:
-	#make -C ../ TOPDIR=$(PWD) CROSS_COMPILE=$(CROSS_COMPILE)
+	make -C ../ TOPDIR=$(PWD) CROSS_COMPILE=$(CROSS_COMPILE)
 	$(CC) $(CFLAG) -L./lib   lua.c -lhulua -lm -ldl -lreadline -ltermcap -o bin/lua
 	$(CC) $(CFLAG) -L./lib   sample1.cpp   -o sample1 -lhulua -lm -ldl -DLUA_C89_NUMBERS
 	$(CC) $(CFLAG) -L./lib   sample2.cpp   -o sample2 -lhulua -lm -ldl -DLUA_C89_NUMBERS

@@ -1,0 +1,41 @@
+﻿<?xml version="1.0"?>
+
+<root>
+  <static_image name="bk" x="0" y="0" width="480" height="272" lay="0">
+    	<node>bk.png</node>
+  </static_image>
+	
+	
+	<static_image name="brid" x="0" y="70" width="77" height="32" lay="2">
+    	<node>brid.png</node>
+  </static_image>
+  
+
+	
+	<cartoon name="cloud" x="0" y="0" fps="500" width="480" height="272"  lay="5" stop="1">   
+		<node>1.png</node>
+		<node>2.png</node>
+		<node>3.png</node>
+		<node>4.png</node>
+	</cartoon>
+	
+	<luado><![CDATA[
+			function sleep(n)
+   		local t0 = os.clock()
+   		while os.clock() - t0 <= n do end
+			end
+			
+			while (true)
+			do
+			
+					print(string.format("brid x=%d",brid.x));
+					sleep(1);
+					local movex = brid.x + 10;
+					if (movex >= 400 ) then
+						movex = 0
+					end
+					brid:move(movex,brid.y);
+			end
+		
+		]]></luado>
+</root>
