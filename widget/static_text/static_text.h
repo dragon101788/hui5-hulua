@@ -13,9 +13,24 @@ public:
         {
               element_base::lua_instal<static_text>(L);
               element::lua_instal<static_text>(L);
+              hulua::class_def<static_text>(L, "settext", &static_text::settext);
+        }
+        void settext(const char * str)
+        {
+        	txt = str;
+        	ttf.m_font = &font_mp[font];
+        	log_d("get font_mp %x %x\r\n", font_mp[font].face,
+						   font_mp[font].ft_Lib);
+        	ttf.fontHeight = size;
+        	ttf.color = color;
+        	ttf.style = style;
+        	ttf.SetBuffer(GetWidth(), GetHeight());
+        	ttf.drawText( (char *) txt.c_str(), txt.length());
+
+        	Flush();
         }
 
-	text ttf;
+        text ttf;
 
 	static_text()
 	{
@@ -34,17 +49,7 @@ public:
 	{
 	   if(luacmd_is("set_text"))
            {
-               txt = cmd;
-               ttf.m_font = &font_mp[font];
-               log_d("get font_mp %x %x\r\n", font_mp[font].face,
-                               font_mp[font].ft_Lib);
-               ttf.fontHeight = size;
-               ttf.color = color;
-               ttf.style = style;
-               ttf.SetBuffer(GetWidth(), GetHeight());
-               ttf.drawText( (char *) txt.c_str(), txt.length());
 
-               Flush();
            }
 
 	}

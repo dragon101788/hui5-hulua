@@ -27,8 +27,13 @@ public:
 	{
 		  hulua::class_def<T>(L, "flush", &element::Flush);
 		  hulua::class_def<T>(L, "move", &element::move);
+		  hulua::class_def<T>(L, "hide", &element::hide);
 	}
-
+	void hide(int n)
+	{
+		SetHide(n);
+		Flush();
+	}
 	void move(int x,int y)
 	{
 		SetX(x);
