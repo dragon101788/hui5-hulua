@@ -6,8 +6,10 @@
 #include "drawlogic_BFQ.h"
 class drawlogic_BQF;
 typedef drawlogic_BQF element;
-
-
+#elif defined(CONFIG_DRAWLOGIC_TT)
+#include "drawlogic_TT.h"
+class drawlogic_TT;
+typedef drawlogic_TT element;
 #else
 #error "!!!dragon!!! Undefined draw logic style"
 #error "!!!dragon!!! --> plase menuconfig select [draw logic]"

@@ -17,9 +17,9 @@ class xmlproc;
 
 #define luacmd_is(name) (strncmp(cmd,name,strlen(name))==0&&(cmd = cmd+strlen(name)))
 
-class drawlogic_BQF;
-typedef drawlogic_BQF element;
-class drawlogic_BQF: virtual public element_base,public schedule_ele, public image,public ResourceContainer,virtual public Mutex
+class drawlogic_TT;
+typedef drawlogic_TT element;
+class drawlogic_TT: virtual public element_base,public schedule_ele, public image,public ResourceContainer,virtual public Mutex
 {
 public:
 	template<typename T>
@@ -31,6 +31,7 @@ public:
 
 	void move(int x,int y)
 	{
+		cleanLastPos();
 		SetX(x);
 		SetY(y);
 		initstack();
@@ -45,13 +46,27 @@ public:
 		printf("warning element bash OnDelete\r\n");
 	}
 
+	int procArea(int &s_ofx,int &s_ofy,int &d_ofx,int &d_ofy, element *ele);
+	int  procArea(image * dst_img, image * rsc_img, int & src_x, int & src_y, int & cp_width, int & cp_height, int & dst_x, int & dst_y,int dst_end_x,int dst_end_y);
+	void renderLayersInOneEle(int s_ofx,int s_ofy,int d_ofx,int d_ofy, element *ele,int &drawCnt);
+	void renderLayers();
+	void cleanArea();
+	void copyLayer(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y);
+	void renderLayer(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y);
+	void renderOut();
+
+
+
 	void Delete()
 	{
 		doDelete();
+
 		revocation();
 		SetHide(1);
 		Render();
-		ResetEB();
+	//	m_mgr->elem.erase(Get);
+
+
 	}
 	void onSchedule()
 	{
@@ -59,26 +74,25 @@ public:
 		Render();
 		log_d("$$$HU$$$ Render_layer::[%s] OK\r\n", GetName());
 	}
-	drawlogic_BQF()
+	drawlogic_TT():hide_lay(-1),m_parent(NULL),m_proc(NULL),m_mgr(NULL)
 	{
 	        m_flag |= ELEMENT_FLAG_DRAWLOGIC;
-		m_parent = NULL;
-		m_proc = NULL;
-		m_mgr = NULL;
 		//log_d("new element m_parent=%x\n",m_parent);
 	}
 
-	virtual ~drawlogic_BQF()
+	virtual ~drawlogic_TT()
 	{
 		log_i("$$$HU$$$ distroy element %s\r\n", GetName());
-		backstack();
+	//	backstack();
 	}
 	void Flush();
 	void revocation();
 
 	void Render();
-	void Back();
-
+	void Back(){
+		cleanLastPos();
+	}
+	void cleanLastPos();
 	void FlushConfig(HUMap &m_mp);
 
 
@@ -138,81 +152,7 @@ public:
 
 		initstack();
 	}
-	void ResetEB()
-	{
-		if (!eb.empty())
-		{
-			list<element *>::iterator it;
-			for (it = eb.begin(); it != eb.end(); ++it)
-			{
-				element * ele = *it;
-				ele->et.remove(this);
-			}
-		}
-	}
-	void RenderEB()
-	{
-		if (!eb.empty())
-		{
-			list<element *>::iterator it;
-			for (it = eb.begin(); it != eb.end(); ++it)
-			{
-				element * ele = *it;
-				if (ele->GetHide() == 0)
-				{
-					//printf("$$$HU$$$ RenderEB %s <-- %s\r\n", name.c_str(), ele->name.c_str());
 
-					int s_ofx = 0; //源x
-					int d_ofx = 0; //目标x
-					if (ele->GetX() < GetX())
-					{
-						s_ofx = GetX() - ele->GetX();
-						d_ofx = 0;
-					}
-					else if (ele->GetX() > GetX())
-					{
-						s_ofx = 0;
-						//d_ofx = width - (x + width - ele->x);
-						d_ofx = ele->GetX() - GetX();
-					}
-
-					int s_ofy = 0; //源x
-					int d_ofy = 0; //目标x
-					if (ele->GetY() < GetY())
-					{
-						s_ofy = GetY() - ele->GetY();
-						d_ofy = 0;
-					}
-					else if (ele->GetY() > GetY())
-					{
-						s_ofy = 0;
-						//d_ofy = height - (y + height - ele->y);
-						d_ofy = ele->GetY() - GetY();
-					}
-					AreaCopyFrom(ele, s_ofx, s_ofy, GetWidth(), GetHeight(), d_ofx, d_ofy);
-				}
-				//RollBack::RollBackBlock(*it, x, y, width, height);
-				//(*it)->Render();
-			}
-		}
-	}
-	void RenderET()
-	{
-		if (!et.empty())
-		{
-			list<element *>::iterator it;
-			for (it = et.begin(); it != et.end(); ++it)
-			{
-				element * ele = *it;
-				if (ele->GetHide() == 0)
-				{
-					//printf("$$$HU$$$ RenderET %s <-- %s\r\n", name.c_str(), ele->name.c_str());
-					ele->Render();
-				}
-			}
-		}
-
-	}
 	class Cmpare
 	{
 	public:
@@ -222,82 +162,85 @@ public:
 		}
 	};
 	void initstack();
-	void addet(element * ele)
+		void addLayers(element * ele)
 	{
 		list<element *>::iterator it;
-		for (it = et.begin(); it != et.end(); ++it)
+		for (it = layers.begin(); it != layers.end(); ++it)
 		{
 			if (*it == ele)
 			{
 				break;
 			}
 		}
-		if (it == et.end())
+		if (it == layers.end())
 		{
-			//printf("$$$HU$$$ [%s] add [%s] ET\r\n",name.c_str(),ele->name.c_str());
-			et.push_back(ele);
-			et.sort(Cmpare());
+			//log_i("$$$HU$$$ [%s] add [%s] ET\r\n",name.c_str(),ele->name.c_str());
+			layers.push_back(ele);
+			layers.sort(Cmpare());
 		}
 	}
-	void addeb(element * ele)
-	{
-		list<element *>::iterator it;
-		for (it = eb.begin(); it != eb.end(); ++it)
-		{
-			if (*it == ele)
-			{
-				break;
-			}
-		}
-		if (it == eb.end())
-		{
-			//printf("$$$HU$$$ [%s] add [%s] EB\r\n",name.c_str(),ele->name.c_str());
-			eb.push_back(ele);
-			eb.sort(Cmpare());
-		}
-	}
-	void delet(element * ele)
-	{
-		et.remove(ele);
-	}
-	void deleb(element * ele)
-	{
-		eb.remove(ele);
-	}
-	void backstack()
-	{
-		list<element *>::iterator it;
-		for (it = eb.begin(); it != eb.end(); ++it)
-		{
-			(*it)->delet(this);
-		}
 
-		for (it = et.begin(); it != et.end(); ++it)
-		{
-			(*it)->deleb(this);
-		}
+	void delLayers(element * ele)
+	{
+		layers.remove(ele);
 	}
-/*
- * layer:将图片绘制到本元素的第几层
- */
-	 void RenderToSelf(image * src_img, int dst_x, int dst_y,int layer){
-		image::RenderFrom( src_img,  dst_x,dst_y);
+	/*
+	 * layer:将图片绘制到本元素的第几层
+	 */
+	void RenderToSelf(image * src_img, int dst_x, int dst_y,int layer){
+		render_res[layer].setRes( src_img, 0, 0,GetWidth(), GetHeight(),  dst_x, dst_y);
 	}
 
 	 void RenderToSelf(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y,int layer)
 	{
-		 image::RenderFrom(src_img,src_x,src_y,cp_width, cp_height,dst_x, dst_y);
+		 render_res[layer].setRes( src_img, src_x, src_y,cp_width, cp_height,  dst_x, dst_y);
 	}
+	class LayerRes
+	{
+	public:
+		int dst_x;
+		int dst_y;
+		int offset_x;
+		int offset_y;
+		int cp_width;
+		int cp_height;
+		image *img;
+		LayerRes():img(NULL),offset_x(0),offset_y(0),dst_x(0),dst_y(0){
 
+		}
+
+
+
+		void setRes(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y){
+			img=src_img;
+			offset_x=src_x;
+			offset_y=src_y;
+			this->cp_width=cp_width;
+			this->cp_height=cp_height;
+			this->dst_x=dst_x;
+			this->dst_y=dst_y;
+		}
+
+
+		/******************
+		 * 图像平移
+		 */
+
+		inline void  translate(int dx, int dy){
+			dst_x=dx;
+			dst_y=dy;
+		}
+	};
+
+
+
+	map<int, LayerRes> render_res;//由原来的单一指针改为指针map，可以在doRender里面同时绘制几层图
+	list<element *> layers;     //底顶合一队列
 	element * m_parent;
 	xmlproc * m_proc;
-
+	int hide_lay;//向对此元素此层隐藏
 	element_manager * m_mgr;
 
-
-	//schedule_draw * mgr;
-	list<element *> et;					//�ϲ�ؼ�
-	list<element *> eb;					//�ײ�ؼ�
 };
 
 //后续将绘图元素剥离出来

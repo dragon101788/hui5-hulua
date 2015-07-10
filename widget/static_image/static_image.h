@@ -54,7 +54,7 @@ public:
 	}
 	void doRender()
 	{
-		image::RenderFrom(GetRes("node",id), xpos, ypos, GetWidth(), GetHeight(), 0, 0);
+		RenderToSelf(GetRes("node",id), xpos, ypos, GetWidth(), GetHeight(), 0, 0,0);
 	}
 	int xpos;
 	int ypos;

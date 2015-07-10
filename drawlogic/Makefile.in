@@ -1,3 +1,4 @@
 
 CFLAG+=-I$AUTOPATH/
 obj-$(CONFIG_DRAWLOGIC_BFQ) += $AUTOPATH/drawlogic_BFQ.o
+obj-$(CONFIG_DRAWLOGIC_TT) += $AUTOPATH/drawlogic_TT.o

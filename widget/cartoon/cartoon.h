@@ -90,7 +90,7 @@ public:
 		if (res["node"][id]->LoadResource() == 0)
 		{
 		      //printf("doRender %d %s\n",id,res["node"][id]->path.nstr());
-                      RenderFrom(&res["node"][id].value(), 0, 0,GetWidth(),GetHeight(),0,0);
+                      RenderToSelf(&res["node"][id].value(), 0, 0,GetWidth(),GetHeight(),0,0,0);
 
                       if (release)
                       {

@@ -9,6 +9,10 @@ config  DRAWLOGIC_BFQ
         bool "BFQ begin after queue >dragon"
         help
 			BFQ
+config  DRAWLOGIC_TT
+        bool "render by orders >TT"
+        help
+			send caveguy@qq.com for detail
 config  DRAWLOGIC_NONE
         bool "none"
         help

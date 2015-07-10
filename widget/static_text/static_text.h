@@ -104,7 +104,7 @@ public:
 	}
 	void doRender()
 	{
-		image::RenderFrom(&ttf, 0, 0);
+		RenderToSelf(&ttf, 0, 0,0);
 		//	image::Render(&img, 0, 0, width, height, 0, 0);
 	}
 //	int xpos;

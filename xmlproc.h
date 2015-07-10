@@ -50,7 +50,7 @@ private:
 			unlock();
 		}
 	};
-	xmlout out;
+
 
 	class save_snap: public schedule_ele
 	{
@@ -93,6 +93,7 @@ private:
 
 	int isDraw; //有改变图像
 public:
+	xmlout out;
 	void Draw(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
 	{
 		//lock();
@@ -100,7 +101,12 @@ public:
 		isDraw++;
 		//unlock();
 	}
-
+	void addDraw()
+	{
+		//lock();
+		isDraw++;
+		//unlock();
+	}
 	hustr filename;
 
 	void ForeProc(); //将页面切换前台

@@ -64,7 +64,7 @@ public:
 	}
 	void doRender()
 	{
-		image::RenderFrom(GetRes(isdn?"dn":"up"), 0, 0);
+		RenderToSelf(GetRes(isdn?"dn":"up"), 0, 0,0);
 	}
 
 	button()
