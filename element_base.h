@@ -121,8 +121,8 @@ public:
 
   void ParseElement(HUMap &m_mp)
   {
-          log_i("$$$HU$$$ ElementPrase [%s] x=%d y=%d width=%d height=%d hide=%d\r\n",
-                                    GetName(),GetX(), GetY(), GetWidth(), GetHeight(), GetHeight());
+          //log_i("$$$HU$$$ ElementPrase [%s] x=%d y=%d width=%d height=%d hide=%d\r\n",
+          //                          GetName(),GetX(), GetY(), GetWidth(), GetHeight(), GetHeight());
           SetName(m_mp["name"]->getvalue());
           defsetf_element_int("x",SetX,m_mp,0);
           defsetf_element_int("y",SetY,m_mp,0);

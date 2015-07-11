@@ -650,17 +650,18 @@ void ProcArea(image * dst_img, image * rsc_img, int & src_x, int & src_y, int & 
 
 }
 
+
 void AreaCopy(image * dst_img, image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
 {
 	int x;
 	int y;
 	dst_img->lock();
 	src_img->lock();
-	//printf("$$$HU$$$ AreaCopy1 src_x=%d src_y=%d cp_width=%d cp_height=%d dst_x=%d dst_y=%d\r\n", src_x, src_y, cp_width, cp_height, dst_x, dst_y);
+	debug_areacopy("$$$HU$$$ AreaCopy1 src_x=%d src_y=%d cp_width=%d cp_height=%d dst_x=%d dst_y=%d\r\n", src_x, src_y, cp_width, cp_height, dst_x, dst_y);
 	ProcArea(dst_img, src_img, src_x, src_y, cp_width, cp_height, dst_x, dst_y);
-	//printf("$$$HU$$$ AreaCopy2 src_x=%d src_y=%d cp_width=%d cp_height=%d dst_x=%d dst_y=%d row_size=%d\r\n", src_x, src_y, cp_width, cp_height, dst_x, dst_y,cp_width * sizeof(IMG_PIX));
-	//printf("$$$HU$$$ AreaCopy3 src[%d:%d] dst[%d:%d]\n",src_img->GetImageWidth(),src_img->GetImageHeight(),dst_img->GetImageWidth(),dst_img->GetImageHeight());
-	//printf("$$$HU$$$ AreaCopy4 0x%x 0x%x\n",dst_img->pSrcBuffer,src_img->pSrcBuffer);
+	debug_areacopy("$$$HU$$$ AreaCopy2 src_x=%d src_y=%d cp_width=%d cp_height=%d dst_x=%d dst_y=%d row_size=%d\r\n", src_x, src_y, cp_width, cp_height, dst_x, dst_y,cp_width * sizeof(IMG_PIX));
+	debug_areacopy("$$$HU$$$ AreaCopy3 src[%d:%d] dst[%d:%d]\n",src_img->GetImageWidth(),src_img->GetImageHeight(),dst_img->GetImageWidth(),dst_img->GetImageHeight());
+	debug_areacopy("$$$HU$$$ AreaCopy4 0x%x 0x%x\n",dst_img->pSrcBuffer,src_img->pSrcBuffer);
 
 	for (y=0; y < cp_height; y++)
 	{
@@ -673,7 +674,7 @@ void AreaCopy(image * dst_img, image * src_img, int src_x, int src_y, int cp_wid
 //                    if(src_pix->u8Alpha)
 //                      *dst_pix = *src_pix;
 //                }
-
+		debug_areacopy("y=%d\n",y);
 		memcpy((unsigned int *) dst_img->pSrcBuffer + (y + dst_y) * dst_img->u32Width + dst_x,
 				(unsigned int *) src_img->pSrcBuffer + (y + src_y) * src_img->u32Width + src_x,
 				(cp_width * sizeof(IMG_PIX)));

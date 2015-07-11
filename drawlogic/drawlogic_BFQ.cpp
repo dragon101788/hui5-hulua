@@ -146,7 +146,7 @@ void element::Render()
 
 		if (GetHide() == 0)
 		{
-			log_d("%s doRender",GetName());
+			log_d("%s doRender\n",GetName());
 			doRender();
 		}
 		else
@@ -178,9 +178,9 @@ void element::FlushConfig(HUMap &mp)
 	PraseElement(mp);
 	doFlushConfig(mp);
 	ParseModifRes(mp);
-	Flush();
-
 	m_mgr->AddElement(GetName(), this);
+
+	Flush();
 	unlock();
 }
 

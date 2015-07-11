@@ -1,0 +1,69 @@
+﻿<?xml version="1.0"?>
+
+<root>
+	<static_image name="bk" x="0" y="0" width="480" height="272" lay="0">
+			<node>bk.png</node>
+	</static_image>
+	
+	<cartoon name="mov1" x="200" y="110" fps="100" width="150" height="150"  lay="2">   
+		<node>mov1/1.png</node>
+		<node>mov1/2.png</node>
+		<node>mov1/3.png</node>
+		<node>mov1/4.png</node>
+		<node>mov1/5.png</node>
+		<node>mov1/6.png</node>
+		<node>mov1/7.png</node>
+		<node>mov1/8.png</node>
+		<node>mov1/9.png</node>
+		<node>mov1/10.png</node>
+		<node>mov1/11.png</node>
+		<node>mov1/12.png</node>
+		<node>mov1/13.png</node>
+		<node>mov1/14.png</node>
+		<node>mov1/15.png</node>
+		<node>mov1/16.png</node>
+		<node>mov1/17.png</node>
+		<node>mov1/18.png</node>
+	</cartoon>
+	<cartoon name="mov2" x="150" y="60" fps="120" width="150" height="150"  lay="3">   
+		<node>mov2/1.png</node>
+		<node>mov2/2.png</node>
+		<node>mov2/3.png</node>
+		<node>mov2/4.png</node>
+		<node>mov2/5.png</node>
+		<node>mov2/6.png</node>
+		<node>mov2/7.png</node>
+		<node>mov2/8.png</node>
+		<node>mov2/9.png</node>
+		<node>mov2/10.png</node>
+		<node>mov2/11.png</node>
+		<node>mov2/12.png</node>
+		<node>mov2/13.png</node>
+		<node>mov2/14.png</node>
+		<node>mov2/15.png</node>
+		<node>mov2/16.png</node>
+		<node>mov2/17.png</node>
+		<node>mov2/18.png</node>
+	</cartoon>
+	
+	<cartoon name="mov3" x="220" y="50" fps="140" width="150" height="150"  lay="4">   
+		<node>mov3/1.png</node>
+		<node>mov3/2.png</node>
+		<node>mov3/3.png</node>
+		<node>mov3/4.png</node>
+		<node>mov3/5.png</node>
+		<node>mov3/6.png</node>
+		<node>mov3/7.png</node>
+		<node>mov3/8.png</node>
+		<node>mov3/9.png</node>
+		<node>mov3/10.png</node>
+		<node>mov3/11.png</node>
+		<node>mov3/12.png</node>
+		<node>mov3/13.png</node>
+		<node>mov3/14.png</node>
+		<node>mov3/15.png</node>
+		<node>mov3/16.png</node>
+		<node>mov3/17.png</node>
+		<node>mov3/18.png</node>
+	</cartoon>
+</root>

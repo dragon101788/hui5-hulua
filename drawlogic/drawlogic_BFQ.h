@@ -125,7 +125,7 @@ public:
 	{
 
 		log_i("$$$HU$$$ ElementPrase [%s] x=%d y=%d width=%d height=%d hide=%d\r\n",
-				GetName(),GetX(), GetY(), GetWidth(), GetHeight(), GetHeight());
+				GetName(),GetX(), GetY(), GetWidth(), GetHeight(), GetHide());
 
 		if(m_mp.exist("element_manager"))
                 {
@@ -138,7 +138,7 @@ public:
                     m_parent = parent;
                 }
 
-                //printf("%s SetBuffer width=%d height=%d\r\n", name.c_str(), width, height);
+                log_d("%s SetBuffer width=%d height=%d\r\n", GetName(), GetWidth(), GetHeight());
                 SetBuffer(GetWidth(), GetHeight());
 
 		initstack();
@@ -157,15 +157,19 @@ public:
 	}
 	void RenderEB()
 	{
+		lock();
 		if (!eb.empty())
 		{
 			list<element *>::iterator it;
 			for (it = eb.begin(); it != eb.end(); ++it)
 			{
 				element * ele = *it;
+				ele->lock();
 				if (ele->GetHide() == 0)
 				{
 					//printf("$$$HU$$$ RenderEB %s <-- %s\r\n", name.c_str(), ele->name.c_str());
+					int width = ele->GetWidth();
+					int height = ele->GetHeight();
 
 					int s_ofx = 0; //源x
 					int d_ofx = 0; //目标x
@@ -173,12 +177,14 @@ public:
 					{
 						s_ofx = GetX() - ele->GetX();
 						d_ofx = 0;
+						width -= s_ofx;
 					}
 					else if (ele->GetX() > GetX())
 					{
 						s_ofx = 0;
 						//d_ofx = width - (x + width - ele->x);
 						d_ofx = ele->GetX() - GetX();
+						width -= d_ofx;
 					}
 
 					int s_ofy = 0; //源x
@@ -187,35 +193,47 @@ public:
 					{
 						s_ofy = GetY() - ele->GetY();
 						d_ofy = 0;
+
+						height -= s_ofy;
 					}
 					else if (ele->GetY() > GetY())
 					{
 						s_ofy = 0;
 						//d_ofy = height - (y + height - ele->y);
 						d_ofy = ele->GetY() - GetY();
+
+						height -= d_ofy;
 					}
-					AreaCopyFrom(ele, s_ofx, s_ofy, GetWidth(), GetHeight(), d_ofx, d_ofy);
+					debug_areacopy("RenderEB::AreaCopyFrom %s from %s %d %d %d %d w=%d h=%d\n",GetName(),ele->GetName(),s_ofx,s_ofy,d_ofx,d_ofy,width,height);
+					AreaCopyFrom(ele, s_ofx, s_ofy, width, height, d_ofx, d_ofy);
 				}
+				ele->unlock();
 				//RollBack::RollBackBlock(*it, x, y, width, height);
 				//(*it)->Render();
 			}
 		}
+		unlock();
 	}
 	void RenderET()
 	{
+		lock();
+		printf("");
 		if (!et.empty())
 		{
 			list<element *>::iterator it;
 			for (it = et.begin(); it != et.end(); ++it)
 			{
 				element * ele = *it;
+				ele->lock();
 				if (ele->GetHide() == 0)
 				{
 					//printf("$$$HU$$$ RenderET %s <-- %s\r\n", name.c_str(), ele->name.c_str());
 					ele->Render();
 				}
+				ele->unlock();
 			}
 		}
+		unlock();
 
 	}
 	class Cmpare
@@ -285,9 +303,10 @@ public:
 /*
  * layer:将图片绘制到本元素的第几层
  */
-	 void RenderToSelf(image * src_img, int dst_x, int dst_y,int layer){
+	 void RenderToSelf(image * src_img, int dst_x, int dst_y,int layer)
+	 {
 		image::RenderFrom( src_img,  dst_x,dst_y);
-	}
+	 }
 
 	 void RenderToSelf(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y,int layer)
 	{

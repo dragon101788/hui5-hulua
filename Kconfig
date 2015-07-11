@@ -54,6 +54,9 @@ config LOG_E
 config DEBUG_FPS
 	bool "debug fps"
 
+config DEBUG_AREACOPY
+	bool "debug areacopy"
+
 config DUMPSTACK_DEBUG
 	bool "enable DUMPSTACK_DEBUG"
 	help 

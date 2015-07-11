@@ -16,6 +16,13 @@ using namespace std;
 #include "hulib.h"
 #include "alpha.h"
 
+#ifdef CONFIG_DEBUG_AREACOPY
+#define debug_areacopy(a,...)    fprintf(stderr,a,##__VA_ARGS__)
+#else
+#define debug_areacopy(a,...)
+#endif
+
+
 extern int snapcache;
 
 int bmpCodec_to_image(image * sobj, const char *filename);
