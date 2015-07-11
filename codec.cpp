@@ -616,15 +616,15 @@ void ProcArea(image * dst_img, image * rsc_img, int & src_x, int & src_y, int & 
 	}
 
 	if (cp_height > dst_img->GetImageHeight())
-        {
-                //printf("AreaCopyDH dst_y=%d cp_height=%d dst_img.height=%d\n",dst_y , cp_height , dst_img->GetImageHeight());
-                cp_height = dst_img->GetImageHeight();
-        }
-        if (cp_width > dst_img->GetImageWidth())
-        {
-                //printf("AreaCopyDW dst_x=%d cp_width=%d dst_img.width=%d\n",dst_x , cp_width , dst_img->GetImageWidth());
-                cp_width = dst_img->GetImageWidth();
-        }
+	{
+			//printf("AreaCopyDH dst_y=%d cp_height=%d dst_img.height=%d\n",dst_y , cp_height , dst_img->GetImageHeight());
+			cp_height = dst_img->GetImageHeight();
+	}
+	if (cp_width > dst_img->GetImageWidth())
+	{
+			//printf("AreaCopyDW dst_x=%d cp_width=%d dst_img.width=%d\n",dst_x , cp_width , dst_img->GetImageWidth());
+			cp_width = dst_img->GetImageWidth();
+	}
 
 	//*************************************
 	if (src_y + cp_height > rsc_img->GetImageHeight())
@@ -645,7 +645,6 @@ void ProcArea(image * dst_img, image * rsc_img, int & src_x, int & src_y, int & 
 			return;
 		}
 	}
-
 	//*************************************
 
 }

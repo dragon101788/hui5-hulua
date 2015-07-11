@@ -57,6 +57,9 @@ config DEBUG_FPS
 config DEBUG_AREACOPY
 	bool "debug areacopy"
 
+config CONFIG_DEBUG_PARSE_XML
+	bool "debug parse xml"
+
 config DUMPSTACK_DEBUG
 	bool "enable DUMPSTACK_DEBUG"
 	help 

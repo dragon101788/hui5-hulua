@@ -7,7 +7,7 @@
 #include<libxml/tree.h>
 
 //#define DEBUG_PARSE_XML
-#ifdef DEBUG_PARSE_XML
+#ifdef CONFIG_DEBUG_PARSE_XML
 #define prase_debug(a,...)    fprintf(stderr,a,##__VA_ARGS__)
 #else
 #define prase_debug(a,...)

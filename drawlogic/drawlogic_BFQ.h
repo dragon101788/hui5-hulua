@@ -165,11 +165,11 @@ public:
 			{
 				element * ele = *it;
 				ele->lock();
-				if (ele->GetHide() == 0)
+				//if (ele->GetHide() == 0)
 				{
 					//printf("$$$HU$$$ RenderEB %s <-- %s\r\n", name.c_str(), ele->name.c_str());
-					int width = ele->GetWidth();
-					int height = ele->GetHeight();
+					int width;
+					int height;
 
 					int s_ofx = 0; //源x
 					int d_ofx = 0; //目标x
@@ -177,14 +177,14 @@ public:
 					{
 						s_ofx = GetX() - ele->GetX();
 						d_ofx = 0;
-						width -= s_ofx;
+
+
 					}
 					else if (ele->GetX() > GetX())
 					{
 						s_ofx = 0;
 						//d_ofx = width - (x + width - ele->x);
 						d_ofx = ele->GetX() - GetX();
-						width -= d_ofx;
 					}
 
 					int s_ofy = 0; //源x
@@ -193,8 +193,6 @@ public:
 					{
 						s_ofy = GetY() - ele->GetY();
 						d_ofy = 0;
-
-						height -= s_ofy;
 					}
 					else if (ele->GetY() > GetY())
 					{
@@ -202,8 +200,19 @@ public:
 						//d_ofy = height - (y + height - ele->y);
 						d_ofy = ele->GetY() - GetY();
 
-						height -= d_ofy;
+
 					}
+
+					if(ele->GetWidth() >= GetWidth())
+						width = ele->GetWidth() - d_ofx;
+					else
+						width = ele->GetWidth() - s_ofy;
+
+					if(ele->GetHeight() >= GetHeight())
+						height = ele->GetHeight() - d_ofy;
+					else
+						height = ele->GetHeight() - s_ofy;
+
 					debug_areacopy("RenderEB::AreaCopyFrom %s from %s %d %d %d %d w=%d h=%d\n",GetName(),ele->GetName(),s_ofx,s_ofy,d_ofx,d_ofy,width,height);
 					AreaCopyFrom(ele, s_ofx, s_ofy, width, height, d_ofx, d_ofy);
 				}
