@@ -225,12 +225,12 @@ public:
 	public:
 		int dst_x;
 		int dst_y;
-		int offset_x;
-		int offset_y;
+		int src_x;
+		int src_y;
 		int cp_width;
 		int cp_height;
 		image *img;
-		LayerRes():img(NULL),offset_x(0),offset_y(0),dst_x(0),dst_y(0){
+		LayerRes():img(NULL),src_x(0),src_y(0),dst_x(0),dst_y(0){
 
 		}
 
@@ -238,8 +238,8 @@ public:
 
 		void setRes(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y){
 			img=src_img;
-			offset_x=src_x;
-			offset_y=src_y;
+			this->src_x=src_x;
+			this->src_y=src_y;
 			this->cp_width=cp_width;
 			this->cp_height=cp_height;
 			this->dst_x=dst_x;

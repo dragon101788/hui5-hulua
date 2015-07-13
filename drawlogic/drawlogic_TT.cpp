@@ -130,8 +130,8 @@ void element::renderLayersInOneEle(int s_ofx,int s_ofy,int d_ofx,int d_ofy, elem
 	{
 		lay_res=&itp->second;
 		//log_i("itp->first=%d\n",itp->first);
-		int final_s_off_x=s_ofx+lay_res->offset_x;
-		int final_s_off_y=s_ofy+lay_res->offset_y;
+		int final_s_off_x=s_ofx+lay_res->src_x;
+		int final_s_off_y=s_ofy+lay_res->src_y;
 		int final_d_off_x=d_ofx+lay_res->dst_x;
 		int final_d_off_y=d_ofy+lay_res->dst_y;
 		//log_i("+++++final_s_off_y=%d\n",final_s_off_y);
@@ -172,10 +172,10 @@ void element::renderLayers()
 	{
 		list<element *>::iterator it;
 		element * ele;
-		int s_ofx ; //源x
-		int d_ofx ; //目标x
-		int s_ofy ; //源x
-		int d_ofy ; //目标x
+//		int s_ofx=0 ; //源x
+//		int d_ofx =0; //目标x
+//		int s_ofy =0; //源x
+//		int d_ofy =0; //目标x
 		for (it = layers.begin(); it != layers.end(); ++it)
 		{
 			ele = *it;
@@ -185,9 +185,11 @@ void element::renderLayers()
 */
 			if (ele->GetHide() == 0&&ele->GetLay()!=hide_lay)
 			{
+				int s_ofx=0 ; //源x
+				int d_ofx =0; //目标x
+				int s_ofy =0; //源x
+				int d_ofy =0; //目标x
 				//log_i("$$$HU$$$ RenderEB %s <-- %s\r\n", name.c_str(), ele->name.c_str());
-				 s_ofx = 0; //源偏移x
-				 d_ofx = 0; //目标偏移x
 				 if(procArea(s_ofx,s_ofy,d_ofx,d_ofy,ele))
 					 continue;
 				 renderLayersInOneEle( s_ofx, s_ofy,d_ofx,d_ofy,ele,cnt);
@@ -250,7 +252,7 @@ void element::cleanLastPos()
 //	render_offset_y=0;
 //	render_width=width;
 //	render_height=height;
- //  log_i("%s cleanLastPos !!\n",name.c_str());
+   log_i("%s cleanLastPos !!\n",GetName());
    int temp_hide=GetHide();
    SetHide(1);
 	renderLayers();  //如果自己隐藏的话，此函数是不会绘制自己的。
@@ -267,42 +269,50 @@ void element::cleanLastPos()
 
 void element::copyLayer(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
 {
+	int s_x=src_x;
+	int s_y=src_y;
 	int _dst_x=dst_x+GetX();
 	int _dst_y=dst_y+GetY();
+	int cp_w=cp_width;
+	int cp_h=cp_height;
+
 	//log_i("####in copyLayer####\n");
 	if(hasParent()){
 
-		if(procArea(m_parent->getOutImage(), src_img, src_x, src_y, cp_width, cp_height, _dst_x, _dst_y,GetX()+GetWidth(),GetY()+GetHeight()))
+		if(procArea(m_parent->getOutImage(), src_img, s_x, s_y, cp_w, cp_h, _dst_x, _dst_y,GetX()+GetWidth(),GetY()+GetHeight()))
 			 return;
 	//	log_i("####%s src_x=%d, src_y=%d, cp_width=%d, cp_height=%d, _dst_x=%d, _dst_y=%d####\n",name.c_str(),src_x, src_y, cp_width, cp_height, _dst_x, _dst_y);
-		::areaCopy_no_procArea(m_parent->getOutImage() ,src_img,src_x, src_y, cp_width, cp_height,_dst_x,_dst_y);
+		::areaCopy_no_procArea(m_parent->getOutImage() ,src_img,s_x, s_y, cp_w, cp_h,_dst_x,_dst_y);
 		//::Copy_img_to_img(&parent->top_image ,src_img,src_x, src_y, cp_width, cp_height,_dst_x,_dst_y);
 	}else{
-	    if(procArea(&m_proc->out, src_img, src_x, src_y, cp_width, cp_height, _dst_x, _dst_y,GetX()+GetWidth(),GetY()+GetHeight()))
+	    if(procArea(&m_proc->out, src_img, s_x, s_y, cp_w, cp_h, _dst_x, _dst_y,GetX()+GetWidth(),GetY()+GetHeight()))
 			 return;
 	//	log_i("####%s src_x=%d, src_y=%d, cp_width=%d, cp_height=%d, _dst_x=%d, _dst_y=%d####\n",name.c_str(),src_x, src_y, cp_width, cp_height, _dst_x, _dst_y);
-		::areaCopy_no_procArea(&m_proc->out, src_img,src_x, src_y, cp_width, cp_height,_dst_x,_dst_y);
+		::areaCopy_no_procArea(&m_proc->out, src_img,s_x, s_y, cp_w, cp_h,_dst_x,_dst_y);
 		//::Copy_img_to_img(&m_mgr->out, src_img,src_x, src_y, cp_width, cp_height,_dst_x,_dst_y);
 	}
 }
 
 void element::renderLayer(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
 {
-//	src_img->LoadResource();
+	int s_x=src_x;
+	int s_y=src_y;
 	int _dst_x=dst_x+GetX();
 	int _dst_y=dst_y+GetY();
+	int cp_w=cp_width;
+	int cp_h=cp_height;
 	//log_i("####in renderLayer####\n");
 	if(hasParent()){
-		if(procArea(m_parent->getOutImage(), src_img, src_x, src_y, cp_width, cp_height, _dst_x, _dst_y,GetX()+GetWidth(),GetY()+GetHeight()))
+		if(procArea(m_parent->getOutImage(), src_img,  s_x, s_y, cp_w, cp_h, _dst_x, _dst_y,GetX()+GetWidth(),GetY()+GetHeight()))
 			return;
 	//	log_i("####%s src_x=%d, src_y=%d, cp_width=%d, cp_height=%d, _dst_x=%d, _dst_y=%d####\n",name.c_str(),src_x, src_y, cp_width, cp_height, _dst_x, _dst_y);
-		::Render_img_to_img(m_parent->getOutImage(), src_img, src_x, src_y, cp_width, cp_height, _dst_x, _dst_y);
+		::Render_img_to_img(m_parent->getOutImage(), src_img,s_x, s_y, cp_w, cp_h, _dst_x, _dst_y);
 
 	}else{
-		if(procArea(&m_proc->out, src_img, src_x, src_y, cp_width, cp_height, _dst_x, _dst_y,GetX()+GetWidth(),GetY()+GetHeight()))
+		if(procArea(&m_proc->out, src_img, s_x, s_y, cp_w, cp_h, _dst_x, _dst_y,GetX()+GetWidth(),GetY()+GetHeight()))
 			return;
 	//	log_i("####%s src_x=%d, src_y=%d, cp_width=%d, cp_height=%d, _dst_x=%d, _dst_y=%d####\n",name.c_str(),src_x, src_y, cp_width, cp_height, _dst_x, _dst_y);
-		::Render_img_to_img(&m_proc->out, src_img, src_x, src_y, cp_width, cp_height, _dst_x, _dst_y);
+		::Render_img_to_img(&m_proc->out, src_img, s_x, s_y, cp_w, cp_h, _dst_x, _dst_y);
 	}
 }
 int element::procArea(int &s_ofx,int &s_ofy,int &d_ofx,int &d_ofy, element *ele){
@@ -321,8 +331,6 @@ if (ele->GetX() < GetX())
 			return 1;
 	}
 
-	 s_ofy = 0; //源x
-	 d_ofy = 0; //目标x
 	if (ele->GetY() < GetY())
 	{
 		s_ofy = GetY() - ele->GetY();
@@ -362,7 +370,7 @@ int  element::procArea(image * dst_img, image * rsc_img, int & src_x, int & src_
 		src_x +=GetX()- dst_x;
 		dst_x = GetX();
 	}
-	if (dst_y <GetX())
+	if (dst_y <GetY())
 	{
 		src_y += GetY()-dst_y;
 		dst_y = GetY();
@@ -415,8 +423,8 @@ int  element::procArea(image * dst_img, image * rsc_img, int & src_x, int & src_
 
 void element::cleanArea()
 {
-	//log_i("--%s cleanArea render_offset_x=%d,render_offset_y=%d,GetImageWidth()=%d,GetImageHeight()=%d---\n"
-	//		,name.c_str(),render_offset_x,render_offset_y,GetImageWidth(),GetImageHeight());
+	log_i("--%s cleanArea x=%d,y=%d,Width()=%d,Height()=%d---\n"
+			,GetName(),GetX(),GetY(),GetWidth(),GetHeight());
 	if (hasParent()){
 		unsigned long *src_offset=(unsigned long *)m_parent->getOutImage()->GetAddr()+GetY()*getOutImage()->GetImageWidth()+GetX();
 		int cp_size=GetWidth()<<2;
