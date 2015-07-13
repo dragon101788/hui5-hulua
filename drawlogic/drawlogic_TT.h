@@ -185,17 +185,33 @@ public:
 	{
 		layers.remove(ele);
 	}
-	/*
-	 * layer:将图片绘制到本元素的第几层
-	 */
 
-	image * getOutImage(){
+	void setOutImage(image * out){
+		if(out->isNULL()){
+			out->SetBuffer(GetWidth(),GetHeight());
+		}
+		render_res[PARENT_LAY].setRes(out, 0, 0,out->GetImageWidth(),out->GetImageHeight(),  0, 0);
+	}
+
+	void setDefaultOutImage(){
 		if(top_image.isNULL()){
 			top_image.SetBuffer(GetWidth(),GetHeight());
 		}
-		render_res[PARENT_LAY].setRes(&top_image, 0, 0,GetWidth(), GetHeight(),  0, 0);
+		render_res[PARENT_LAY].setRes(&top_image, 0, 0,top_image.GetImageWidth(),top_image.GetImageHeight(),  0, 0);
+	}
+
+
+	image * getOutImage(){
+		if(render_res[PARENT_LAY].img==NULL){
+			setDefaultOutImage();
+		}
 		return render_res[PARENT_LAY].img;
 	}
+
+
+	/*
+	 * layer:将图片绘制到本元素的第几层
+	 */
 	void RenderToSelf(image * src_img, int dst_x, int dst_y,int layer){
 		render_res[layer].setRes( src_img, 0, 0,GetWidth(), GetHeight(),  dst_x, dst_y);
 	}

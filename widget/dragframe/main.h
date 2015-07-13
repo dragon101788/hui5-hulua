@@ -18,6 +18,7 @@ public:
 		id = 0;
 		x_pos=0;
 		y_pos=0;
+
 	}
 	~dragframe()
 	{
@@ -149,6 +150,9 @@ public:
 	{
 
 	    res.SetBuffer(GetWidth(),GetHeight());
+#ifdef CONFIG_DRAWLOGIC_TT
+	    setOutImage(&res);
+#endif
 	    ParseXML(mp);
 
 		//printf("lua=[%s]\n",mp.m_val.nstr());
@@ -164,7 +168,7 @@ public:
 	    int resy = y_pos-move_y();
 	    //printf("resx=%d resy=%d\n",resx,resy);
 	 //   res.RenderTo(this, resx, resy, GetWidth(), GetHeight(), 0, 0);
-	    RenderToSelf(&res, resx,resy,GetWidth(), GetHeight(), 0, 0,0);
+	    RenderToSelf(&res, resx,resy,GetWidth(), GetHeight(), 0, 0,PARENT_LAY);
 
 	    unlock();
 	}
