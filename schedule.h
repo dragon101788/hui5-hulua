@@ -8,19 +8,7 @@ using namespace std;
 class schedule_ele
 {
 public:
-	 virtual void onSchedule()=0;
-	inline int schedule(){
-		wait_to_render=0;
-		onSchedule();
-	}
-
-	inline int waitRender()const{
-		return wait_to_render;
-	}
-	schedule_ele():wait_to_render(0){
-	};
-	virtual ~schedule_ele(){};
-	int wait_to_render;
+	virtual void onSchedule()=0;
 };
 
 class element_manager;
@@ -40,29 +28,21 @@ public:
 			m_list.clear();
 			unlock();
 		}
-
 		void addele(schedule_ele * ele)
 		{
 			lock();
 			list<schedule_ele *>::iterator it;
 			for (it = m_list.begin(); it != m_list.end(); ++it)
 			{
+				schedule_ele * tele = *it;
 				if (ele == *it)
 				{
-					if(ele->waitRender()){
-						unlock();
-						return;
-					}
-					else{
-						continue;
-					}
+					break;
 				}
 			}
 			if (it == m_list.end())
 			{
-				ele->wait_to_render++;
 				m_list.push_back(ele);
-
 			}
 			unlock();
 		}
@@ -86,9 +66,6 @@ public:
 			unlock();
 		}
 
-		int getSize(){
-			return m_list.size();
-		}
 		list<schedule_ele *> m_list;
 	};
 
@@ -160,7 +137,6 @@ public:
 		width = 0;
 		height = 0;
 		stop = 0;
-
 	}
 
 	void clean()
@@ -172,7 +148,6 @@ public:
 	int width;
 	int stop;
 	int height;
-
 	//hustr name;
 };
 
