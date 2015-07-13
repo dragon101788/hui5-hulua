@@ -151,7 +151,7 @@ public:
 
 	    res.SetBuffer(GetWidth(),GetHeight());
 #ifdef CONFIG_DRAWLOGIC_TT
-	    setOutImage(&res);
+	    setOutImage(&res,0);
 #endif
 	    ParseXML(mp);
 
@@ -168,7 +168,7 @@ public:
 	    int resy = y_pos-move_y();
 	    //printf("resx=%d resy=%d\n",resx,resy);
 	 //   res.RenderTo(this, resx, resy, GetWidth(), GetHeight(), 0, 0);
-	    RenderToSelf(&res, resx,resy,GetWidth(), GetHeight(), 0, 0,PARENT_LAY);
+	    RenderToSelf(&res, resx,resy,GetWidth(), GetHeight(), 0, 0,0);
 
 	    unlock();
 	}

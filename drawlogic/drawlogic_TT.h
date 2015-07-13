@@ -75,7 +75,7 @@ public:
 		Render();
 		log_d("$$$HU$$$ Render_layer::[%s] OK\r\n", GetName());
 	}
-	drawlogic_TT():hide_lay(-1),m_parent(NULL),m_proc(NULL),m_mgr(NULL)
+	drawlogic_TT():hide_lay(-1),m_parent(NULL),m_proc(NULL),m_mgr(NULL),top_image_layer(PARENT_LAY)
 	{
 	        m_flag |= ELEMENT_FLAG_DRAWLOGIC;
 		//log_d("new element m_parent=%x\n",m_parent);
@@ -190,22 +190,30 @@ public:
 		if(out->isNULL()){
 			out->SetBuffer(GetWidth(),GetHeight());
 		}
-		render_res[PARENT_LAY].setRes(out, 0, 0,out->GetImageWidth(),out->GetImageHeight(),  0, 0);
+		render_res[top_image_layer].setRes(out, 0, 0,out->GetImageWidth(),out->GetImageHeight(),  0, 0);
+	}
+
+	void setOutImage(image * out,int layer){
+		top_image_layer=layer;
+		if(out->isNULL()){
+			out->SetBuffer(GetWidth(),GetHeight());
+		}
+		render_res[top_image_layer].setRes(out, 0, 0,out->GetImageWidth(),out->GetImageHeight(),  0, 0);
 	}
 
 	void setDefaultOutImage(){
 		if(top_image.isNULL()){
 			top_image.SetBuffer(GetWidth(),GetHeight());
 		}
-		render_res[PARENT_LAY].setRes(&top_image, 0, 0,top_image.GetImageWidth(),top_image.GetImageHeight(),  0, 0);
+		render_res[top_image_layer].setRes(&top_image, 0, 0,top_image.GetImageWidth(),top_image.GetImageHeight(),  0, 0);
 	}
 
 
 	image * getOutImage(){
-		if(render_res[PARENT_LAY].img==NULL){
+		if(render_res[top_image_layer].img==NULL){
 			setDefaultOutImage();
 		}
-		return render_res[PARENT_LAY].img;
+		return render_res[top_image_layer].img;
 	}
 
 
@@ -268,6 +276,7 @@ public:
 	int hide_lay;//向对此元素此层隐藏
 	element_manager * m_mgr;
 	image top_image;//元素的最高一层，专门用来绘制子空间
+	int top_image_layer;
 };
 
 //后续将绘图元素剥离出来
