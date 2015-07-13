@@ -82,11 +82,11 @@ int crossAlgorithm(element * r1, element * r2)
 	nMaxLeft = r1->GetX() >= r2->GetX() ? r1->GetX() : r2->GetX();
 	nMaxTop = r1->GetY() >= r2->GetY() ? r1->GetY() : r2->GetY();
 	nMinRight =
-			(r1->GetX() + r1->GetImageWidth()) <= (r2->GetX() + r2->GetImageWidth()) ?
-					(r1->GetX() + r1->GetImageWidth()) : (r2->GetX() + r2->GetImageWidth());
+			(r1->GetX() + r1->GetWidth()) <= (r2->GetX() + r2->GetWidth()) ?
+					(r1->GetX() + r1->GetWidth()) : (r2->GetX() + r2->GetWidth());
 	nMinBottom =
-			(r1->GetY() + r1->GetImageHeight()) <= (r2->GetY() + r2->GetImageHeight()) ?
-					(r1->GetY() + r1->GetImageHeight()) : (r2->GetY() + r2->GetImageHeight());
+			(r1->GetY() + r1->GetHeight()) <= (r2->GetY() + r2->GetHeight()) ?
+					(r1->GetY() + r1->GetHeight()) : (r2->GetY() + r2->GetHeight());
 	// 判断是否相交
 	//printf("crossAlgorithm %d %d %d %d\r\n",nMaxLeft , nMinRight , nMaxTop , nMinBottom);
 	if (nMaxLeft >= nMinRight || nMaxTop >= nMinBottom){
@@ -106,8 +106,8 @@ void element::initstack()
 	for (it = m_mgr->begin(); it != m_mgr->end(); ++it)
 	{
 		element * ele = it->second;
-//		if(ele->parent==parent)
-//		{  //只有当在同一父亲下，或父亲都为0，才相互作用
+		if(ele->m_parent==m_parent)
+		{  //只有当在同一父亲下，或父亲都为0，才相互作用
 			if (crossAlgorithm(ele, this))
 			{
 				if(ele->GetLay() != GetLay()){
@@ -115,7 +115,7 @@ void element::initstack()
 					ele->addLayers(this); //将自己加入队列
 				}
 			}
-		//}
+		}
 	}
 	addLayers(this);  //自己也要加在自己的队列中
 }
@@ -135,13 +135,13 @@ void element::renderLayersInOneEle(int s_ofx,int s_ofy,int d_ofx,int d_ofy, elem
 		int final_d_off_x=d_ofx+lay_res->dst_x;
 		int final_d_off_y=d_ofy+lay_res->dst_y;
 		//log_i("+++++final_s_off_y=%d\n",final_s_off_y);
-		if(lay_res->dst_x>=ele->GetImageWidth()){
-			int reduce=(lay_res->dst_x/ele->GetImageWidth())*ele->GetImageWidth();
+		if(lay_res->dst_x>=ele->GetWidth()){
+			int reduce=(lay_res->dst_x/ele->GetWidth())*ele->GetWidth();
 			final_s_off_x-=reduce;
 			final_d_off_x-=reduce;
 		}
-		if(lay_res->dst_y>=ele->GetImageHeight()){
-			int reduce=(lay_res->dst_y/ele->GetImageHeight())*ele->GetImageHeight();
+		if(lay_res->dst_y>=ele->GetHeight()){
+			int reduce=(lay_res->dst_y/ele->GetHeight())*ele->GetHeight();
 			final_s_off_y-=reduce;
 			final_d_off_y-=reduce;
 		}
@@ -206,6 +206,10 @@ void element::Render()
 //	cfgPartRender();
 	//log_i("~~~%s render_offset_x=%d,render_offset_y=%d,render_width=%d,render_height=%d~~~\n",name.c_str(),render_offset_x,render_offset_y,render_width,render_height);
 
+
+
+
+
 	if (GetHide() == 0)
 	{
 		doRender();
@@ -218,19 +222,21 @@ void element::Render()
 	//log_i("~~~%s RenderOut before renderLayers~~~\n",name.c_str());
 	renderLayers();  //如果自己隐藏的话，此函数是不会绘制自己的。
 	//log_i("~~~%s RenderOut after renderLayers~~~\n",name.c_str());
-//	if(parent!=NULL){
-//		parent->addDraw(x+render_offset_x,y+render_offset_y,render_width,render_height);
+	if(m_parent!=NULL){
+		//parent->addDraw(GetX(),GetY(),GetWidth(),GetHeight);
 //		if(!parent->isParent()){
 //			parent->tobeParent(name,this);
 //		}
 //		if(render_cached)
-//			parent->flush();
+			//m_parent->Flush();
+			m_parent->Render();
 //		else
 //			parent->renderOut();
-//
-//	}else{
+
+	}else{
 
 	m_proc->addDraw();
+	}
 //	}
 	//log_i("~~~%s RenderOut leave~~~\n",name.c_str());
 	unlock();
@@ -264,20 +270,20 @@ void element::copyLayer(image * src_img, int src_x, int src_y, int cp_width, int
 	int _dst_x=dst_x+GetX();
 	int _dst_y=dst_y+GetY();
 	//log_i("####in copyLayer####\n");
-//	if(hasParent()){
-//
-//		if(procArea(&parent->top_image, src_img, src_x, src_y, cp_width, cp_height, _dst_x, _dst_y,x+width,y+height))
-//			 return;
-//	//	log_i("####%s src_x=%d, src_y=%d, cp_width=%d, cp_height=%d, _dst_x=%d, _dst_y=%d####\n",name.c_str(),src_x, src_y, cp_width, cp_height, _dst_x, _dst_y);
-//		::areaCopy_no_procArea(&parent->top_image ,src_img,src_x, src_y, cp_width, cp_height,_dst_x,_dst_y);
-//		//::Copy_img_to_img(&parent->top_image ,src_img,src_x, src_y, cp_width, cp_height,_dst_x,_dst_y);
-//	}else{
+	if(hasParent()){
+
+		if(procArea(m_parent->getOutImage(), src_img, src_x, src_y, cp_width, cp_height, _dst_x, _dst_y,GetX()+GetWidth(),GetY()+GetHeight()))
+			 return;
+	//	log_i("####%s src_x=%d, src_y=%d, cp_width=%d, cp_height=%d, _dst_x=%d, _dst_y=%d####\n",name.c_str(),src_x, src_y, cp_width, cp_height, _dst_x, _dst_y);
+		::areaCopy_no_procArea(m_parent->getOutImage() ,src_img,src_x, src_y, cp_width, cp_height,_dst_x,_dst_y);
+		//::Copy_img_to_img(&parent->top_image ,src_img,src_x, src_y, cp_width, cp_height,_dst_x,_dst_y);
+	}else{
 	    if(procArea(&m_proc->out, src_img, src_x, src_y, cp_width, cp_height, _dst_x, _dst_y,GetX()+GetWidth(),GetY()+GetHeight()))
 			 return;
 	//	log_i("####%s src_x=%d, src_y=%d, cp_width=%d, cp_height=%d, _dst_x=%d, _dst_y=%d####\n",name.c_str(),src_x, src_y, cp_width, cp_height, _dst_x, _dst_y);
 		::areaCopy_no_procArea(&m_proc->out, src_img,src_x, src_y, cp_width, cp_height,_dst_x,_dst_y);
 		//::Copy_img_to_img(&m_mgr->out, src_img,src_x, src_y, cp_width, cp_height,_dst_x,_dst_y);
-//	}
+	}
 }
 
 void element::renderLayer(image * src_img, int src_x, int src_y, int cp_width, int cp_height, int dst_x, int dst_y)
@@ -286,18 +292,18 @@ void element::renderLayer(image * src_img, int src_x, int src_y, int cp_width, i
 	int _dst_x=dst_x+GetX();
 	int _dst_y=dst_y+GetY();
 	//log_i("####in renderLayer####\n");
-//	if(hasParent()){
-//		if(procArea(&parent->top_image, src_img, src_x, src_y, cp_width, cp_height, _dst_x, _dst_y,x+width,y+height))
-//			return;
-//	//	log_i("####%s src_x=%d, src_y=%d, cp_width=%d, cp_height=%d, _dst_x=%d, _dst_y=%d####\n",name.c_str(),src_x, src_y, cp_width, cp_height, _dst_x, _dst_y);
-//		render_img_to_img(&parent->top_image, src_img, src_x, src_y, cp_width, cp_height, _dst_x, _dst_y);
-//
-//	}else{
+	if(hasParent()){
+		if(procArea(m_parent->getOutImage(), src_img, src_x, src_y, cp_width, cp_height, _dst_x, _dst_y,GetX()+GetWidth(),GetY()+GetHeight()))
+			return;
+	//	log_i("####%s src_x=%d, src_y=%d, cp_width=%d, cp_height=%d, _dst_x=%d, _dst_y=%d####\n",name.c_str(),src_x, src_y, cp_width, cp_height, _dst_x, _dst_y);
+		::Render_img_to_img(m_parent->getOutImage(), src_img, src_x, src_y, cp_width, cp_height, _dst_x, _dst_y);
+
+	}else{
 		if(procArea(&m_proc->out, src_img, src_x, src_y, cp_width, cp_height, _dst_x, _dst_y,GetX()+GetWidth(),GetY()+GetHeight()))
 			return;
 	//	log_i("####%s src_x=%d, src_y=%d, cp_width=%d, cp_height=%d, _dst_x=%d, _dst_y=%d####\n",name.c_str(),src_x, src_y, cp_width, cp_height, _dst_x, _dst_y);
 		::Render_img_to_img(&m_proc->out, src_img, src_x, src_y, cp_width, cp_height, _dst_x, _dst_y);
-//	}
+	}
 }
 int element::procArea(int &s_ofx,int &s_ofy,int &d_ofx,int &d_ofy, element *ele){
 if (ele->GetX() < GetX())
@@ -311,7 +317,7 @@ if (ele->GetX() < GetX())
 	{
 		s_ofx = 0;
 		d_ofx = ele->GetX() - GetX();
-		if(d_ofx>GetImageWidth())
+		if(d_ofx>GetWidth())
 			return 1;
 	}
 
@@ -328,7 +334,7 @@ if (ele->GetX() < GetX())
 	{
 		s_ofy = 0;
 		d_ofy = ele->GetY() -GetY() ;
-		if(d_ofy>GetImageHeight())
+		if(d_ofy>GetHeight())
 			return 1;
 
 	}
@@ -411,29 +417,29 @@ void element::cleanArea()
 {
 	//log_i("--%s cleanArea render_offset_x=%d,render_offset_y=%d,GetImageWidth()=%d,GetImageHeight()=%d---\n"
 	//		,name.c_str(),render_offset_x,render_offset_y,GetImageWidth(),GetImageHeight());
-//	if (hasParent()){
-//		unsigned long *src_offset=(unsigned long *)parent->top_image.pSrcBuffer+(y+render_offset_y)*parent->top_image.u32Width+(x+render_offset_x);
-//		int cp_size=render_width<<2;
-//		parent->top_image.lock();
-//		for(int i=0;i<render_height;i++){
-//
-////			if(src_offset+cp_size>parent->top_image.SrcSize){
-////				break;
-////			}
-//			memset((void*)src_offset, 0,cp_size);
-//			src_offset+=parent->top_image.u32Width;
-//		}
-//		parent->top_image.unlock();
-//	}else{
+	if (hasParent()){
+		unsigned long *src_offset=(unsigned long *)m_parent->getOutImage()->GetAddr()+GetY()*getOutImage()->GetImageWidth()+GetX();
+		int cp_size=GetWidth()<<2;
+		m_parent->getOutImage()->lock();
+		for(int i=0;i<GetHeight();i++){
+
+//			if(src_offset+cp_size>parent->top_image.SrcSize){
+//				break;
+//			}
+			memset((void*)src_offset, 0,cp_size);
+			src_offset+=m_parent->getOutImage()->GetImageWidth();
+		}
+		m_parent->getOutImage()->unlock();
+	}else{
 		unsigned long  *src_offset=(unsigned long *)m_proc->out.GetAddr()+GetY()*m_proc->out.GetImageWidth()+GetX();
-		int cp_size=GetImageWidth()<<2;
+		int cp_size=GetWidth()<<2;
 		m_proc->out.lock();
-		for(int i=0;i<GetImageHeight();i++){
+		for(int i=0;i<GetHeight();i++){
 			memset((void*)src_offset, 0, cp_size);
 			src_offset+=m_proc->out.GetImageWidth();
 		}
 		m_proc->out.unlock();
-	//}
+	}
 }
 
 

@@ -163,7 +163,9 @@ public:
 	    int resx = x_pos-move_x();
 	    int resy = y_pos-move_y();
 	    //printf("resx=%d resy=%d\n",resx,resy);
-	    res.RenderTo(this, resx, resy, GetWidth(), GetHeight(), 0, 0);
+	 //   res.RenderTo(this, resx, resy, GetWidth(), GetHeight(), 0, 0);
+	    RenderToSelf(&res, resx,resy,GetWidth(), GetHeight(), 0, 0,0);
+
 	    unlock();
 	}
 

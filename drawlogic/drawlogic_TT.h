@@ -19,9 +19,10 @@ class xmlproc;
 
 class drawlogic_TT;
 typedef drawlogic_TT element;
-class drawlogic_TT: virtual public element_base,public schedule_ele, public image,public ResourceContainer,virtual public Mutex
+class drawlogic_TT: virtual public element_base,public schedule_ele,public ResourceContainer,virtual public Mutex
 {
 public:
+#define PARENT_LAY  99
 	template<typename T>
 	static void lua_instal(lua_State* L)
 	{
@@ -148,7 +149,7 @@ public:
                 }
 
                 //printf("%s SetBuffer width=%d height=%d\r\n", name.c_str(), width, height);
-                SetBuffer(GetWidth(), GetHeight());
+         //       SetBuffer(GetWidth(), GetHeight());
 
 		initstack();
 	}
@@ -187,6 +188,14 @@ public:
 	/*
 	 * layer:将图片绘制到本元素的第几层
 	 */
+
+	image * getOutImage(){
+		if(top_image.isNULL()){
+			top_image.SetBuffer(GetWidth(),GetHeight());
+		}
+		render_res[PARENT_LAY].setRes(&top_image, 0, 0,GetWidth(), GetHeight(),  0, 0);
+		return render_res[PARENT_LAY].img;
+	}
 	void RenderToSelf(image * src_img, int dst_x, int dst_y,int layer){
 		render_res[layer].setRes( src_img, 0, 0,GetWidth(), GetHeight(),  dst_x, dst_y);
 	}
@@ -232,7 +241,9 @@ public:
 		}
 	};
 
-
+	bool hasParent()const{
+		return m_parent!=NULL;
+	}
 
 	map<int, LayerRes> render_res;//由原来的单一指针改为指针map，可以在doRender里面同时绘制几层图
 	list<element *> layers;     //底顶合一队列
@@ -240,7 +251,7 @@ public:
 	xmlproc * m_proc;
 	int hide_lay;//向对此元素此层隐藏
 	element_manager * m_mgr;
-
+	image top_image;//元素的最高一层，专门用来绘制子空间
 };
 
 //后续将绘图元素剥离出来
