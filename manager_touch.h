@@ -26,10 +26,16 @@ public:
               hulua::class_mem<T>(L, "bottom", &touch_element::bottom);
               hulua::class_mem<T>(L, "left", &touch_element::left);
               hulua::class_mem<T>(L, "right", &touch_element::right);
-              hulua::class_mem<T>(L, "lock", &touch_element::touch_lock);
+              hulua::class_def<T>(L, "setlock", &touch_element::setlock);
               hulua::class_def<T>(L, "GetTouchX", &touch_element::GetTouchX);
               hulua::class_def<T>(L, "GetTouchY", &touch_element::GetTouchY);
               hulua::class_def<T>(L, "GetTouchP", &touch_element::GetTouchP);
+        }
+        void setlock(int onoff)
+        {
+        	lock();
+        	touch_lock = onoff;
+        	unlock();
         }
 	touch_element()
 	{
